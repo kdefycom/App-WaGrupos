@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KDefy Grupos - Divulgação de Grupos WhatsApp e Telegram</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='white'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='%23764ba2'>K</text></svg>">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -31,6 +31,12 @@
       align-items: center;
       margin-bottom: 30px;
       flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
       gap: 15px;
     }
 
@@ -101,7 +107,7 @@
       border-radius: 2px;
     }
 
-    /* Sidebar */
+    /* Sidebar (Right) */
     .sidebar {
       position: fixed;
       top: 0;
@@ -119,6 +125,24 @@
       right: 0;
     }
 
+    /* Sidebar (Left) */
+    .left-sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100vh;
+      background: white;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      transition: left 0.3s;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .left-sidebar.active {
+      left: 0;
+    }
+
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -134,12 +158,12 @@
       display: block;
     }
 
-    .sidebar h3 {
+    .left-sidebar h3, .sidebar h3 {
       margin-bottom: 20px;
       color: #667eea;
     }
 
-    .sidebar a {
+    .left-sidebar a, .sidebar a {
       display: block;
       padding: 12px;
       margin-bottom: 8px;
@@ -150,7 +174,7 @@
       transition: all 0.3s;
     }
 
-    .sidebar a:hover {
+    .left-sidebar a:hover, .sidebar a:hover {
       background: #667eea;
       color: white;
     }
@@ -309,26 +333,39 @@
 </head>
 <body>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  
+
+  <!-- Left Sidebar -->
+  <div class="left-sidebar" id="leftSidebar">
+    <h3>Menu</h3>
+    <a href="javascript:void(0)" onclick="window.open('/termos-uso', '_blank')">📜 Termos de Uso</a>
+    <a href="javascript:void(0)" onclick="window.open('/politica-privacidade', '_blank')">🔒 Política de Privacidade</a>
+  </div>
+
+  <!-- Right Sidebar -->
   <div class="sidebar" id="sidebar">
     <h3>Menu</h3>
     <a href="index.html">🏠 Home</a>
     <a href="meus-grupos/index.html">📱 Meus Grupos</a>
     <a href="enviar-grupo/index.html">➕ Enviar Grupo</a>
-    <a href="javascript:void(0)" onclick="window.open('/politica-privacidade', '_blank')">🔒 Política de Privacidade</a>
-    <a href="javascript:void(0)" onclick="window.open('/termos-uso', '_blank')">📜 Termos de Uso</a>
     <a href="javascript:void(0)" class="danger" onclick="limparDados()">🗑️ Limpar Cookies/IndexDB</a>
   </div>
 
   <div class="container">
     <header>
-      <div class="logo">
-        💬 KDefy Grupos
+      <div class="header-left">
+        <div class="menu-btn" onclick="toggleLeftSidebar()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="logo">
+          💬 KDefy Grupos
+        </div>
       </div>
       <div class="nav-buttons">
         <a href="enviar-grupo/index.html" class="btn btn-primary">➕ Enviar Grupo</a>
         <a href="meus-grupos/index.html" class="btn btn-secondary">📱 Meus Grupos</a>
-        <div class="menu-btn" onclick="toggleSidebar()">
+        <div class="menu-btn" onclick="toggleRightSidebar()">
           <span></span>
           <span></span>
           <span></span>
@@ -347,12 +384,23 @@
     let paginaAtual = 1;
     let totalGrupos = 0;
 
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('active');
-      document.getElementById('sidebarOverlay').classList.toggle('active');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleLeftSidebar() {
+      document.getElementById('leftSidebar').classList.toggle('active');
+      overlay.classList.toggle('active');
     }
 
-    document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+    function toggleRightSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    overlay.addEventListener('click', () => {
+      document.getElementById('leftSidebar').classList.remove('active');
+      document.getElementById('sidebar').classList.remove('active');
+      overlay.classList.remove('active');
+    });
 
     async function limparDados() {
       if (confirm('Tem certeza que deseja limpar todos os dados locais?')) {
