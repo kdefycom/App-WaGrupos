@@ -229,7 +229,7 @@
             ✈️<br>Telegram
           </button>
         </div>
-        <a href="../index.html" class="btn btn-back">← Voltar</a>
+        <a href="/" class="btn btn-back">← Voltar</a>
       </div>
 
       <!-- Step 2: Validar Link -->
@@ -285,7 +285,7 @@
     </div>
   </div>
 
-  <script src="../app.js"></script>
+  <script src="/app.js"></script>
   <script>
     let tipoSelecionado = '';
     let linkValidado = '';
@@ -421,7 +421,7 @@
         await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
 
         alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
-        window.location.href = '../meus-grupos/index.html';
+        window.location.href = '/meus-grupos/';
       } catch (error) {
         alert('Erro ao enviar grupo: ' + error.message);
       }
