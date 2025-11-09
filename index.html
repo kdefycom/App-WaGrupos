@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KDefy Grupos - Encontre Grupos de WhatsApp e Telegram</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='white'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='%2316a34a'>K</text></svg>">
+  <!-- Favicon Original Restaurado -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='white'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='%23764ba2'>K</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,8 +16,8 @@
       --card-bg: #ffffff;
       --text-primary: #212529;
       --text-secondary: #6c757d;
-      --accent-green: #28a745;
-      --accent-red: #dc3545;
+      --accent-green: #28a745; /* Verde para ações */
+      --accent-purple: #764ba2; /* Roxo da marca */
       --vip-gold: #ffc107;
       --border-color: #dee2e6;
       --shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -35,32 +36,64 @@
       margin: 0 auto;
       padding: 0 15px;
     }
-
-    /* --- Top Banner --- */
-    .top-banner {
-      background-color: var(--accent-red);
-      color: white;
-      padding: 10px 15px;
+    
+    /* --- Sidebar (Menu Hambúrguer) --- */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0s 0.3s;
+    }
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px; /* Começa fora da tela */
+      width: 280px;
+      height: 100%;
+      background: var(--header-bg);
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      z-index: 1001;
+      transition: left 0.3s;
+      padding: 20px;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .sidebar h3 {
+      font-size: 20px;
+      color: var(--accent-purple);
+      margin-bottom: 25px;
+    }
+    .sidebar a {
       display: flex;
-      justify-content: center;
       align-items: center;
-      text-align: center;
-      font-size: 14px;
+      gap: 15px;
+      padding: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+      border-radius: 8px;
       font-weight: 500;
-      position: relative;
+      margin-bottom: 8px;
     }
-    .top-banner a { color: white; font-weight: 700; text-decoration: underline; }
-    .close-banner {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
+    .sidebar a:hover {
+      background-color: var(--bg-color);
     }
+    .sidebar a.danger:hover {
+      background-color: #ffebee;
+      color: var(--accent-red);
+    }
+
 
     /* --- Header --- */
     .main-header {
@@ -70,13 +103,14 @@
       box-shadow: var(--shadow);
       position: sticky;
       top: 0;
-      z-index: 999;
+      z-index: 998;
     }
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+    .header-left { display: flex; align-items: center; gap: 15px; }
     .logo {
       display: flex;
       align-items: center;
@@ -88,14 +122,35 @@
     .logo-icon {
       width: 40px;
       height: 40px;
-      background-color: var(--accent-green);
-      border-radius: 50%;
+      background-color: var(--accent-purple); /* Corrigido para roxo */
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 22px;
+      font-size: 24px;
+      font-weight: bold;
     }
+    .menu-toggle {
+      background: none;
+      border: 1px solid var(--border-color);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+    .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--text-primary);
+    }
+
     .nav-buttons { display: flex; align-items: center; gap: 10px; }
     .btn {
       padding: 10px 20px;
@@ -113,23 +168,12 @@
       border-color: var(--accent-green);
     }
     .btn-primary:hover { background-color: #218838; }
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--text-primary);
-      border-color: var(--border-color);
-    }
-    .btn-secondary:hover { background-color: var(--bg-color); }
-    .menu-toggle { display: none; } /* Será implementado depois */
 
     /* --- Search & Categories --- */
     .filters-section {
       background-color: var(--header-bg);
       padding: 30px 0;
       border-bottom: 1px solid var(--border-color);
-    }
-    .search-bar {
-      display: flex;
-      margin-bottom: 25px;
     }
     #searchInput {
       flex-grow: 1;
@@ -166,12 +210,12 @@
       text-decoration: none;
       color: var(--text-secondary);
       transition: color 0.2s;
+      width: 80px;
     }
     .category-item:hover { color: var(--text-primary); }
     .category-icon {
-      font-size: 28px;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background-color: var(--bg-color);
       display: flex;
@@ -179,16 +223,15 @@
       justify-content: center;
       transition: all 0.2s;
     }
+    .category-icon svg { width: 24px; height: 24px; color: var(--text-secondary); }
     .category-item:hover .category-icon { background-color: #e9ecef; }
-    .category-item.active .category-icon { background-color: var(--accent-green); color: white; }
+    .category-item.active .category-icon { background-color: var(--accent-green); }
+    .category-item.active .category-icon svg { color: white; }
     .category-item.active span { color: var(--text-primary); font-weight: 500; }
+    .category-item span { font-size: 14px; text-align: center; }
 
     /* --- Main Content --- */
     .content-section { padding: 40px 0; }
-    .section-title {
-      font-size: 28px;
-      margin-bottom: 25px;
-    }
     .grupos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -204,103 +247,51 @@
     }
     .grupo-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .grupo-card.vip { border-color: var(--vip-gold); }
-    
     .card-image-container { position: relative; }
-    .grupo-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      display: block;
-      background-color: #f0f0f0;
-    }
-    .vip-star {
-      position: absolute;
-      top: -1px;
-      right: 10px;
-      font-size: 40px;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.4));
-      color: var(--vip-gold);
-    }
-    
-    .card-content {
-      padding: 15px;
-    }
-    .card-category {
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-    .grupo-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .grupo-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 15px;
-      line-height: 1.5;
-      height: 42px; /* 2 linhas */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    .card-button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      text-align: center;
-      background-color: var(--accent-green);
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: background-color 0.2s;
-    }
-    .card-button:hover { background-color: #218838; }
-
-    .loading, .empty {
-      text-align: center;
-      padding: 60px 20px;
-      grid-column: 1 / -1;
-      font-size: 18px;
-      color: var(--text-secondary);
-    }
+    .grupo-img { width: 100%; height: 180px; object-fit: cover; display: block; background-color: #f0f0f0; }
+    .vip-star { position: absolute; top: -1px; right: 10px; font-size: 40px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.4)); color: var(--vip-gold); }
+    .card-content { padding: 15px; }
+    .card-category { color: var(--text-secondary); font-size: 12px; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; }
+    .grupo-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .grupo-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; height: 42px; overflow: hidden; }
+    .card-button { display: block; width: 100%; padding: 12px; text-align: center; background-color: var(--accent-green); color: white; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .loading, .empty { text-align: center; padding: 60px 20px; grid-column: 1 / -1; font-size: 18px; color: var(--text-secondary); }
     
     @media (max-width: 768px) {
-      .nav-buttons .btn-secondary { display: none; }
-      .categories-bar { gap: 10px; justify-content: space-around; }
-      .category-icon { width: 50px; height: 50px; font-size: 24px; }
       .grupos-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <div class="top-banner" id="topBanner">
-    <span>❗️ <b>TEM UM GRUPO?</b> – <a href="/enviar-grupo/">Aumente sua comunidade gratuitamente!</a> É grátis!</span>
-    <button class="close-banner" onclick="document.getElementById('topBanner').style.display = 'none'">&times;</button>
-  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <h3>Menu</h3>
+    <a href="/">🏠 Home</a>
+    <a href="/meus-grupos/">📱 Meus Grupos</a>
+    <a href="/enviar-grupo/">➕ Enviar Grupo</a>
+    <hr style="border:0; border-top:1px solid var(--border-color); margin: 10px 0;">
+    <a href="/termos-uso/">📜 Termos de Uso</a>
+    <a href="/politica-privacidade/">🔒 Política de Privacidade</a>
+    <hr style="border:0; border-top:1px solid var(--border-color); margin: 10px 0;">
+    <a href="javascript:void(0)" class="danger" onclick="limparDados()">🗑️ Limpar Dados Locais</a>
+  </aside>
 
   <header class="main-header">
     <div class="container header-content">
-      <a href="/" style="text-decoration: none;">
-        <div class="logo">
-          <div class="logo-icon">💬</div>
-          <span>KDefyGrupos</span>
-        </div>
-      </a>
+      <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="/" style="text-decoration: none;">
+          <div class="logo">
+            <div class="logo-icon">K</div>
+            <span>KDefyGrupos</span>
+          </div>
+        </a>
+      </div>
       <div class="nav-buttons">
         <a href="/enviar-grupo/" class="btn btn-primary">ENVIAR GRUPO</a>
-        <a href="/meus-grupos/" class="btn btn-secondary">MEUS GRUPOS</a>
-        <!-- <div class="menu-toggle">...</div> -->
       </div>
     </div>
   </header>
@@ -308,13 +299,11 @@
   <main>
     <section class="filters-section">
       <div class="container">
-        <div class="search-bar">
+        <div class="search-bar" style="display:flex; margin-bottom: 25px;">
           <input type="text" id="searchInput" placeholder="Buscar por nome ou categoria...">
           <button id="searchButton">Buscar</button>
         </div>
-        <div class="categories-bar" id="categoriesBar">
-          <!-- Categorias serão inseridas pelo JS -->
-        </div>
+        <div class="categories-bar" id="categoriesBar"></div>
       </div>
     </section>
 
@@ -323,117 +312,126 @@
         <h2 class="section-title" id="sectionTitle">Grupos em Destaque</h2>
         <div id="loading" class="loading">Carregando grupos...</div>
         <div id="grupos" class="grupos-grid"></div>
-        <!-- Paginação pode ser adicionada aqui se necessário -->
       </div>
     </section>
   </main>
   
   <script src="app.js"></script>
   <script>
+    const ICONS = {
+      all: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.41 1.41L16.17 10H4v4h12.17l-5.58 5.59L12 21l8-8-8-8z"/></svg>',
+      amizade: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      jogos: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M6 11h2"/><path d="m14 11 2 2-2 2"/><path d="M10 11v4"/></svg>',
+      anime: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-3 0-6 2-6 6v2h12v-2c0-4-3-6-6-6z"/><circle cx="12" cy="7" r="4"/></svg>',
+      figurinhas: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 14h6"/><path d="M8 17h4"/></svg>',
+      namoro: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.77-.77-.77a5.4 5.4 0 0 0-7.65 0C3.33 5.45 3 6.67 3 8s.33 2.55 1.23 3.42l7.77 7.77 7.77-7.77A5.4 5.4 0 0 0 20.42 4.58z"/></svg>',
+      cidades: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M7 21V7l-2-2-2 2v14"/><path d="M11 21V3l-2-2-2 2v18"/><path d="M19 21V11l-2-2-2 2v10"/></svg>',
+      vendas: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.16"/></svg>',
+      apostas: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>',
+      outros: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20z"/><path d="M2 12h20"/></svg>'
+    };
     const CATEGORIES = [
-      { id: 'amizade', name: 'Amizade', icon: '🧑‍🤝‍🧑' },
-      { id: 'jogos', name: 'Jogos', icon: '🎮' },
-      { id: 'anime', name: 'Anime', icon: '🍥' },
-      { id: 'figurinhas', name: 'Figurinhas', icon: '🖼️' },
-      { id: 'namoro', name: 'Namoro', icon: '❤️' },
-      { id: 'cidade', name: 'Cidades', icon: '🏙️' },
-      { id: 'vendas', name: 'Vendas', icon: '🛒' },
-      { id: 'bet', name: 'Apostas', icon: '🎰' },
-      { id: 'outros', name: 'Outros', icon: '🌐' }
+      { id: 'amizade', name: 'Amizade' }, { id: 'jogos', name: 'Jogos' },
+      { id: 'anime', name: 'Anime' }, { id: 'figurinhas', name: 'Figurinhas' },
+      { id: 'namoro', name: 'Namoro' }, { id: 'cidades', name: 'Cidades' },
+      { id: 'vendas', name: 'Vendas' }, { id: 'apostas', name: 'Apostas' },
+      { id: 'outros', name: 'Outros' }
     ];
-
     let currentCategory = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+      setupSidebar();
       renderizarCategorias();
       carregarGrupos();
-      
+      setupSearch();
+    });
+
+    function setupSidebar() {
+      const toggle = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      toggle.addEventListener('click', () => {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+      });
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+      });
+    }
+    
+    function setupSearch(){
       const searchButton = document.getElementById('searchButton');
       const searchInput = document.getElementById('searchInput');
-
-      searchButton.addEventListener('click', () => {
-        carregarGrupos(searchInput.value, currentCategory);
-      });
-
-      searchInput.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') {
-          carregarGrupos(searchInput.value, currentCategory);
-        }
-      });
-    });
+      searchButton.addEventListener('click', () => carregarGrupos(searchInput.value, currentCategory));
+      searchInput.addEventListener('keyup', e => e.key === 'Enter' && carregarGrupos(searchInput.value, currentCategory));
+    }
 
     function renderizarCategorias() {
       const container = document.getElementById('categoriesBar');
+      container.innerHTML = '';
       
-      const allCat = document.createElement('a');
-      allCat.className = 'category-item active';
-      allCat.href = 'javascript:void(0)';
-      allCat.innerHTML = `<div class="category-icon">✨</div><span>Todos</span>`;
-      allCat.onclick = () => filterByCategory(null, allCat);
+      const allCat = createCategoryElement(null, 'Todos', ICONS.all);
+      allCat.classList.add('active');
       container.appendChild(allCat);
 
       CATEGORIES.forEach(cat => {
-        const item = document.createElement('a');
-        item.className = 'category-item';
-        item.href = 'javascript:void(0)';
-        item.innerHTML = `<div class="category-icon">${cat.icon}</div><span>${cat.name}</span>`;
-        item.onclick = () => filterByCategory(cat.id, item);
+        const item = createCategoryElement(cat.id, cat.name, ICONS[cat.id]);
         container.appendChild(item);
       });
     }
 
+    function createCategoryElement(id, name, icon) {
+        const item = document.createElement('a');
+        item.className = 'category-item';
+        item.href = 'javascript:void(0)';
+        item.innerHTML = `<div class="category-icon">${icon}</div><span>${name}</span>`;
+        item.onclick = () => filterByCategory(id, item);
+        return item;
+    }
+
     function filterByCategory(categoryId, element) {
       currentCategory = categoryId;
-      
       document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
       element.classList.add('active');
-      
-      const searchInput = document.getElementById('searchInput');
-      carregarGrupos(searchInput.value, currentCategory);
+      carregarGrupos(document.getElementById('searchInput').value, currentCategory);
+    }
+    
+    async function limparDados() {
+      if (confirm('Tem certeza que deseja limpar os dados de grupos salvos localmente?')) {
+        await limparIndexDB(); // Função do app.js
+        alert('Dados limpos com sucesso!');
+        location.reload();
+      }
     }
 
     async function carregarGrupos(filtro = '', categoria = null) {
       const loading = document.getElementById('loading');
       const container = document.getElementById('grupos');
-      const sectionTitle = document.getElementById('sectionTitle');
-
       loading.style.display = 'block';
       container.innerHTML = '';
 
       try {
         let baseQuery = 'aprovado=eq.true';
-        if (categoria) {
-          baseQuery += `&categoria=eq.${categoria}`;
-          const catName = CATEGORIES.find(c => c.id === categoria)?.name || 'Grupos';
-          sectionTitle.textContent = `Grupos de ${catName}`;
-        } else {
-          sectionTitle.textContent = 'Grupos em Destaque';
-        }
-
-        if (filtro) {
-          baseQuery += `&or=(nome.ilike.*${filtro}*,descricao.ilike.*${filtro}*)`;
-        }
-
-        const vipQuery = `grupos?${baseQuery}&vip=eq.true&order=posicao_vip.asc.nullslast`;
-        const normalQuery = `grupos?${baseQuery}&vip=eq.false&order=created_at.desc`;
-
+        if (categoria) baseQuery += `&categoria=eq.${categoria}`;
+        if (filtro) baseQuery += `&or=(nome.ilike.*${filtro}*,descricao.ilike.*${filtro}*)`;
+        
         const [gruposVip, gruposNormais] = await Promise.all([
-          supabaseFetch(vipQuery),
-          supabaseFetch(normalQuery)
+          supabaseFetch(`grupos?${baseQuery}&vip=eq.true&order=posicao_vip.asc.nullslast`),
+          supabaseFetch(`grupos?${baseQuery}&vip=eq.false&order=created_at.desc`)
         ]);
         
         const todosGrupos = [...gruposVip, ...gruposNormais];
-
         loading.style.display = 'none';
+        
         if (todosGrupos.length === 0) {
-          container.innerHTML = '<div class="empty">Nenhum grupo encontrado com esses critérios.</div>';
+          container.innerHTML = '<div class="empty">Nenhum grupo encontrado.</div>';
         } else {
           renderizarGrupos(todosGrupos);
         }
       } catch (error) {
-        console.error('Erro ao carregar grupos:', error);
         loading.style.display = 'none';
-        container.innerHTML = '<div class="empty">Ocorreu um erro ao buscar os grupos. Tente novamente.</div>';
+        container.innerHTML = '<div class="empty">Ocorreu um erro ao buscar os grupos.</div>';
       }
     }
 
@@ -458,6 +456,5 @@
       }).join('');
     }
   </script>
-
 </body>
 </html>
