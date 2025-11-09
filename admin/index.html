@@ -303,7 +303,12 @@
         alert(vip ? 'Grupo agora é VIP!' : 'VIP removido!');
         carregarGrupos();
       } catch (error) {
-        alert('Erro: ' + error.message);
+        try {
+            const parsedError = JSON.parse(error.message);
+            alert('Erro: ' + parsedError.message);
+        } catch (e) {
+            alert('Erro: ' + error.message);
+        }
       }
     }
 
