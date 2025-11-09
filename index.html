@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KDefy Grupos - Divulgação de Grupos WhatsApp e Telegram</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #25d366;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1fb855;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5568d3;
+    }
+
+    .menu-btn {
+      background: #f3f4f6;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .menu-btn span {
+      width: 24px;
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100vh;
+      background: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+      transition: right 0.3s;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 999;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    .sidebar h3 {
+      margin-bottom: 20px;
+      color: #667eea;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .sidebar .danger {
+      background: #fee;
+      color: #c33;
+    }
+
+    .sidebar .danger:hover {
+      background: #c33;
+      color: white;
+    }
+
+    /* Grid de Grupos */
+    .grupos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .grupo-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .grupo-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .grupo-card.vip {
+      border: 3px solid gold;
+      box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+    }
+
+    .grupo-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #f3f4f6;
+    }
+
+    .grupo-content {
+      padding: 15px;
+    }
+
+    .grupo-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .badge-whatsapp {
+      background: #25d366;
+      color: white;
+    }
+
+    .badge-telegram {
+      background: #0088cc;
+      color: white;
+    }
+
+    .badge-vip {
+      background: gold;
+      color: #333;
+      margin-left: 8px;
+    }
+
+    .grupo-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .grupo-desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      max-height: 60px;
+      overflow: hidden;
+    }
+
+    .grupo-categoria {
+      font-size: 12px;
+      color: #667eea;
+      margin-bottom: 12px;
+    }
+
+    /* Paginação */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .pagination button {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination .page-info {
+      padding: 8px 16px;
+      font-weight: 600;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 12px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .logo { font-size: 18px; }
+      .grupos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <div class="sidebar" id="sidebar">
+    <h3>Menu</h3>
+    <a href="index.html">🏠 Home</a>
+    <a href="meus-grupos/index.html">📱 Meus Grupos</a>
+    <a href="enviar-grupo/index.html">➕ Enviar Grupo</a>
+    <a href="javascript:void(0)" onclick="window.open('/politica-privacidade', '_blank')">🔒 Política de Privacidade</a>
+    <a href="javascript:void(0)" onclick="window.open('/termos-uso', '_blank')">📜 Termos de Uso</a>
+    <a href="javascript:void(0)" class="danger" onclick="limparDados()">🗑️ Limpar Cookies/IndexDB</a>
+  </div>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        💬 KDefy Grupos
+      </div>
+      <div class="nav-buttons">
+        <a href="enviar-grupo/index.html" class="btn btn-primary">➕ Enviar Grupo</a>
+        <a href="meus-grupos/index.html" class="btn btn-secondary">📱 Meus Grupos</a>
+        <div class="menu-btn" onclick="toggleSidebar()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </header>
+
+    <div id="loading" class="loading">Carregando grupos...</div>
+    <div id="grupos" class="grupos-grid"></div>
+    <div id="pagination" class="pagination" style="display: none;"></div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const GRUPOS_POR_PAGINA = 35;
+    let paginaAtual = 1;
+    let totalGrupos = 0;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('sidebarOverlay').classList.toggle('active');
+    }
+
+    document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+
+    async function limparDados() {
+      if (confirm('Tem certeza que deseja limpar todos os dados locais?')) {
+        await limparIndexDB();
+        localStorage.clear();
+        sessionStorage.clear();
+        alert('Dados limpos com sucesso!');
+        location.reload();
+      }
+    }
+
+    async function carregarGrupos(pagina = 1) {
+      try {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('grupos').innerHTML = '';
+        document.getElementById('pagination').style.display = 'none';
+
+        // Buscar grupos VIP
+        const gruposVip = await supabaseFetch(
+          'grupos?aprovado=eq.true&vip=eq.true&order=posicao_vip.asc.nullslast'
+        );
+
+        // Buscar grupos normais com paginação
+        const offset = (pagina - 1) * GRUPOS_POR_PAGINA;
+        const gruposNormais = await supabaseFetch(
+          `grupos?aprovado=eq.true&vip=eq.false&order=created_at.desc&limit=${GRUPOS_POR_PAGINA}&offset=${offset}`
+        );
+
+        // Contar total para paginação
+        const countResponse = await fetch(
+          `${SUPABASE_URL}/rest/v1/grupos?aprovado=eq.true&vip=eq.false&select=count`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Prefer': 'count=exact'
+            }
+          }
+        );
+        const countData = await countResponse.json();
+        totalGrupos = countData[0]?.count || 0;
+
+        const todosGrupos = [...gruposVip, ...gruposNormais];
+
+        if (todosGrupos.length === 0) {
+          document.getElementById('grupos').innerHTML = 
+            '<div class="empty">Nenhum grupo disponível no momento. Seja o primeiro a enviar!</div>';
+        } else {
+          renderizarGrupos(todosGrupos);
+          renderizarPaginacao(pagina);
+        }
+
+        document.getElementById('loading').style.display = 'none';
+      } catch (error) {
+        console.error('Erro ao carregar grupos:', error);
+        document.getElementById('loading').innerHTML = 
+          '<div class="empty">Erro ao carregar grupos. Tente novamente.</div>';
+      }
+    }
+
+    function renderizarGrupos(grupos) {
+      const container = document.getElementById('grupos');
+      container.innerHTML = grupos.map(grupo => `
+        <div class="grupo-card ${grupo.vip ? 'vip' : ''}">
+          <img src="${grupo.foto_url || 'https://via.placeholder.com/300'}" 
+               alt="${grupo.nome}" class="grupo-img">
+          <div class="grupo-content">
+            <div>
+              <span class="grupo-badge badge-${grupo.tipo}">${grupo.tipo.toUpperCase()}</span>
+              ${grupo.vip ? '<span class="grupo-badge badge-vip">VIP</span>' : ''}
+            </div>
+            <h3 class="grupo-title">${grupo.nome}</h3>
+            <p class="grupo-categoria">📁 ${grupo.categoria || 'Outros'}</p>
+            <p class="grupo-desc">${grupo.descricao || 'Sem descrição'}</p>
+            <a href="${grupo.link}" target="_blank" class="btn btn-primary" style="width: 100%;">
+              Entrar no Grupo
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarPaginacao(paginaAtual) {
+      const totalPaginas = Math.ceil(totalGrupos / GRUPOS_POR_PAGINA);
+      
+      if (totalPaginas <= 1) return;
+
+      document.getElementById('pagination').style.display = 'flex';
+      document.getElementById('pagination').innerHTML = `
+        <button onclick="mudarPagina(${paginaAtual - 1})" ${paginaAtual === 1 ? 'disabled' : ''}>
+          ← Anterior
+        </button>
+        <span class="page-info">Página ${paginaAtual} de ${totalPaginas}</span>
+        <button onclick="mudarPagina(${paginaAtual + 1})" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+          Próximo →
+        </button>
+      `;
+    }
+
+    function mudarPagina(novaPagina) {
+      paginaAtual = novaPagina;
+      carregarGrupos(paginaAtual);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Carregar na inicialização
+    carregarGrupos();
+  </script>
+</body>
+</html>
