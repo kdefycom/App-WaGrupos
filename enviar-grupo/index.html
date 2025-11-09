@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enviar Grupo - KDefy</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: border 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+    }
+
+    .btn-secondary {
+      background: #25d366;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #1fb855;
+    }
+
+    .btn-back {
+      background: #f3f4f6;
+      color: #333;
+    }
+
+    .preview-img {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 20px auto;
+      display: block;
+      border: 3px solid #667eea;
+    }
+
+    .regras-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .regra-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 8px;
+    }
+
+    .regra-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .tipo-btn {
+      flex: 1;
+      padding: 40px 20px;
+      border: 3px solid #e0e0e0;
+      background: white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .tipo-btn:hover {
+      border-color: #667eea;
+      transform: translateY(-5px);
+    }
+
+    .tipo-btn.whatsapp {
+      border-color: #25d366;
+    }
+
+    .tipo-btn.telegram {
+      border-color: #0088cc;
+    }
+
+    .tipo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .upload-area {
+      border: 2px dashed #667eea;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+
+    .upload-area:hover {
+      background: #f9fafb;
+    }
+
+    .upload-area input {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .tipo-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>➕ Enviar Grupo</h1>
+      <p class="subtitle">Compartilhe seu grupo com a comunidade</p>
+
+      <!-- Step 1: Escolher Tipo -->
+      <div id="step1" class="step active">
+        <label>Escolha o tipo do grupo:</label>
+        <div class="tipo-grid">
+          <button class="tipo-btn whatsapp" onclick="escolherTipo('whatsapp')">
+            📱<br>WhatsApp
+          </button>
+          <button class="tipo-btn telegram" onclick="escolherTipo('telegram')">
+            ✈️<br>Telegram
+          </button>
+        </div>
+        <a href="../index.html" class="btn btn-back">← Voltar</a>
+      </div>
+
+      <!-- Step 2: Validar Link -->
+      <div id="step2" class="step">
+        <div id="alert"></div>
+        <label>Cole o link do grupo <span id="tipoTexto"></span>:</label>
+        <input type="url" id="linkInput" placeholder="https://">
+        <button class="btn btn-primary" onclick="validarLink()">Validar Link</button>
+        <button class="btn btn-back" onclick="voltarStep(1)">← Voltar</button>
+      </div>
+
+      <!-- Step 3: Preview e Detalhes -->
+      <div id="step3" class="step">
+        <h2>📝 Detalhes do Grupo</h2>
+        
+        <img id="previewImg" class="preview-img" src="https://via.placeholder.com/300" alt="Preview">
+        
+        <div class="upload-area" onclick="document.getElementById('fotoUpload').click()">
+          <p>📷 Clique para alterar a foto</p>
+          <input type="file" id="fotoUpload" accept="image/*" onchange="alterarFoto()">
+        </div>
+
+        <label>Nome do Grupo *</label>
+        <input type="text" id="nomeInput" placeholder="Ex: Grupo de Amigos" required>
+
+        <label>Descrição/Bio do Grupo</label>
+        <textarea id="descInput" placeholder="Fale sobre o grupo..."></textarea>
+
+        <label>Categoria *</label>
+        <select id="categoriaSelect">
+          <option value="">Selecione...</option>
+          <option value="amizade">Amizade</option>
+          <option value="jogos">Jogos</option>
+          <option value="anime">Anime</option>
+          <option value="figurinhas">Figurinhas</option>
+          <option value="namoro">Namoro</option>
+          <option value="cidade">Cidade</option>
+          <option value="postagens">Postagens</option>
+          <option value="vendas">Vendas</option>
+          <option value="bet">Apostas/Bet</option>
+          <option value="outros">Outros</option>
+        </select>
+
+        <label>Regras do Grupo</label>
+        <div class="regras-grid" id="regrasGrid"></div>
+
+        <label>Seu Email *</label>
+        <input type="email" id="emailInput" placeholder="seu@email.com" required>
+
+        <button class="btn btn-secondary" onclick="enviarGrupo()">Enviar para Análise</button>
+        <button class="btn btn-back" onclick="voltarStep(2)">← Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
+  <script>
+    let tipoSelecionado = '';
+    let linkValidado = '';
+    let fotoUrl = 'https://via.placeholder.com/300';
+
+    const REGRAS = [
+      'Proibido conteúdo pornográfico',
+      'Proibido brigas e discussões',
+      'Proibido racismo',
+      'Proibido assédio',
+      'Respeitar LGPD',
+      'Proibido spam',
+      'Proibido links maliciosos'
+    ];
+
+    function mostrarStep(numero) {
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      document.getElementById(`step${numero}`).classList.add('active');
+    }
+
+    function voltarStep(numero) {
+      mostrarStep(numero);
+    }
+
+    function escolherTipo(tipo) {
+      tipoSelecionado = tipo;
+      document.getElementById('tipoTexto').textContent = tipo === 'whatsapp' ? 'WhatsApp' : 'Telegram';
+      mostrarStep(2);
+    }
+
+    async function validarLink() {
+      const link = document.getElementById('linkInput').value.trim();
+      const alert = document.getElementById('alert');
+
+      if (!link) {
+        alert.innerHTML = '<div class="alert alert-error">Por favor, cole o link do grupo.</div>';
+        return;
+      }
+
+      // Validar formato do link
+      const isWhatsApp = tipoSelecionado === 'whatsapp';
+      const isTelegram = tipoSelecionado === 'telegram';
+
+      if (isWhatsApp && !link.startsWith('https://chat.whatsapp.com/')) {
+        alert.innerHTML = '<div class="alert alert-error">Link de WhatsApp inválido. Deve começar com https://chat.whatsapp.com/</div>';
+        return;
+      }
+
+      if (isTelegram && !link.startsWith('https://t.me/')) {
+        alert.innerHTML = '<div class="alert alert-error">Link de Telegram inválido. Deve começar com https://t.me/</div>';
+        return;
+      }
+
+      // Verificar se o link já existe
+      try {
+        const grupos = await supabaseFetch(`grupos?link=eq.${encodeURIComponent(link)}`);
+        if (grupos.length > 0) {
+          alert.innerHTML = '<div class="alert alert-error">Este link já foi cadastrado!</div>';
+          return;
+        }
+
+        // Link válido, fazer scraping
+        alert.innerHTML = '<div class="alert alert-success">✓ Link válido! Carregando preview...</div>';
+        linkValidado = link;
+
+        // Simular scraping (em produção, chamar backend real)
+        setTimeout(() => {
+          renderizarRegras();
+          mostrarStep(3);
+        }, 1000);
+
+      } catch (error) {
+        alert.innerHTML = '<div class="alert alert-error">Erro ao validar link. Tente novamente.</div>';
+      }
+    }
+
+    function renderizarRegras() {
+      const grid = document.getElementById('regrasGrid');
+      grid.innerHTML = REGRAS.map((regra, i) => `
+        <div class="regra-item">
+          <input type="checkbox" id="regra${i}" checked>
+          <label for="regra${i}" style="margin: 0;">${regra}</label>
+        </div>
+      `).join('');
+    }
+
+    function alterarFoto() {
+      const file = document.getElementById('fotoUpload').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          fotoUrl = e.target.result;
+          document.getElementById('previewImg').src = fotoUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function enviarGrupo() {
+      const nome = document.getElementById('nomeInput').value.trim();
+      const descricao = document.getElementById('descInput').value.trim();
+      const categoria = document.getElementById('categoriaSelect').value;
+      const email = document.getElementById('emailInput').value.trim();
+
+      if (!nome || !categoria || !email) {
+        alert('Por favor, preencha todos os campos obrigatórios (*)');
+        return;
+      }
+
+      const regras = REGRAS.filter((_, i) => 
+        document.getElementById(`regra${i}`).checked
+      );
+
+      const grupo = {
+        nome,
+        link: linkValidado,
+        tipo: tipoSelecionado,
+        descricao,
+        categoria,
+        foto_url: fotoUrl,
+        email,
+        regras: JSON.stringify(regras),
+        aprovado: false
+      };
+
+      try {
+        const resultado = await supabaseFetch('grupos', {
+          method: 'POST',
+          body: JSON.stringify(grupo)
+        });
+
+        // Salvar no IndexedDB
+        await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
+
+        alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
+        window.location.href = '../meus-grupos/index.html';
+      } catch (error) {
+        alert('Erro ao enviar grupo: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>
