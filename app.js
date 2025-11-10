@@ -44,45 +44,44 @@ const CATEGORIES = [
 ];
 
 const ICONS = {
-    all: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>',
-    amizade: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>',
-    amor_romance: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>',
-    carros_motos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>',
-    cidades: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path></svg>',
-    compra_venda: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.97 1.078h10.428a1 1 0 00.97-1.078l.305-1.222H17a1 1 0 100-2H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path><path d="M..."></path></svg>', // Truncated for brevity
-    concursos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z" clip-rule="evenodd"></path></svg>',
-    desenhos_animes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zM12 11a1 1 0 100-2 1 1 0 000 2zM8 9a1 1 0 112 0 1 1 0 01-2 0zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>',
-    divulgacao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>',
-    educacao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>',
-    emagrecimento: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.636 6.636a.5.5 0 01.707 0L10 9.293l2.657-2.657a.5.5 0 01.707.707L10.707 10l2.657 2.657a.5.5 0 01-.707.707L10 10.707l-2.657 2.657a.5.5 0 01-.707-.707L9.293 10 6.636 7.343a.5.5 0 010-.707z" clip-rule="evenodd"></path></svg>',
-    esportes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 5.168A1 1 0 008 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z"></path></svg>',
-    eventos: '<svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>',
-    fas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    figurinhas_stickers: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    filmes_series: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    frases_mensagens: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    futebol: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    games_jogos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    ganhar_dinheiro: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    imobiliaria: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    investimentos_financas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    links: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    memes_engracados: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    moda_beleza: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    musica: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    namoro: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    negocios_empreendedorismo: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    noticias: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    outros: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    politica: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    profissoes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    receitas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    redes_sociais: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    religiao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    shitpost: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
-    tecnologia: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M..."></path></svg>', // Truncated
+  all: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h3v3H4V4zm0 5h3v3H4V9zm0 5h3v3H4v-3zm5-10h3v3H9V4zm0 5h3v3H9V9zm0 5h3v3H9v-3zm5-10h3v3h-3V4zm0 5h3v3h-3V9zm0 5h3v3h-3v-3z"/></svg>',
+  amizade: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M13 7a3 3 0 11-6 0 3 3 0 016 0zM4 16a4 4 0 118-1H4z"/></svg>',
+  amor_romance: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.344l1.172-1.172a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>',
+  carros_motos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 11l1-4h12l1 4H3zm1 2a1 1 0 100 2h1a1 1 0 100-2H4zm10 0a1 1 0 100 2h1a1 1 0 100-2h-1zM6 7l2-3h4l2 3H6z"/></svg>',
+  cidades: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 3h5v4h4V3h5v14H3V3zm2 2v10h2V5H5zm6 4v6h2V9h-2z"/></svg>',
+  compra_venda: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2H3V4zm0 4h16v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm3 2v4h2v-4H6zm6 0v4h2v-4h-2z"/></svg>',
+  concursos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1h3v14H6V4h3V3a1 1 0 011-1zM8 6v2h4V6H8zm0 4v2h4v-2H8z"/></svg>',
+  desenhos_animes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM7 8a1 1 0 110 2 1 1 0 010-2zm6 0a1 1 0 110 2 1 1 0 010-2zm-6 4a5 5 0 006 0H7z"/></svg>',
+  divulgacao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 8l10-5v14L3 12V8zm11 1h3v2h-3V9z"/></svg>',
+  educacao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l8 4-8 4-8-4 8-4zm0 6l5.5-2.75V10L10 12l-5.5-2V5.25L10 8z"/></svg>',
+  emagrecimento: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2c3 3 3 13 0 16-3-3-3-13 0-16z"/></svg>',
+  esportes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 5h3l-4 6H7l4-6z"/></svg>',
+  eventos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M6 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2V2h-2v2H8V2H6zm0 6h8v2H6V8z"/></svg>',
+  fas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l2 4 4 .5-3 3 1 4-4-2-4 2 1-4-3-3 4-.5 2-4z"/></svg>',
+  figurinhas_stickers: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h8l5-5V4a1 1 0 00-1-1H4zm8 10h3l-3 3v-3z"/></svg>',
+  filmes_series: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4zm2 2v2h2V6H6zm0 4v2h2v-2H6zm6 0v2h2v-2h-2z"/></svg>',
+  frases_mensagens: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a2 2 0 012-2h10a2 2 0 012 2v10l-3-2H5a2 2 0 01-2-2V4z"/></svg>',
+  futebol: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm2 4l2 3-2 3H8L6 9l2-3h4z"/></svg>',
+  games_jogos: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M5 7a2 2 0 00-2 2v4a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2H5zm1 3h2v1H6v-1zm6 0h2v1h-2v-1z"/></svg>',
+  ganhar_dinheiro: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 4v1.5h2v2h-2v1h2v2h-2V14H9v-1.5H7v-2h2v-1H7v-2h2V6h2z"/></svg>',
+  imobiliaria: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l7 6v8h-4v-4H7v4H3V9l7-6z"/></svg>',
+  investimentos_financas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 10h2v6H3v-6zm4-4h2v10H7V6zm4 2h2v8h-2V8zm4-4h2v12h-2V4z"/></svg>',
+  links: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M7 7h6v2H7V7zm-1 3h8v2H6v-2zm-1 3h10v2H5v-2z"/></svg>',
+  memes_engracados: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm-3 6h2v2H7V8zm4 0h2v2h-2V8zm-4 3a3 3 0 006 0H7z"/></svg>',
+  moda_beleza: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a3 3 0 013 3v4a3 3 0 11-6 0V5a3 3 0 013-3zM7 14h6v4H7v-4z"/></svg>',
+  musica: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M14 3v10.56A4 4 0 1112 13V7l-4 1V3l6-1z"/></svg>',
+  namoro: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3.5 7a3.5 3.5 0 017 0 3.5 3.5 0 017 0c0 3.75-7 8-7 8s-7-4.25-7-8z"/></svg>',
+  negocios_empreendedorismo: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v5H3V4zm0 7h14v5a1 1 0 01-1 1H4a1 1 0 01-1-1v-5z"/></svg>',
+  noticias: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 3h12v14H4V3zm2 2v2h8V5H6zm0 4v2h8V9H6zm0 4v2h5v-2H6z"/></svg>',
+  outros: '<svg fill="currentColor" viewBox="0 0 20 20"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="14" cy="10" r="2"/></svg>',
+  politica: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l6 5v11H4V7l6-5zM6 9v7h2V9H6zm6 0v7h2V9h-2z"/></svg>',
+  profissoes: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M3 8l7-4 7 4v2H3V8zm0 3h14v5H3v-5z"/></svg>',
+  receitas: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M5 3h10v2H5V3zm0 4h10v10H5V7zm2 2v6h6V9H7z"/></svg>',
+  redes_sociais: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 3h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1zm3 2v2h6V5H7zm0 4v2h6V9H7zm0 4v2h6v-2H7z"/></svg>',
+  religiao: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M9 2h2v3h3v2h-3v11H9V7H6V5h3V2z"/></svg>',
+  shitpost: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 3a4 4 0 013 7H7a4 4 0 013-7zM5 11h10v5H5v-5z"/></svg>',
+  tecnologia: '<svg fill="currentColor" viewBox="0 0 20 20"><path d="M4 5h12v10H4V5zm2 2v6h8V7H6z"/></svg>'
 };
-
 
 // Helper para fazer requisições
 async function supabaseFetch(endpoint, options = {}) {
