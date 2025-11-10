@@ -244,6 +244,12 @@
 
   <script src="/app.js"></script>
   <script>
+    function getCategoryName(id) {
+      if (typeof CATEGORIES === 'undefined') return id;
+      const category = CATEGORIES.find(cat => cat.id === id);
+      return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1);
+    }
+
     async function carregarMeusGrupos() {
       try {
         const gruposLocais = await buscarGruposLocais();
@@ -260,17 +266,14 @@
           return;
         }
 
-        // Buscar status atualizado da API
         const ids = gruposLocais.map(g => g.id).join(',');
         const gruposAPI = await supabaseFetch(`grupos?id=in.(${ids})`);
 
-        // Merge dados locais com API
         const grupos = gruposLocais.map(local => {
           const api = gruposAPI.find(g => g.id === local.id);
           return api || local;
         });
 
-        // Verificar se tem grupo recém aprovado para mostrar modal
         const recemAprovado = grupos.find(g => 
           g.aprovado && !localStorage.getItem(`visto_${g.id}`)
         );
@@ -316,7 +319,7 @@
             <div class="grupo-titulo">${grupo.nome}</div>
             <span class="grupo-status status-${statusClass}">${statusTexto}</span>
             <div class="grupo-desc">${grupo.descricao || 'Sem descrição'}</div>
-            <div><strong>Categoria:</strong> ${grupo.categoria}</div>
+            <div><strong>Categoria:</strong> ${getCategoryName(grupo.categoria)}</div>
             <div><strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}</div>
             
             ${grupo.mensagem_admin ? `

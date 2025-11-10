@@ -259,19 +259,7 @@
         <textarea id="descInput" placeholder="Fale sobre o grupo..."></textarea>
 
         <label>Categoria *</label>
-        <select id="categoriaSelect">
-          <option value="">Selecione...</option>
-          <option value="amizade">Amizade</option>
-          <option value="jogos">Jogos</option>
-          <option value="anime">Anime</option>
-          <option value="figurinhas">Figurinhas</option>
-          <option value="namoro">Namoro</option>
-          <option value="cidade">Cidade</option>
-          <option value="postagens">Postagens</option>
-          <option value="vendas">Vendas</option>
-          <option value="bet">Apostas/Bet</option>
-          <option value="outros">Outros</option>
-        </select>
+        <select id="categoriaSelect"></select>
 
         <label>Regras do Grupo</label>
         <div class="regras-grid" id="regrasGrid"></div>
@@ -301,6 +289,32 @@
       'Proibido links maliciosos'
     ];
 
+    document.addEventListener('DOMContentLoaded', () => {
+      popularCategorias();
+    });
+
+    function popularCategorias() {
+      const select = document.getElementById('categoriaSelect');
+      if (!select || typeof CATEGORIES === 'undefined') {
+        console.error('Elemento select ou array de CATEGORIAS não encontrado.');
+        return;
+      }
+
+      select.innerHTML = ''; // Limpa as opções estáticas
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Selecione...';
+      select.appendChild(defaultOption);
+
+      CATEGORIES.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.name;
+        select.appendChild(option);
+      });
+    }
+
     function mostrarStep(numero) {
       document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
       document.getElementById(`step${numero}`).classList.add('active');
@@ -325,7 +339,6 @@
         return;
       }
 
-      // Validar formato do link
       const isWhatsApp = tipoSelecionado === 'whatsapp';
       const isTelegram = tipoSelecionado === 'telegram';
 
@@ -339,7 +352,6 @@
         return;
       }
 
-      // Verificar se o link já existe
       try {
         const grupos = await supabaseFetch(`grupos?link=eq.${encodeURIComponent(link)}`);
         if (grupos.length > 0) {
@@ -347,11 +359,9 @@
           return;
         }
 
-        // Link válido, fazer scraping
         alert.innerHTML = '<div class="alert alert-success">✓ Link válido! Carregando preview...</div>';
         linkValidado = link;
 
-        // Simular scraping (em produção, chamar backend real)
         setTimeout(() => {
           renderizarRegras();
           mostrarStep(3);
@@ -417,7 +427,6 @@
           body: JSON.stringify(grupo)
         });
 
-        // Salvar no IndexedDB
         await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
 
         alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
