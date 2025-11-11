@@ -3,519 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout - Payment</title>
+<title>Checkout - VIP</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-  background: #0a0a0a;
-  color: #fff;
-  padding: 0;
-  margin: 0;
-}
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  background: #1a1a1a;
-  min-height: 100vh;
-}
-.header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-  border-radius: 0 0 20px 20px;
-}
-.header-logo {
-  width: 60px;
-  height: 60px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.header-info h1 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-.header-info p {
-  font-size: 12px;
-  opacity: 0.9;
-}
-.price {
-  margin-left: auto;
-  font-size: 24px;
-  font-weight: 800;
-  color: #00ff88;
-  text-shadow: 0 0 10px rgba(0,255,136,0.3);
-}
-.section {
-  padding: 24px 20px;
-  border-bottom: 1px solid #2a2a2a;
-}
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.section-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.section-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: #fff;
-}
-.section-title {
-  font-size: 16px;
-  font-weight: 700;
-}
-.input-group {
-  margin-bottom: 16px;
-}
-.input-group label {
-  display: block;
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 8px;
-}
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #252525;
-  border-radius: 10px;
-  border: 1px solid #333;
-  transition: all 0.3s;
-}
-.input-wrapper:focus-within {
-  border-color: #ff8c00;
-  box-shadow: 0 0 0 2px rgba(255,140,0,0.1);
-}
-.input-icon {
-  padding: 0 14px;
-  color: #666;
-}
-input {
-  flex: 1;
-  padding: 14px 14px 14px 0;
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-size: 15px;
-  outline: none;
-}
-input::placeholder {
-  color: #666;
-}
-.payment-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 16px;
-  background: #1a1a1a;
-  border: 2px solid #00ff88;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-bottom: 20px;
-}
-.payment-button:hover {
-  background: rgba(0,255,136,0.05);
-}
-.pix-icon {
-  width: 28px;
-  height: 28px;
-  fill: #00ff88;
-}
-.payment-button span {
-  font-size: 16px;
-  font-weight: 600;
-  color: #00ff88;
-}
-.payment-info {
-  background: #252525;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-}
-.info-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.info-item:last-child {
-  margin-bottom: 0;
-}
-.info-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-.info-text h4 {
-  font-size: 15px;
-  color: #4d9fff;
-  margin-bottom: 4px;
-}
-.info-text p {
-  font-size: 13px;
-  color: #999;
-  line-height: 1.4;
-}
-.totals {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-}
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 15px;
-}
-.total-row.main {
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-}
-.btn-primary {
-  width: 100%;
-  padding: 18px;
-  background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 24px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,229,118,0.3);
-}
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-  font-size: 12px;
-  color: #666;
-}
-.footer-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.qr-section {
-  padding: 24px 20px;
-  text-align: center;
-  display: none;
-}
-.qr-section h3 {
-  font-size: 18px;
-  margin-bottom: 16px;
-}
-.qr-code-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  display: inline-block;
-  margin: 20px 0;
-}
-#pix-payload {
-  background: #252525;
-  padding: 16px;
-  border-radius: 8px;
-  word-break: break-all;
-  margin: 16px 0;
-  color: #00ff88;
-  font-family: monospace;
-  font-size: 12px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-.copy-btn {
-  background: linear-gradient(135deg, #6a00ff 0%, #8b00ff 100%);
-  padding: 14px 24px;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.copy-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(106,0,255,0.3);
-}
-.timer {
-  color: #ff4444;
-  margin-top: 16px;
-  font-weight: 600;
-  font-size: 16px;
-}
-.success {
-  color: #00ff88;
-  font-weight: 700;
-  margin-top: 16px;
-  font-size: 18px;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;padding:0}
+.container{max-width:100%;width:100%;margin:0 auto;background:#1a1a1a;min-height:100vh}
+@media(min-width:768px){.container{max-width:480px;margin:20px auto;border-radius:12px;min-height:auto}}
+.header{display:flex;align-items:center;gap:15px;padding:24px 20px;background:linear-gradient(135deg,#ff6b35 0%,#ff4757 50%,#a55eea 100%);position:relative}
+.logo{width:80px;height:80px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.header-info{flex:1}
+.header-title{font-size:18px;font-weight:bold;color:#fff;margin-bottom:4px}
+.header-subtitle{font-size:13px;color:rgba(255,255,255,0.8)}
+.price{font-size:24px;font-weight:bold;color:#00ff88;text-align:right}
+.section{padding:24px 20px;border-bottom:1px solid #2a2a2a}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.section-icon{width:24px;height:24px;fill:#ff9500}
+.section h3{font-size:16px;font-weight:600;color:#fff}
+.input-group{margin-bottom:16px}
+.input-label{display:block;font-size:14px;color:#999;margin-bottom:8px}
+.input-wrapper{position:relative}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;fill:#666}
+input{width:100%;padding:14px 14px 14px 42px;border-radius:8px;border:1px solid #333;background:#0f0f0f;color:#fff;font-size:15px}
+input::placeholder{color:#555}
+input:focus{outline:none;border-color:#ff9500}
+.payment-box{border:2px solid #00ff88;border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px;background:#0f0f0f;margin-bottom:20px;position:relative}
+.payment-icon{width:32px;height:32px}
+.payment-icon svg{fill:#00ff88}
+.payment-text{font-size:16px;font-weight:600;color:#00ff88}
+.payment-check{position:absolute;right:16px;width:24px;height:24px;background:#00ff88;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.payment-check svg{width:14px;height:14px;fill:#000}
+.info-list{margin-top:20px}
+.info-item{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+.info-icon{width:24px;height:24px;flex-shrink:0;margin-top:2px}
+.info-icon.blue svg{fill:#3498db}
+.info-icon.cyan svg{fill:#00d4ff}
+.info-icon.green svg{fill:#00ff88}
+.info-content h4{font-size:15px;color:#3498db;margin-bottom:4px;font-weight:600}
+.info-content.cyan h4{color:#00d4ff}
+.info-content.green h4{color:#00ff88}
+.info-content p{font-size:13px;color:#999;line-height:1.5}
+.total-row{display:flex;justify-content:space-between;margin-bottom:12px;font-size:15px}
+.total-row.subtotal{color:#999}
+.total-row.final{font-size:18px;font-weight:bold;color:#fff;margin-top:16px;padding-top:16px;border-top:1px solid #2a2a2a}
+button{width:100%;padding:16px;background:#00c853;color:#fff;font-size:16px;font-weight:bold;border:none;border-radius:8px;cursor:pointer;margin-top:24px;transition:background 0.2s}
+button:hover{background:#00a844}
+button:disabled{opacity:0.6;cursor:not-allowed}
+.footer{display:flex;justify-content:center;align-items:center;gap:40px;padding:20px;font-size:13px;color:#666}
+.footer-item{display:flex;align-items:center;gap:8px}
+.footer-icon{width:18px;height:18px;fill:#666}
+.qr-section{padding:24px 20px;display:none;text-align:center}
+.qr-section h3{font-size:18px;margin-bottom:8px}
+.qr-section p{color:#999;margin-bottom:20px}
+#qrcode{margin:20px auto;border-radius:8px}
+#pix-payload{background:#0f0f0f;padding:12px;border-radius:6px;word-break:break-all;margin:20px 0;color:#00ff88;font-size:12px;border:1px solid #333}
+.copy-btn{background:#a55eea;padding:14px 24px;border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:600;transition:background 0.2s}
+.copy-btn:hover{background:#8b4bd4}
+.timer{color:#ff4757;margin-top:16px;font-weight:bold;font-size:16px}
+.success{color:#00ff88;font-weight:bold;margin-top:16px;font-size:16px}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <div class="header-logo">
-      <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:#fff">
-        <path d="M12 2C10.89 2 10 2.89 10 4V6H9C7.89 6 7 6.89 7 8V10C7 11.11 7.89 12 9 12H15C16.11 12 17 11.11 17 10V8C17 6.89 16.11 6 15 6H14V4C14 2.89 13.11 2 12 2M12 4C12 4 12 6 12 6C12 6 12 4 12 4M9 8H15V10H9V8M12 13C9.33 13 7.14 14.92 6.35 17.5C6.13 18.17 6 18.88 6 19.6C6 20.37 6.13 21.11 6.35 21.78C7.14 24.36 9.33 26.28 12 26.28C14.67 26.28 16.86 24.36 17.65 21.78C17.87 21.11 18 20.37 18 19.6C18 18.88 17.87 18.17 17.65 17.5C16.86 14.92 14.67 13 12 13Z"/>
-      </svg>
-    </div>
-    <div class="header-info">
-      <h1>VIP</h1>
-      <p>No Pix:</p>
-    </div>
-    <div class="price">R$ 78,00</div>
-  </div>
+<div class="header">
+<div class="logo">
+<svg viewBox="0 0 100 100" style="width:100%;height:100%">
+<defs>
+<linearGradient id="vipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1"/>
+<stop offset="100%" style="stop-color:#a55eea;stop-opacity:1"/>
+</linearGradient>
+</defs>
+<rect width="100" height="100" fill="#000" rx="12"/>
+<text x="50" y="65" font-family="Arial Black,sans-serif" font-size="32" font-weight="900" fill="url(#vipGrad)" text-anchor="middle">VIP</text>
+<path d="M30 25 L35 40 L25 40 Z M50 25 L50 40 M70 25 L75 40 L65 40 Z" stroke="url(#vipGrad)" stroke-width="3" fill="none"/>
+</svg>
+</div>
+<div class="header-info">
+<div class="header-title">VIP</div>
+<div class="header-subtitle">No Pix:</div>
+</div>
+<div class="price">R$ 78,00</div>
+</div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
-      </div>
-      <h2 class="section-title">Identificação</h2>
-    </div>
-    
-    <div class="input-group">
-      <label>Nome completo</label>
-      <div class="input-wrapper">
-        <span class="input-icon">👤</span>
-        <input type="text" id="nome" placeholder="Digite seu nome completo">
-      </div>
-    </div>
+<div class="section">
+<div class="section-header">
+<svg class="section-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+<h3>Identificação</h3>
+</div>
+<div class="input-group">
+<label class="input-label">Nome completo</label>
+<div class="input-wrapper">
+<svg class="input-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+<input type="text" id="nome" placeholder="Digite seu nome completo">
+</div>
+</div>
+<div class="input-group">
+<label class="input-label">E-mail</label>
+<div class="input-wrapper">
+<svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+<input type="email" id="email" placeholder="">
+</div>
+</div>
+<div class="input-group">
+<label class="input-label">CPF/CNPJ</label>
+<div class="input-wrapper">
+<svg class="input-icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+<input type="text" id="cpf" placeholder="Digite seu CPF ou CNPJ">
+</div>
+</div>
+</div>
 
-    <div class="input-group">
-      <label>E-mail</label>
-      <div class="input-wrapper">
-        <span class="input-icon">✉️</span>
-        <input type="email" id="email" placeholder="seu@email.com">
-      </div>
-    </div>
+<div class="section">
+<div class="section-header">
+<svg class="section-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+<h3>Pagamento</h3>
+</div>
+<div class="payment-box">
+<div class="payment-icon">
+<svg viewBox="0 0 24 24"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H3V6h14v8zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm13 0v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"/></svg>
+</svg>
+</div>
+<span class="payment-text">Pix</span>
+<div class="payment-check">
+<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+</div>
+</div>
+<div class="info-list">
+<div class="info-item">
+<div class="info-icon blue">
+<svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/><path d="M7 10l5 5 5-5z"/></svg>
+</div>
+<div class="info-content">
+<h4>Imediato</h4>
+<p>Ao selecionar a opção Gerar Pix o código para pagamento estará disponível.</p>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon cyan">
+<svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+</div>
+<div class="info-content cyan">
+<h4>Pagamento Simples</h4>
+<p>Para pagar basta abrir o aplicativo do seu banco, procurar pelo PIX e escanear o QRcode.</p>
+</div>
+</div>
+<div class="info-item">
+<div class="info-icon green">
+<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+</div>
+<div class="info-content green">
+<h4>100% Seguro</h4>
+<p>O pagamento com PIX foi desenvolvido pelo Banco Central para facilitar suas compras.</p>
+</div>
+</div>
+</div>
+<div style="margin-top:24px">
+<div class="total-row subtotal">
+<span>Subtotal:</span>
+<span>R$ 78,00</span>
+</div>
+<div class="total-row final">
+<span>Valor total:</span>
+<span>R$ 78,00</span>
+</div>
+</div>
+<button id="btnPagar">FINALIZAR COMPRA</button>
+</div>
 
-    <div class="input-group">
-      <label>CPF/CNPJ</label>
-      <div class="input-wrapper">
-        <span class="input-icon">🔖</span>
-        <input type="text" id="cpf" placeholder="Digite seu CPF ou CNPJ">
-      </div>
-    </div>
-  </div>
+<div class="qr-section" id="qrDiv">
+<h3>Pagamento PIX</h3>
+<p>Copie o código abaixo ou escaneie o QR Code:</p>
+<img id="qrcode" width="220" height="220">
+<div id="pix-payload"></div>
+<button class="copy-btn" id="copyBtn">Copiar Código PIX</button>
+<p class="timer" id="timer"></p>
+<p id="status"></p>
+</div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-        </svg>
-      </div>
-      <h2 class="section-title">Pagamento</h2>
-    </div>
-
-    <div class="payment-button">
-      <svg class="pix-icon" viewBox="0 0 24 24">
-        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M14.5,8L18.5,12L14.5,16H11.5L15.5,12L11.5,8H14.5M9.5,8L5.5,12L9.5,16H12.5L8.5,12L12.5,8H9.5Z"/>
-      </svg>
-      <span>Pix</span>
-      <span style="margin-left:auto;font-size:20px;">✓</span>
-    </div>
-
-    <div class="payment-info">
-      <div class="info-item">
-        <svg class="info-icon" viewBox="0 0 24 24" style="fill:#4d9fff">
-          <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
-        </svg>
-        <div class="info-text">
-          <h4>Imediato</h4>
-          <p>Ao selecionar a opção Gerar Pix o código para pagamento estará disponível.</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <svg class="info-icon" viewBox="0 0 24 24" style="fill:#4d9fff">
-          <path d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/>
-        </svg>
-        <div class="info-text">
-          <h4>Pagamento Simples</h4>
-          <p>Para pagar basta abrir o aplicativo do seu banco, procurar pelo PIX e escanear o QRcode.</p>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <svg class="info-icon" viewBox="0 0 24 24" style="fill:#4d9fff">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-        </svg>
-        <div class="info-text">
-          <h4>100% Seguro</h4>
-          <p>O pagamento com PIX foi desenvolvido pelo Banco Central para facilitar suas compras.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="totals">
-      <div class="total-row">
-        <span>Subtotal:</span>
-        <span>R$ 78,00</span>
-      </div>
-      <div class="total-row main">
-        <span>Valor total:</span>
-        <span>R$ 78,00</span>
-      </div>
-    </div>
-
-    <button class="btn-primary" id="btnPagar">Finalizar Compra</button>
-  </div>
-
-  <div class="qr-section" id="qrDiv">
-    <h3>Pagamento PIX</h3>
-    <p style="color:#999;margin-bottom:10px">Copie o código abaixo ou escaneie o QR Code:</p>
-    <div class="qr-code-box">
-      <img id="qrcode" width="220" height="220">
-    </div>
-    <div id="pix-payload"></div>
-    <button class="copy-btn" id="copyBtn">📋 Copiar Código PIX</button>
-    <p class="timer" id="timer"></p>
-    <p id="status"></p>
-  </div>
-
-  <div class="footer">
-    <div class="footer-item">
-      <span>🔒</span>
-      <span>Pagamento Seguro</span>
-    </div>
-    <div class="footer-item">
-      <span>✓</span>
-      <span>Dados 100% Protegidos</span>
-    </div>
-  </div>
+<div class="footer">
+<div class="footer-item">
+<svg class="footer-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+<span>Pagamento Seguro</span>
+</div>
+<div class="footer-item">
+<svg class="footer-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+<span>Dados 100% Protegidos</span>
+</div>
+</div>
 </div>
 
 <script>
-const btn = document.getElementById('btnPagar');
-const nome = document.getElementById('nome');
-const cpf = document.getElementById('cpf');
-const email = document.getElementById('email');
-const qrDiv = document.getElementById('qrDiv');
-const qr = document.getElementById('qrcode');
-const payloadDiv = document.getElementById('pix-payload');
-const copyBtn = document.getElementById('copyBtn');
-const timerEl = document.getElementById('timer');
-const statusEl = document.getElementById('status');
-let pagamentoId = null;
-
-btn.onclick = async () => {
-  if (!nome.value || !cpf.value || !email.value) {
-    alert('⚠️ Preencha todos os campos.');
-    return;
-  }
-  
-  btn.disabled = true;
-  btn.textContent = 'Gerando pagamento...';
-  
-  try {
-    const r = await fetch('http://localhost:3000/sunize/gerar_pagamento', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'
-      },
-      body: JSON.stringify({
-        usuario_id: cpf.value,
-        nome: nome.value,
-        email: email.value,
-        valor: 78
-      })
-    });
-    
-    const j = await r.json();
-    
-    if (!j.success) {
-      alert(j.error || 'Erro ao gerar pagamento');
-      btn.disabled = false;
-      btn.textContent = 'FINALIZAR COMPRA';
-      return;
-    }
-    
-    pagamentoId = j.pagamento.id;
-    payloadDiv.textContent = j.pagamento.pix.payload;
-    qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(j.pagamento.pix.payload)}`;
-    
-    qrDiv.style.display = 'block';
-    document.querySelector('.section:last-of-type').style.display = 'none';
-    
-    let t = 300;
-    const interval = setInterval(async () => {
-      t--;
-      const minutes = Math.floor(t / 60);
-      const seconds = t % 60;
-      timerEl.textContent = `⏱️ Tempo restante: ${minutes}:${seconds.toString().padStart(2, '0')}`;
-      
-      if (t <= 0) {
-        clearInterval(interval);
-        timerEl.textContent = '⏱️ Tempo expirado';
-        return;
-      }
-      
-      if (t % 5 === 0) {
-        const s = await fetch(`http://localhost:3000/sunize/status/${pagamentoId}`, {
-          headers: {
-            'x-api-key': 'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'
-          }
-        });
-        const sj = await s.json();
-        
-        if (sj.success && sj.status === 'PAID') {
-          clearInterval(interval);
-          statusEl.innerHTML = '<span class="success">✅ Pagamento confirmado!</span>';
-          timerEl.style.display = 'none';
-        }
-      }
-    }, 1000);
-    
-  } catch (error) {
-    alert('Erro ao conectar com o servidor');
-    btn.disabled = false;
-    btn.textContent = 'FINALIZAR COMPRA';
-  }
-};
-
-copyBtn.onclick = () => {
-  navigator.clipboard.writeText(payloadDiv.textContent);
-  copyBtn.textContent = '✓ Código Copiado!';
-  setTimeout(() => copyBtn.textContent = '📋 Copiar Código PIX', 2000);
-};
+const btn=document.getElementById('btnPagar')
+const nome=document.getElementById('nome')
+const cpf=document.getElementById('cpf')
+const email=document.getElementById('email')
+const qrDiv=document.getElementById('qrDiv')
+const qr=document.getElementById('qrcode')
+const payloadDiv=document.getElementById('pix-payload')
+const copyBtn=document.getElementById('copyBtn')
+const timerEl=document.getElementById('timer')
+const statusEl=document.getElementById('status')
+let pagamentoId=null
+btn.onclick=async()=>{
+if(!nome.value||!cpf.value||!email.value){alert('Preencha todos os campos.');return}
+btn.disabled=true;btn.textContent='Gerando pagamento...'
+try{
+const r=await fetch('http://localhost:3000/sunize/gerar_pagamento',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'},body:JSON.stringify({usuario_id:cpf.value,nome:nome.value,email:email.value,valor:78})})
+const j=await r.json()
+if(!j.success){alert(j.error||'Erro ao gerar pagamento');btn.disabled=false;btn.textContent='FINALIZAR COMPRA';return}
+pagamentoId=j.pagamento.id
+payloadDiv.textContent=j.pagamento.pix.payload
+qr.src=`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(j.pagamento.pix.payload)}`
+document.querySelector('.section:last-of-type').style.display='none'
+qrDiv.style.display='block'
+let t=300
+const interval=setInterval(async()=>{
+t--
+const m=Math.floor(t/60)
+const s=t%60
+timerEl.textContent=`Tempo restante: ${m}:${s.toString().padStart(2,'0')}`
+if(t<=0){clearInterval(interval);timerEl.textContent='Tempo expirado';return}
+if(t%5===0){
+const st=await fetch(`http://localhost:3000/sunize/status/${pagamentoId}`,{headers:{'x-api-key':'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'}})
+const sj=await st.json()
+if(sj.success&&sj.status==='PAID'){clearInterval(interval);statusEl.innerHTML='<span class="success">Pagamento confirmado!</span>'}
+}
+},1000)
+}catch(e){alert('Erro ao conectar com o servidor');btn.disabled=false;btn.textContent='FINALIZAR COMPRA'}
+}
+copyBtn.onclick=()=>{navigator.clipboard.writeText(payloadDiv.textContent);copyBtn.textContent='Código Copiado!';setTimeout(()=>copyBtn.textContent='Copiar Código PIX',2000)}
 </script>
 </body>
 </html>
