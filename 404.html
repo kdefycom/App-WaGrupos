@@ -5,58 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Página não encontrada - Kdefy</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", Arial, sans-serif;
       background: linear-gradient(135deg, #ffffff 0%, #e6f0ff 100%);
       color: #111;
-      font-family: "Segoe UI", Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    main {
       text-align: center;
+      max-width: 90%;
+      width: 400px;
+      padding: 20px;
+      box-sizing: border-box;
     }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.3em;
-      color: #0d47a1;
-    }
-    p {
-      font-size: 1.1em;
-      max-width: 420px;
-      margin: 0 auto 2em;
-      line-height: 1.5em;
-    }
-    button {
-      background-color: #0d47a1;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #1976d2;
-    }
-    #sadFace {
+
+    svg {
       width: 120px;
       height: 120px;
       margin-bottom: 25px;
     }
+
+    h1 {
+      font-size: 2.2em;
+      margin: 0.3em 0;
+      color: #0d47a1;
+      word-wrap: break-word;
+    }
+
+    p {
+      font-size: 1.05em;
+      margin: 10px 0 30px;
+      line-height: 1.5em;
+      color: #222;
+    }
+
+    button {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #1976d2;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      p {
+        font-size: 1em;
+      }
+      svg {
+        width: 100px;
+        height: 100px;
+      }
+    }
   </style>
 </head>
 <body>
-  <svg id="sadFace" viewBox="0 0 100 100"></svg>
-  <h1>404 - Página não encontrada</h1>
-  <p>O endereço que você tentou acessar não existe.<br>
-     Deseja visitar o site real da <strong>Kdefy</strong>?</p>
-  <button onclick="window.location.href='/'">Ir para o site</button>
+  <main>
+    <svg id="sadFace" viewBox="0 0 100 100"></svg>
+    <h1>404 - Página não encontrada</h1>
+    <p>O endereço que você tentou acessar não existe.<br>
+       Deseja visitar o site real da <strong>Kdefy</strong>?</p>
+    <button onclick="window.location.href='/'">Ir para o site</button>
+  </main>
 
   <script>
-    // Desenha um rosto triste dentro do SVG
     const svg = document.getElementById("sadFace");
     const ns = "http://www.w3.org/2000/svg";
 
