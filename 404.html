@@ -8,21 +8,21 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #ffffff 0%, #e6f0ff 100%);
+      min-height: 100%;
+      background: linear-gradient(135deg, #ffffff 0%, #f2e6ff 100%);
       color: #111;
+      font-family: "Segoe UI", Arial, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      overflow-y: auto; 
     }
 
     main {
-      text-align: center;
-      max-width: 90%;
-      width: 400px;
-      padding: 20px;
+      padding: 40px 20px;
+      max-width: 420px;
+      width: 90%;
       box-sizing: border-box;
     }
 
@@ -34,43 +34,49 @@
 
     h1 {
       font-size: 2.2em;
-      margin: 0.3em 0;
-      color: #0d47a1;
-      word-wrap: break-word;
+      color: #6a1b9a;
+      margin-bottom: 0.3em;
+      letter-spacing: 0.5px;
     }
 
     p {
       font-size: 1.05em;
-      margin: 10px 0 30px;
-      line-height: 1.5em;
+      margin: 8px 0 28px;
+      line-height: 1.6em;
       color: #222;
     }
 
     button {
-      background-color: #0d47a1;
+      background: linear-gradient(90deg, #6a1b9a, #9c27b0);
       color: white;
       border: none;
-      padding: 12px 26px;
+      padding: 12px 30px;
       border-radius: 8px;
-      font-size: 1em;
+      font-size: 1.05em;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     button:hover {
-      background-color: #1976d2;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+    }
+
+    button:active {
+      transform: scale(0.97);
     }
 
     @media (max-width: 480px) {
+      svg {
+        width: 90px;
+        height: 90px;
+      }
       h1 {
-        font-size: 1.8em;
+        font-size: 1.9em;
       }
       p {
         font-size: 1em;
-      }
-      svg {
-        width: 100px;
-        height: 100px;
       }
     }
   </style>
@@ -78,10 +84,12 @@
 <body>
   <main>
     <svg id="sadFace" viewBox="0 0 100 100"></svg>
+
     <h1>404 - Página não encontrada</h1>
     <p>O endereço que você tentou acessar não existe.<br>
        Deseja visitar o site real da <strong>Kdefy</strong>?</p>
-    <button onclick="window.location.href='/'">Ir para o site</button>
+
+    <button onclick="window.location.href='/'">Acessar o site</button>
   </main>
 
   <script>
@@ -92,8 +100,8 @@
     face.setAttribute("cx", "50");
     face.setAttribute("cy", "50");
     face.setAttribute("r", "45");
-    face.setAttribute("fill", "#bbdefb");
-    face.setAttribute("stroke", "#0d47a1");
+    face.setAttribute("fill", "#ede7f6");
+    face.setAttribute("stroke", "#6a1b9a");
     face.setAttribute("stroke-width", "3");
     svg.appendChild(face);
 
@@ -101,19 +109,19 @@
     leftEye.setAttribute("cx", "35");
     leftEye.setAttribute("cy", "40");
     leftEye.setAttribute("r", "5");
-    leftEye.setAttribute("fill", "#0d47a1");
+    leftEye.setAttribute("fill", "#6a1b9a");
     svg.appendChild(leftEye);
 
     const rightEye = document.createElementNS(ns, "circle");
     rightEye.setAttribute("cx", "65");
     rightEye.setAttribute("cy", "40");
     rightEye.setAttribute("r", "5");
-    rightEye.setAttribute("fill", "#0d47a1");
+    rightEye.setAttribute("fill", "#6a1b9a");
     svg.appendChild(rightEye);
 
     const mouth = document.createElementNS(ns, "path");
     mouth.setAttribute("d", "M30,70 Q50,55 70,70");
-    mouth.setAttribute("stroke", "#0d47a1");
+    mouth.setAttribute("stroke", "#6a1b9a");
     mouth.setAttribute("stroke-width", "4");
     mouth.setAttribute("fill", "transparent");
     svg.appendChild(mouth);
