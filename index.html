@@ -3,21 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kdefy grupos - Encontre Grupos de WhatsApp e Telegram</title>
+  <title>Kdefy grupos - Encontre e divulgue Grupos de WhatsApp e Telegram</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1'/><stop offset='100%' style='stop-color:%23059669;stop-opacity:1'/></linearGradient></defs><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='url(%23grad)'>K</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["WebSite", "Organization"],
+  "name": "Kdefy Grupos",
+  "url": "https://app.kdefy.com",
+  "alternateName": "Kdefy",
+  "description": "Encontre e compartilhe grupos de WhatsApp e Telegram de forma fácil, segura e organizada.",
+  "inLanguage": "pt-BR",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://app.kdefy.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Kdefy",
+    "url": "https://app.kdefy.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://app.kdefy.com/favicon.svg"
+    }
+  },
+  "sameAs": [
+    "https://github.com/kdefycom",
+    "https://t.me/kdefygrupos",
+    "https://instagram.com/kdefybr,
+    "https://whatsapp.com/channel/0029VbAzSaB4yltTEgRZvW0Y
+  ]
+}
+</script>
   <style>
     :root {
       --bg-color: #f8f9fa;
       --header-bg: #ffffff;
       --card-bg: #ffffff;
       --text-primary: #212529;
-      --text-secondary: #4b5563; /* bio mais escura */
-      --accent-green: #0d8b3e; /* verde escuro solicitado */
+      --text-secondary: #4b5563;
+      --accent-green: #0d8b3e;
       --accent-green-hover: #0b6b31;
-      --gray-dark: #0f0f0f; /* preto fosco para os botões */
+      --gray-dark: #0f0f0f;
       --vip-gold: #ffc107;
       --border-color: #dee2e6;
       --shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -46,13 +77,13 @@
     .header-content { display: flex; justify-content: space-between; align-items: center; }
     .header-left { display: flex; align-items: center; gap: 15px; }
     .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; color: var(--text-primary); text-decoration: none; }
-    /* Menu toggle (barras escuras) - aparência simples */
+    /* Menu toggle */
     .menu-toggle { background: none; border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; }
     .menu-toggle span { display: block; width: 22px; height: 2px; background: #0b0b0b; } /* barras pretas escuras */
     .nav-buttons { display: flex; align-items: center; gap: 10px; }
 
     .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-block; }
-    /* ENVIAR GRUPO e MEUS GRUPOS em preto fosco */
+    /* ENVIAR GRUPO e MEUS GRUPOS */
     .btn-primary { background-color: var(--gray-dark); color: white; border-color: var(--gray-dark); }
     .btn-primary:hover { background-color: #0b0b0b; }
     .btn-dark { background-color: var(--gray-dark); color: white; border-color: var(--gray-dark); }
@@ -62,7 +93,7 @@
     .filters-section { background-color: var(--header-bg); padding: 30px 0; border-bottom: 1px solid var(--border-color); }
     #searchInput { flex-grow: 1; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px 0 0 8px; font-size: 16px; outline: none; }
     #searchInput:focus { border-color: var(--accent-green); }
-    /* search button verde escuro */
+    /* search button */
     #searchButton { padding: 0 30px; border: 1px solid var(--accent-green); border-left: 0; background-color: var(--accent-green); color: white; font-size: 16px; font-weight: 700; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; }
     #searchButton:hover { background-color: var(--accent-green-hover); }
     .categories-bar { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
@@ -86,18 +117,17 @@
     .grupo-card.vip { box-shadow: 0 0 0 2px var(--vip-gold); }
     .card-image-container { position: relative; }
     .grupo-img { width: 100%; height: 320px; object-fit: cover; display: block; background-color: #f0f0f0; }
-    /* estrela VIP mais destacada */
+    /* estrela VIP */
     .vip-star { position: absolute; top: 8px; right: 8px; font-size: 46px; color: var(--vip-gold); text-shadow: 0 6px 18px rgba(255, 193, 7, 0.45); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45)); transform: rotate(-8deg); }
     .card-content { padding: 15px; }
     .card-category { display: inline-block; background-color: var(--gray-dark); color: white; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
     .grupo-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .grupo-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; height: 42px; overflow: hidden; }
-    /* Entrar no grupo (botão verde escuro) */
+    /* Entrar no grupo */
     .card-button { display: block; width: 100%; padding: 12px; text-align: center; background-color: var(--accent-green); color: white; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.2s; }
     .card-button:hover { background-color: var(--accent-green-hover); }
     .loading, .empty { text-align: center; padding: 60px 20px; grid-column: 1 / -1; font-size: 18px; color: var(--text-secondary); }
 
-    /* ajuste do título "Grupos em Destaque" para subir um pouco */
     .section-title { text-align: center; margin-top: -8px; margin-bottom: 25px; font-size: 24px; font-weight: 700; }
 
     /* Paginação */
@@ -155,7 +185,6 @@
         </a>
       </div>
       <div class="nav-buttons">
-        <!-- menu-toggle movido para junto dos botões -->
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
           <span></span><span></span><span></span>
         </button>
