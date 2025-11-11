@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página não encontrada - Kdefy</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffffff 0%, #e6f0ff 100%);
+      color: #111;
+      font-family: "Segoe UI", Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.3em;
+      color: #0d47a1;
+    }
+    p {
+      font-size: 1.1em;
+      max-width: 420px;
+      margin: 0 auto 2em;
+      line-height: 1.5em;
+    }
+    button {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+    #sadFace {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+  <svg id="sadFace" viewBox="0 0 100 100"></svg>
+  <h1>404 - Página não encontrada</h1>
+  <p>O endereço que você tentou acessar não existe.<br>
+     Deseja visitar o site real da <strong>Kdefy</strong>?</p>
+  <button onclick="window.location.href='/'">Ir para o site</button>
+
+  <script>
+    // Desenha um rosto triste dentro do SVG
+    const svg = document.getElementById("sadFace");
+    const ns = "http://www.w3.org/2000/svg";
+
+    const face = document.createElementNS(ns, "circle");
+    face.setAttribute("cx", "50");
+    face.setAttribute("cy", "50");
+    face.setAttribute("r", "45");
+    face.setAttribute("fill", "#bbdefb");
+    face.setAttribute("stroke", "#0d47a1");
+    face.setAttribute("stroke-width", "3");
+    svg.appendChild(face);
+
+    const leftEye = document.createElementNS(ns, "circle");
+    leftEye.setAttribute("cx", "35");
+    leftEye.setAttribute("cy", "40");
+    leftEye.setAttribute("r", "5");
+    leftEye.setAttribute("fill", "#0d47a1");
+    svg.appendChild(leftEye);
+
+    const rightEye = document.createElementNS(ns, "circle");
+    rightEye.setAttribute("cx", "65");
+    rightEye.setAttribute("cy", "40");
+    rightEye.setAttribute("r", "5");
+    rightEye.setAttribute("fill", "#0d47a1");
+    svg.appendChild(rightEye);
+
+    const mouth = document.createElementNS(ns, "path");
+    mouth.setAttribute("d", "M30,70 Q50,55 70,70");
+    mouth.setAttribute("stroke", "#0d47a1");
+    mouth.setAttribute("stroke-width", "4");
+    mouth.setAttribute("fill", "transparent");
+    svg.appendChild(mouth);
+  </script>
+</body>
+</html>
