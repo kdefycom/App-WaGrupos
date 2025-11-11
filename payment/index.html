@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Pagamento PIX</title>
+<style>
+body{font-family:Arial,sans-serif;background:#fff;margin:0;padding:0;color:#000}
+.container{max-width:420px;margin:60px auto;padding:30px;border:2px solid #000;border-radius:10px;text-align:center;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+h1{color:#6a00ff;margin-bottom:10px}
+input{width:100%;padding:10px;margin:8px 0;border:1px solid #6a00ff;border-radius:6px;font-size:16px}
+button{width:100%;padding:12px;background:#6a00ff;color:#fff;font-size:18px;border:none;border-radius:6px;cursor:pointer}
+button:hover{background:#4b00b5}
+.qr-section{margin-top:20px}
+#pix-payload{background:#f2f2f2;padding:10px;border-radius:6px;word-break:break-all}
+.timer{font-weight:bold;color:red;margin-top:10px}
+.success{color:green;font-weight:bold;font-size:18px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Pagamento PIX</h1>
+<input type="text" id="nome" placeholder="Nome completo">
+<input type="text" id="cpf" placeholder="CPF">
+<input type="text" id="telefone" placeholder="Telefone">
+<button id="btnPagar">Pagar R$ 78,00</button>
+<div class="qr-section" id="resultado" style="display:none">
+<p><strong>Copie o código abaixo para pagar:</strong></p>
+<div id="pix-payload"></div>
+<img id="qrcode" style="margin-top:10px;width:200px;height:200px">
+<p class="timer" id="timer"></p>
+<p id="status"></p>
+</div>
+</div>
+<script>
+const btn=document.getElementById('btnPagar')
+const nome=document.getElementById('nome')
+const cpf=document.getElementById('cpf')
+const tel=document.getElementById('telefone')
+const resDiv=document.getElementById('resultado')
+const payloadDiv=document.getElementById('pix-payload')
+const qr=document.getElementById('qrcode')
+const timerEl=document.getElementById('timer')
+const statusEl=document.getElementById('status')
+let pagamentoId=null
+btn.onclick=async()=>{
+if(!nome.value||!cpf.value||!tel.value)return alert('Preencha todos os campos.')
+btn.disabled=true;btn.textContent='Gerando pagamento...'
+const r=await fetch('http://localhost:3000/sunize/gerar_pagamento',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'},body:JSON.stringify({usuario_id:cpf.value,nome:nome.value,email:'pagamento@kdefy.com',valor:78})})
+const j=await r.json()
+if(!j.success){alert(j.error||'Erro ao gerar pagamento');btn.disabled=false;btn.textContent='Pagar R$ 78,00';return}
+pagamentoId=j.pagamento.id
+payloadDiv.textContent=j.pagamento.pix.payload
+qr.src=`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(j.pagamento.pix.payload)}`
+resDiv.style.display='block'
+let t=300
+const interval=setInterval(async()=>{
+t--;timerEl.textContent=`Tempo restante: ${t}s`
+if(t<=0){clearInterval(interval);timerEl.textContent='Tempo expirado';return}
+if(t%5===0){
+const s=await fetch(`http://localhost:3000/sunize/status/${pagamentoId}`,{headers:{'x-api-key':'f2c286b2a259ee0e0051883f63b85aae6ba5b8bb0e526fcb58834e92975bac54'}})
+const sj=await s.json()
+if(sj.success&&sj.status==='PAID'){clearInterval(interval);statusEl.innerHTML='<span class="success">Pagamento confirmado!</span>'}
+}
+},1000)
+btn.style.display='none'
+}
+</script>
+</body>
+</html>
