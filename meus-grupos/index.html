@@ -18,7 +18,6 @@
       --accent-green: #0d8b3e;
       --accent-green-hover: #0b6b31;
       --gray-dark: #0f0f0f;
-      --vip-gold: #ffc107;
       --border-color: #dee2e6;
       --shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
@@ -50,12 +49,12 @@
     .menu-toggle { background: none; border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; }
     .menu-toggle span { display: block; width: 22px; height: 2px; background: #0b0b0b; }
     
-    .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-block; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-primary-white { background-color: white; color: var(--gray-dark); border-color: var(--border-color); }
     .btn-primary-white:hover { background-color: #f8f9fa; }
     .btn-dark { background-color: var(--gray-dark); color: white; border-color: var(--gray-dark); }
     .btn-dark:hover { background-color: #0b0b0b; }
-
+    
     /* Content */
     .content-section { padding: 40px 0; }
     h1 { color: var(--text-primary); margin-bottom: 10px; font-size: 28px; }
@@ -69,18 +68,17 @@
     .grupo-info { flex: 1; }
     .grupo-titulo { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     .grupo-status { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
-    .status-pendente { background: #fffbeb; color: #b45309; }
-    .status-aprovado { background: #f0fdf4; color: #15803d; }
-    .status-reprovado { background: #fef2f2; color: #b91c1c; }
+    .status-pendente { background: #fef3c7; color: #92400e; }
+    .status-aprovado { background: #d1fae5; color: #065f46; }
+    .status-reprovado { background: #fee2e2; color: #991b1b; }
     .grupo-desc { color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
     .grupo-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-    .btn-action { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-success { background: #25d366; color: white; }
-    .btn-danger { background: #ef4444; color: white; }
-    .btn-boost { background: #8b5cf6; color: white; }
+    
     .boost-timer { font-size: 13px; color: var(--text-secondary); margin-top: 8px; display: inline-block; padding: 8px 16px; background-color: #f3f4f6; border-radius: 8px; }
     .mensagem-admin { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 12px; border-radius: 4px; font-size: 14px; }
     .empty { text-align: center; padding: 60px 20px; background-color: var(--card-bg); border-radius: 12px; }
+    
+    /* Modal */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
     .modal.active { display: flex; }
     .modal-content { background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; }
@@ -89,7 +87,6 @@
       .grupo-item { flex-direction: column; }
       .grupo-foto { width: 100%; height: 180px; }
       .nav-buttons { flex-wrap: wrap; }
-      .btn { font-size: 12px; padding: 8px 15px; }
     }
   </style>
 </head>
@@ -136,11 +133,12 @@
     </div>
   </main>
 
+  <!-- Modal de Parabéns -->
   <div id="modalParabens" class="modal">
     <div class="modal-content">
-      <h2>🎉 Parabéns!</h2>
+      <h2 style="color: #25d366;">🎉 Parabéns!</h2>
       <p>Seu grupo foi aprovado com sucesso e já está disponível para todos!</p>
-      <button class="btn btn-boost" onclick="fecharModal()" style="margin-top:20px;">Fechar</button>
+      <button class="btn btn-dark" onclick="fecharModal()" style="margin-top:20px;">Fechar</button>
     </div>
   </div>
 
@@ -218,47 +216,88 @@
 
     function renderizarGrupo(grupo) {
       let statusClass = 'pendente';
-      let statusTexto = 'Enviado para análise';
+      let statusTexto = '⏳ Enviado para análise';
       let acoes = '';
 
-      if (grupo.aprovado === true) {
+      if (grupo.aprovado) {
         statusClass = 'aprovado';
-        statusTexto = 'Aprovado';
-        acoes = `<a href="${grupo.link}" target="_blank" class="btn-action btn-success">Entrar no Grupo</a>`;
-      } else if (grupo.aprovado === false) {
+        statusTexto = '✅ Aprovado';
+        acoes = `
+          <a href="${grupo.link}" target="_blank" class="btn btn-success">Entrar no Grupo</a>
+          ${podeImpulsionar(grupo) ? 
+            `<button class="btn btn-primary" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>` :
+            `<span class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</span>`
+          }
+        `;
+      } else if (grupo.mensagem_admin) {
         statusClass = 'reprovado';
-        statusTexto = 'Reprovado';
+        statusTexto = '❌ Reprovado';
       }
 
       return `
         <div class="grupo-item ${statusClass}">
           <img src="${grupo.foto_url || 'https://via.placeholder.com/100?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
           <div class="grupo-info">
-            <span class="grupo-status status-${statusClass}">${statusTexto}</span>
             <div class="grupo-titulo">${grupo.nome}</div>
-            <div class="grupo-desc">${grupo.descricao || 'Este grupo não possui uma descrição.'}</div>
-            <div style="font-size: 14px; color: var(--text-secondary);"><strong>Categoria:</strong> ${getCategoryName(grupo.categoria)}</div>
+            <span class="grupo-status status-${statusClass}">${statusTexto}</span>
+            <div class="grupo-desc">${grupo.descricao || 'Sem descrição'}</div>
+            <div><strong>Categoria:</strong> ${getCategoryName(grupo.categoria)}</div>
+            <div><strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}</div>
             
-            ${grupo.mensagem_admin ? `<div class="mensagem-admin"><strong>Mensagem do Admin:</strong><br>${grupo.mensagem_admin}</div>` : ''}
+            ${grupo.mensagem_admin ? `
+              <div class="mensagem-admin">
+                <strong>📩 Mensagem do Admin:</strong><br>
+                ${grupo.mensagem_admin}
+              </div>
+            ` : ''}
 
-            <div class="grupo-actions">
+            <div class="grupo-actions" style="margin-top: 15px;">
               ${acoes}
-              <button class="btn-action btn-danger" onclick="removerGrupo('${grupo.id}')">Remover</button>
+              <button class="btn btn-danger" onclick="removerGrupo('${grupo.id}')">🗑️ Remover</button>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
+    }
+
+    function podeImpulsionar(grupo) {
+      if (!grupo.ultimo_boost) return true;
+      const duasHoras = 2 * 60 * 60 * 1000;
+      return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras;
+    }
+
+    function tempoRestante(grupo) {
+      if (!grupo.ultimo_boost) return '0min';
+      const duasHoras = 2 * 60 * 60 * 1000;
+      const passado = Date.now() - new Date(grupo.ultimo_boost).getTime();
+      const restante = duasHoras - passado;
+      const minutos = Math.ceil(restante / 60000);
+      return `${minutos}min`;
+    }
+
+    async function impulsionar(id) {
+      try {
+        await supabaseFetch(`grupos?id=eq.${id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ ultimo_boost: new Date().toISOString() })
+        });
+        alert('🚀 Grupo impulsionado! Ele aparecerá em destaque.');
+        carregarMeusGrupos();
+      } catch (error) {
+        alert('Erro ao impulsionar: ' + error.message);
+      }
     }
 
     async function removerGrupo(id) {
-      if (!confirm('Tem certeza que deseja remover este grupo da sua lista? Esta ação não pode ser desfeita.')) return;
+      if (!confirm('Tem certeza que deseja remover este grupo?')) return;
+
       try {
         await removerGrupoLocal(id);
-        // We don't delete from the backend anymore, just from local view.
-        // await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
-        alert('Grupo removido da sua lista local.');
+        await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
+        alert('Grupo removido com sucesso!');
         carregarMeusGrupos();
       } catch (error) {
-        alert('Erro ao remover o grupo: ' + error.message);
+        alert('Erro ao remover: ' + error.message);
       }
     }
 
