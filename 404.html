@@ -3,128 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Página não encontrada - Kdefy</title>
+  <title>Página Não Encontrada</title>
   <style>
-    html, body {
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #fff;
       margin: 0;
       padding: 0;
-      min-height: 100%;
-      background: linear-gradient(135deg, #ffffff 0%, #f2e6ff 100%);
-      color: #111;
-      font-family: "Segoe UI", Arial, sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
       text-align: center;
-      overflow-y: auto; 
     }
 
-    main {
-      padding: 40px 20px;
-      max-width: 420px;
-      width: 90%;
-      box-sizing: border-box;
+    .container {
+      max-width: 400px;
+      padding: 20px;
     }
 
-    svg {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 25px;
+    .icon {
+      margin-bottom: 20px;
+    }
+
+    .icon svg {
+        width: 100px;
+        height: 100px;
     }
 
     h1 {
-      font-size: 2.2em;
-      color: #6a1b9a;
-      margin-bottom: 0.3em;
-      letter-spacing: 0.5px;
+      font-size: 3em;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      color: #333;
     }
 
     p {
-      font-size: 1.05em;
-      margin: 8px 0 28px;
-      line-height: 1.6em;
-      color: #222;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 30px;
     }
 
-    button {
-      background: linear-gradient(90deg, #6a1b9a, #9c27b0);
-      color: white;
-      border: none;
-      padding: 12px 30px;
+    .button {
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 24px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
       border-radius: 8px;
-      font-size: 1.05em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 500;
+      transition: background-color 0.3s;
     }
 
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+    .button:hover {
+      background-color: #0056b3;
     }
 
-    button:active {
-      transform: scale(0.97);
+    .button-icon {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
     }
 
-    @media (max-width: 480px) {
-      svg {
-        width: 90px;
-        height: 90px;
-      }
-      h1 {
-        font-size: 1.9em;
-      }
-      p {
-        font-size: 1em;
-      }
-    }
   </style>
 </head>
 <body>
-  <main>
-    <svg id="sadFace" viewBox="0 0 100 100"></svg>
-
-    <h1>404 - Página não encontrada</h1>
-    <p>O endereço que você tentou acessar não existe.<br>
-       Deseja visitar o site real da <strong>Kdefy</strong>?</p>
-
-    <button onclick="window.location.href='/'">Acessar o site</button>
-  </main>
-
-  <script>
-    const svg = document.getElementById("sadFace");
-    const ns = "http://www.w3.org/2000/svg";
-
-    const face = document.createElementNS(ns, "circle");
-    face.setAttribute("cx", "50");
-    face.setAttribute("cy", "50");
-    face.setAttribute("r", "45");
-    face.setAttribute("fill", "#ede7f6");
-    face.setAttribute("stroke", "#6a1b9a");
-    face.setAttribute("stroke-width", "3");
-    svg.appendChild(face);
-
-    const leftEye = document.createElementNS(ns, "circle");
-    leftEye.setAttribute("cx", "35");
-    leftEye.setAttribute("cy", "40");
-    leftEye.setAttribute("r", "5");
-    leftEye.setAttribute("fill", "#6a1b9a");
-    svg.appendChild(leftEye);
-
-    const rightEye = document.createElementNS(ns, "circle");
-    rightEye.setAttribute("cx", "65");
-    rightEye.setAttribute("cy", "40");
-    rightEye.setAttribute("r", "5");
-    rightEye.setAttribute("fill", "#6a1b9a");
-    svg.appendChild(rightEye);
-
-    const mouth = document.createElementNS(ns, "path");
-    mouth.setAttribute("d", "M30,70 Q50,55 70,70");
-    mouth.setAttribute("stroke", "#6a1b9a");
-    mouth.setAttribute("stroke-width", "4");
-    mouth.setAttribute("fill", "transparent");
-    svg.appendChild(mouth);
-  </script>
+  <div class="container">
+    <div class="icon">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90Z" stroke="#007BFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M67.6775 32.3225L32.3225 67.6775" stroke="#007BFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M50 65L65 50L50 35L35 50L50 65Z" fill="#007BFF"/>
+        </svg>
+    </div>
+    <h1>404</h1>
+    <h2>Página Não Encontrada</h2>
+    <p>Desculpe, não conseguimos encontrar a página que você está procurando. Ela pode ter sido movida ou não existe mais.</p>
+    <a href="/" class="button">
+      <svg class="button-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" clip-rule="evenodd"></path></svg>
+      <span>Voltar para a Página Inicial</span>
+    </a>
+  </div>
 </body>
 </html>
