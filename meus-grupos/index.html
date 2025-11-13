@@ -4,179 +4,172 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Grupos - KDefy</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1'/><stop offset='100%' style='stop-color:%23059669;stop-opacity:1'/></linearGradient></defs><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='url(%23grad)'>K</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%2322C55E;stop-opacity:1'/><stop offset='100%' style='stop-color:%2316a34a;stop-opacity:1'/></linearGradient></defs><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='url(%23grad)'>K</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f8f9fa;
-      --header-bg: #ffffff;
-      --card-bg: #ffffff;
-      --text-primary: #212529;
-      --text-secondary: #4b5563;
-      --accent-green: #0d8b3e;
-      --accent-green-hover: #0b6b31;
-      --gray-dark: #0f0f0f;
-      --border-color: #dee2e6;
-      --shadow: 0 2px 4px rgba(0,0,0,0.05);
-      --danger-red: #ef4444;
-      --pending-gray: #6b7280;
+      --bg-main: #000000;
+      --bg-container: #1A1A1A;
+      --bg-container-light: #222222;
+      --text-primary: #FFFFFF;
+      --text-secondary: #888888;
+      --text-tertiary: #AAAAAA;
+      --action-green: #22C55E;
+      --action-red: #EF4444;
+      --border-color: #333333;
+      --shadow-color: rgba(150, 150, 150, 0.1);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: var(--bg-color);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--bg-main);
       color: var(--text-primary);
     }
     .container { max-width: 900px; margin: 0 auto; padding: 0 15px; }
 
-    /* Sidebar & Header (sem alterações) */
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
-    .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s; }
-    .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--header-bg); box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 1001; transition: right 0.3s; padding: 20px; }
-    .sidebar.active { right: 0; }
-    .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-    .sidebar h3 { font-size: 20px; color: var(--accent-green); }
-    .close-sidebar { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); }
-    .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-primary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
-    .sidebar a:hover { background-color: var(--bg-color); }
-    .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .main-header { background-color: var(--header-bg); padding: 15px 0; border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 998; }
-    .header-content { display: flex; justify-content: space-between; align-items: center; }
-    .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; color: var(--text-primary); text-decoration: none; }
-    .nav-buttons { display: flex; align-items: center; gap: 10px; }
-    .menu-toggle { background: none; border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; }
-    .menu-toggle span { display: block; width: 22px; height: 2px; background: #0b0b0b; }
-    .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary-white { background-color: white; color: var(--gray-dark); border-color: var(--border-color); }
-    .btn-primary-white:hover { background-color: #f8f9fa; }
-    .btn-dark { background-color: var(--gray-dark); color: white; border-color: var(--gray-dark); }
-    .btn-dark:hover { background-color: #0b0b0b; }
-    
-    /* --- NOVOS ESTILOS --- */
-    
-    /* Centralizar Header da página */
-    .content-section .container h1, .content-section .container .page-description {
-        text-align: center;
+    /* --- HEADER --- */
+    .main-header { 
+      background-color: var(--bg-main); 
+      padding: 20px 0; 
+      border-bottom: 1px solid var(--border-color); 
+      position: sticky; 
+      top: 0; 
+      z-index: 998; 
     }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 900; color: var(--text-primary); text-decoration: none; }
+    .nav-buttons { display: flex; align-items: center; gap: 12px; }
+    
+    .btn { 
+      padding: 10px 22px; 
+      border-radius: 8px; 
+      border: 1px solid transparent; 
+      font-size: 14px; 
+      font-weight: 700; 
+      text-decoration: none; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px;
+      text-transform: uppercase;
+    }
+    .btn-send { background-color: var(--action-green); color: var(--text-primary); }
+    .btn-send:hover { background-color: #16a34a; }
+    .btn-my-groups-active { background-color: var(--bg-container); color: var(--text-primary); border-color: var(--text-primary); }
+    
+    /* --- CONTENT --- */
+    .content-section { padding: 50px 0; }
+    .content-section .container h1 { text-align: center; font-size: 36px; font-weight: 900; margin-bottom: 10px; }
+    .content-section .container .page-description { text-align: center; color: var(--text-secondary); margin-bottom: 40px; font-size: 16px; }
 
+    /* --- GRUPO CARD --- */
     .grupo-item { 
-      background-color: var(--card-bg); 
+      background-color: var(--bg-container); 
       border-radius: 16px; 
       padding: 25px; 
       margin-bottom: 25px; 
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 12px var(--shadow-color);
       display: flex;
       flex-direction: column;
-      align-items: center; /* Centraliza tudo */
-      transition: all 0.3s;
+      align-items: center;
+      transition: all 0.3s ease;
+      position: relative;
     }
-    .grupo-item:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
-
-    .grupo-foto-container {
-        position: relative;
-        margin-bottom: 15px;
-    }
-
-    .grupo-foto { 
-      width: 120px; 
-      height: 120px; 
-      object-fit: cover; 
-      border-radius: 50%; /* Foto redonda */
-      border: 4px solid var(--header-bg);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+    .grupo-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color); }
     
     .remove-btn-icon {
         position: absolute;
-        top: 0px;
-        right: 0px;
-        background: var(--danger-red);
-        color: white;
-        border: 2px solid var(--header-bg);
-        border-radius: 50%;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        color: var(--action-red);
+        border: none;
         width: 32px;
         height: 32px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         z-index: 10;
         transition: all 0.2s;
     }
-    .remove-btn-icon:hover { transform: scale(1.1); }
+    .remove-btn-icon:hover { transform: scale(1.2); color: #c02b2b; }
+
+    .grupo-foto { 
+      width: 100px; 
+      height: 100px; 
+      object-fit: cover; 
+      border-radius: 8px; /* Cantos levemente arredondados */
+      border: 2px solid var(--text-primary);
+      margin-bottom: 20px;
+    }
     
     .grupo-info { 
-      flex: 1; 
       text-align: center; 
       width: 100%;
     }
-    .grupo-titulo { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-    .grupo-desc { color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; font-size: 15px; }
-    .grupo-details { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+    .grupo-titulo { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+    .grupo-desc { color: var(--text-secondary); margin-bottom: 15px; line-height: 1.6; font-size: 15px; }
+    .grupo-details { font-size: 13px; color: var(--text-tertiary); margin-bottom: 25px; }
     
     .card-footer-action {
-        margin-top: 20px;
         width: 100%;
     }
 
     .btn-large {
         width: 100%;
-        padding: 15px 20px;
+        padding: 16px 20px;
         font-size: 16px;
         font-weight: 700;
         border-radius: 12px;
+        text-transform: uppercase;
+        border: none;
     }
-
-    .btn-impulsionar { background-color: var(--accent-green); color: white; }
-    .btn-impulsionar:hover { background-color: var(--accent-green-hover); }
-    .btn-reprovado { background-color: var(--danger-red); color: white; cursor: not-allowed; opacity: 0.8; }
-    .btn-pendente { background-color: var(--pending-gray); color: white; cursor: not-allowed; opacity: 0.8; }
+    .btn-impulsionar { background-color: var(--action-green); color: var(--text-primary); box-shadow: 0 4px 15px -5px var(--action-green); }
+    .btn-impulsionar:hover { background-color: #16a34a; transform: translateY(-2px); }
+    .btn-reprovado { background-color: var(--action-red); color: var(--text-primary); cursor: default; }
+    .btn-pendente { background-color: var(--text-secondary); color: var(--bg-container); cursor: default; }
     
     .boost-timer { 
       display: block;
       width: 100%;
-      padding: 15px 20px;
+      padding: 16px 20px;
       font-size: 16px;
       font-weight: 700;
       border-radius: 12px;
-      background-color: #e9ecef;
-      color: var(--text-secondary);
+      background-color: var(--bg-container-light);
+      color: var(--text-primary);
       text-align: center;
     }
 
-    .mensagem-admin { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 12px; border-radius: 4px; font-size: 14px; text-align: left; }
-    .empty { text-align: center; padding: 60px 20px; background-color: var(--card-bg); border-radius: 12px; }
-    
-    /* Modal (sem alterações) */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-    .modal.active { display: flex; }
-    .modal-content { background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; }
+    .mensagem-admin { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--action-red); padding: 12px; margin-top: 15px; border-radius: 4px; font-size: 14px; text-align: left; color: #fecaca; }
+    .empty { text-align: center; padding: 60px 20px; background-color: var(--bg-container); border-radius: 12px; }
+
+    /* --- FOOTER --- */
+    .main-footer {
+        text-align: center;
+        padding: 40px 0 20px 0;
+        border-top: 1px solid var(--bg-container-light);
+        margin-top: 50px;
+    }
+    .main-footer p {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h3>Menu</h3>
-      <button class="close-sidebar" id="closeSidebar">&times;</button>
-    </div>
-    <a href="/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Home</a>
-    <a href="/termos-uso/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Termos de Uso</a>
-    <a href="/politica-privacidade/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Política de Privacidade</a>
-  </aside>
-
   <header class="main-header">
     <div class="container header-content">
-      <a href="/" class="logo"><span>Kdefy Grupos</span></a>
+      <a href="/" class="logo">KDEFY GRUPOS</a>
       <div class="nav-buttons">
-        <a href="/enviar-grupo/" class="btn btn-primary-white">ENVIAR GRUPO</a>
-        <a href="/meus-grupos/" class="btn btn-dark">MEUS GRUPOS</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+        <a href="/enviar-grupo/" class="btn btn-send">ENVIAR GRUPO</a>
+        <a href="/meus-grupos/" class="btn btn-my-groups-active">MEUS GRUPOS</a>
       </div>
     </div>
   </header>
@@ -188,33 +181,16 @@
       <div id="gruposLista"></div>
     </div>
   </main>
-
-  <div id="modalParabens" class="modal">
-    <div class="modal-content">
-      <h2 style="color: #25d366;">🎉 Parabéns!</h2>
-      <p>Seu grupo foi aprovado com sucesso e já está disponível para todos!</p>
-      <button class="btn btn-dark" onclick="fecharModal()" style="margin-top:20px;">Fechar</button>
+  
+  <footer class="main-footer">
+    <div class="container">
+      <p>© 2025 Kdefy. Todos os direitos reservados.</p>
     </div>
-  </div>
+  </footer>
 
   <script src="/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      setupSidebar();
-      carregarMeusGrupos();
-    });
-
-    function setupSidebar() {
-      const toggle = document.getElementById('menuToggle');
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      const closeBtn = document.getElementById('closeSidebar');
-      const openMenu = () => { sidebar.classList.add('active'); overlay.classList.add('active'); };
-      const closeMenu = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); };
-      toggle.addEventListener('click', openMenu);
-      closeBtn.addEventListener('click', closeMenu);
-      overlay.addEventListener('click', closeMenu);
-    }
+    document.addEventListener('DOMContentLoaded', carregarMeusGrupos);
 
     function getCategoryName(id) {
       if (typeof CATEGORIES === 'undefined' || !id) return 'Outros';
@@ -224,15 +200,15 @@
 
     async function carregarMeusGrupos() {
       const lista = document.getElementById('gruposLista');
-      lista.innerHTML = '<p style="text-align:center;">Carregando seus grupos...</p>';
+      lista.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Carregando seus grupos...</p>';
       try {
         const gruposLocais = await buscarGruposLocais();
         if (gruposLocais.length === 0) {
           lista.innerHTML = `<div class="empty">
               <p style="font-size: 60px;">📭</p>
-              <h3>Nenhum grupo enviado ainda</h3>
-              <p>Que tal enviar seu primeiro grupo agora?</p>
-              <a href="/enviar-grupo/" class="btn btn-dark" style="margin-top: 20px;">➕ Enviar Novo Grupo</a>
+              <h3 style="margin:10px 0; color:var(--text-primary);">Nenhum grupo enviado ainda</h3>
+              <p style="color:var(--text-secondary);">Que tal enviar seu primeiro grupo agora?</p>
+              <a href="/enviar-grupo/" class="btn btn-send" style="margin-top: 20px;">➕ Enviar Novo Grupo</a>
             </div>`;
           return;
         }
@@ -245,53 +221,45 @@
           return apiData ? { ...local, ...apiData } : local;
         });
 
-        const recemAprovado = grupos.find(g => g.aprovado && !localStorage.getItem(`visto_${g.id}`));
-        if (recemAprovado) {
-          document.getElementById('modalParabens').classList.add('active');
-          localStorage.setItem(`visto_${recemAprovado.id}`, 'true');
-        }
-
         lista.innerHTML = grupos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(renderizarGrupo).join('');
       } catch (error) {
         console.error('Erro:', error);
-        lista.innerHTML = '<div class="empty">Ocorreu um erro ao carregar seus grupos. Tente recarregar a página.</div>';
+        lista.innerHTML = '<div class="empty"><h3 style="color:var(--text-primary);">Ocorreu um erro</h3><p style="color:var(--text-secondary);">Não foi possível carregar seus grupos. Tente recarregar a página.</p></div>';
       }
     }
 
     function renderizarGrupo(grupo) {
       let actionButtonHTML = '';
 
-      if (grupo.aprovado) { // Aprovado
+      if (grupo.aprovado) {
         if (podeImpulsionar(grupo)) {
-          actionButtonHTML = `<button class="btn btn-large btn-impulsionar" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>`;
+          actionButtonHTML = `<button class="btn-large btn-impulsionar" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>`;
         } else {
           actionButtonHTML = `<div class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</div>`;
         }
-      } else if (grupo.mensagem_admin) { // Reprovado
-        actionButtonHTML = `<button class="btn btn-large btn-reprovado" disabled>❌ Reprovado</button>`;
-      } else { // Pendente
-        actionButtonHTML = `<button class="btn btn-large btn-pendente" disabled>⏳ Em Análise</button>`;
+      } else if (grupo.mensagem_admin) {
+        actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
+      } else {
+        actionButtonHTML = `<button class="btn-large btn-pendente" disabled>EM ANÁLISE</button>`;
       }
 
       return `
         <div class="grupo-item">
-          <div class="grupo-foto-container">
-            <img src="${grupo.foto_url || 'https://via.placeholder.com/120?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
-            <button class="remove-btn-icon" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">🗑️</button>
-          </div>
+          <button class="remove-btn-icon" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+          </button>
+          <img src="${grupo.foto_url || 'https://via.placeholder.com/100?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
           <div class="grupo-info">
             <div class="grupo-titulo">${grupo.nome}</div>
-            <div class="grupo-desc">${grupo.descricao || 'Sem descrição'}</div>
+            <div class="grupo-desc">${grupo.descricao || 'Sem descrição.'}</div>
             <div class="grupo-details">
-              <strong>Categoria:</strong> ${getCategoryName(grupo.categoria)} &bull; <strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}
+              <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria).toUpperCase()} &bull; <strong>TIPO:</strong> ${grupo.tipo.toUpperCase()}
             </div>
-            
             ${grupo.mensagem_admin ? `
               <div class="mensagem-admin">
-                <strong>📩 Mensagem do Admin:</strong><br>
+                <strong>Mensagem do Admin:</strong><br>
                 ${grupo.mensagem_admin}
               </div>` : ''}
-
             <div class="card-footer-action">
               ${actionButtonHTML}
             </div>
@@ -316,32 +284,31 @@
     }
 
     async function impulsionar(id) {
+      const button = event.target;
+      button.disabled = true;
+      button.textContent = 'Impulsionando...';
       try {
         await supabaseFetch(`grupos?id=eq.${id}`, {
           method: 'PATCH',
           body: JSON.stringify({ ultimo_boost: new Date().toISOString() })
         });
-        alert('🚀 Grupo impulsionado! Ele aparecerá em destaque.');
-        carregarMeusGrupos();
+        carregarMeusGrupos(); // Recarrega para mostrar o timer
       } catch (error) {
         alert('Erro ao impulsionar: ' + error.message);
+        button.disabled = false;
+        button.textContent = '🚀 Impulsionar';
       }
     }
 
     async function removerGrupo(id) {
-      if (!confirm('Tem certeza que deseja remover este grupo? Esta ação não pode ser desfeita.')) return;
+      if (!confirm('Tem certeza que deseja apagar este grupo? Esta ação é permanente.')) return;
       try {
         await removerGrupoLocal(id);
         await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
-        alert('Grupo removido com sucesso!');
         carregarMeusGrupos();
       } catch (error) {
         alert('Erro ao remover: ' + error.message);
       }
-    }
-
-    function fecharModal() {
-      document.getElementById('modalParabens').classList.remove('active');
     }
   </script>
 </body>
