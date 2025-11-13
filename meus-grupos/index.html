@@ -4,427 +4,386 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Grupos - KDefy</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='white'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='green'>K</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='white'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='%23764ba2'>K</text></svg>">
   <style>
-    :root {
-      --cor-fundo: #ffffff;
-      --cor-texto: #000000;
-      --cor-verde: #25D366;
-      --cor-cinza: #f0f0f0;
-      --cor-vermelho: #ef4444;
-      --cor-borda: #e0e0e0;
-    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--cor-fundo);
-      color: var(--cor-texto);
-      display: flex;
-      flex-direction: column;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      padding: 20px;
     }
-    header {
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .grupo-item {
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      border-bottom: 1px solid var(--cor-borda);
+      gap: 20px;
+      align-items: start;
+      transition: all 0.3s;
     }
-    .logo {
+
+    .grupo-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .grupo-item.aprovado {
+      border-color: #25d366;
+      background: #f0fdf4;
+    }
+
+    .grupo-item.reprovado {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .grupo-foto {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .grupo-info {
+      flex: 1;
+    }
+
+    .grupo-titulo {
+      font-size: 20px;
       font-weight: bold;
-      font-size: 24px;
-      color: var(--cor-verde);
+      margin-bottom: 8px;
     }
-    .hamburguer {
+
+    .grupo-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .status-pendente {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-aprovado {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-reprovado {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .grupo-desc {
+      color: #666;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .grupo-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
     }
-    .hamburguer svg {
-      width: 30px;
-      height: 30px;
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
     }
-    .nav-menu {
+
+    .btn-success {
+      background: #25d366;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .empty img {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+
+    .boost-timer {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    .mensagem-admin {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Modal */
+    .modal {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 100;
-    }
-    .nav-menu.active {
-      display: block;
-    }
-    .nav-content {
-      background: var(--cor-fundo);
-      width: 250px;
-      height: 100%;
-      padding-top: 60px;
-      position: relative;
-    }
-    .nav-content a {
-      display: block;
-      padding: 15px 20px;
-      color: var(--cor-texto);
-      text-decoration: none;
-      font-size: 18px;
-    }
-    .nav-content a:hover {
-      background: var(--cor-cinza);
-    }
-    .close-menu {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      cursor: pointer;
-      font-size: 24px;
-    }
-    .container {
-      max-width: 800px;
-      width: 100%;
-      margin: 20px auto;
-      padding: 0 15px;
-      flex: 1;
-    }
-    .actions-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .btn {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 0.3s;
-    }
-    .btn-verde {
-      background-color: var(--cor-verde);
-      color: white;
-    }
-    .btn-verde:hover {
-      background-color: #1da851;
-    }
-    .btn-preto {
-      background-color: var(--cor-texto);
-      color: white;
-    }
-    .btn-preto:hover {
-      background-color: #333;
-    }
-    .grupos-container {
-      height: calc(100vh - 320px);
-      overflow-y: auto;
-      border: 1px solid var(--cor-borda);
-      border-radius: 12px;
-      padding: 10px;
-    }
-    .grupo-item {
-      background: var(--cor-fundo);
-      border: 2px solid var(--cor-cinza);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-      display: flex;
-      gap: 15px;
-      align-items: flex-start;
-      position: relative;
-    }
-    .grupo-item.status-pendente { border-color: var(--cor-cinza); background-color: #fafafa; }
-    .grupo-item.status-aprovado { border-color: var(--cor-verde); }
-    .grupo-item.status-reprovado { border-color: var(--cor-vermelho); background-color: #fff5f5; }
-    
-    .grupo-foto-wrapper {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .grupo-foto {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-    .btn-editar {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--cor-verde);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: bold;
-    }
-     .btn-editar svg {
-      width: 16px;
-      height: 16px;
-    }
-    .grupo-info { flex: 1; }
-    .grupo-titulo { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
-    .grupo-desc { color: #555; margin-bottom: 10px; font-size: 14px; }
-    .grupo-status { font-size: 12px; font-weight: 600; }
-    .status-pendente .grupo-status { color: #888; }
-    .status-aprovado .grupo-status { color: var(--cor-verde); }
-    .status-reprovado .grupo-status { color: var(--cor-vermelho); }
-    
-    .grupo-actions {
-      margin-top: 15px;
-    }
-    .btn-impulsionar {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-    }
-    .mensagem-admin {
-      background: #fff5f5;
-      border-left: 4px solid var(--cor-vermelho);
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-    .dica-box {
-      background-color: var(--cor-cinza);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 14px;
-    }
-    .dica-box svg {
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.5);
       z-index: 1000;
-      justify-content: center; align-items: center;
+      justify-content: center;
+      align-items: center;
     }
-    .modal.active { display: flex; }
+
+    .modal.active {
+      display: flex;
+    }
+
     .modal-content {
-      background: var(--cor-fundo);
-      padding: 30px;
+      background: white;
+      padding: 40px;
       border-radius: 12px;
-      width: 90%;
+      text-align: center;
       max-width: 400px;
+      animation: slideIn 0.3s;
     }
-    .modal-content h2 { margin-bottom: 20px; }
-    .modal-content label { display: block; margin-bottom: 8px; font-weight: 600; }
-    .modal-content input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--cor-borda);
-      border-radius: 8px;
-      margin-bottom: 20px;
+
+    @keyframes slideIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
-    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .btn-perigo { background-color: var(--cor-vermelho); color: white; }
-    
+
+    .modal-content h2 {
+      color: #25d366;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .grupo-item {
+        flex-direction: column;
+      }
+      .grupo-foto {
+        width: 100%;
+        height: 200px;
+      }
+    }
   </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">KDefy</div>
-    <div class="hamburguer" onclick="toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-  </header>
-
-  <nav class="nav-menu" id="navMenu">
-    <div class="nav-content">
-      <span class="close-menu" onclick="toggleMenu()">&times;</span>
-      <a href="/">Página Inicial</a>
-      <a href="/termos-uso/">Termos de Uso</a>
-      <a href="/politica-privacidade/">Política de Privacidade</a>
-    </div>
-  </nav>
-
   <div class="container">
-    <div class="actions-bar">
-      <a href="/enviar-grupo/" class="btn btn-verde">
-        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-        Enviar Grupo
-      </a>
-      <a href="/" class="btn btn-preto">
-         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-        Voltar ao Início
-      </a>
-    </div>
+    <div class="card">
+      <h1>📱 Meus Grupos</h1>
+      <p style="color: #666; margin-bottom: 30px;">Grupos que você enviou para divulgação</p>
 
-    <div class="grupos-container" id="gruposLista">
-      <!-- Grupos serão inseridos aqui pelo JS -->
-    </div>
+      <div id="gruposLista"></div>
 
-    <div class="dica-box">
-       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-      <div>
-        <strong>Dica:</strong> Se você remover um grupo, poderá enviar um novo para análise. Mantenha seus links sempre atualizados!
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="/enviar-grupo/" class="btn btn-success">➕ Enviar Novo Grupo</a>
+        <a href="/" class="btn btn-primary">🏠 Voltar ao Início</a>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Edição -->
-  <div id="modalEditar" class="modal">
+  <!-- Modal de Parabéns -->
+  <div id="modalParabens" class="modal">
     <div class="modal-content">
-      <h2>Editar Grupo</h2>
-      <input type="hidden" id="editGroupId">
-      <div>
-        <label for="editGroupLink">Link do Grupo</label>
-        <input type="url" id="editGroupLink" placeholder="https://chat.whatsapp.com/...">
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-perigo" onclick="removerGrupo()">Remover Grupo</button>
-        <button class="btn btn-verde" onclick="salvarGrupo()">Salvar Alterações</button>
-        <button class="btn" onclick="fecharModal()">Cancelar</button>
-      </div>
+      <h2>🎉 Parabéns!</h2>
+      <p>Seu grupo foi aprovado com sucesso e já está disponível para todos!</p>
+      <button class="btn btn-primary" onclick="fecharModal()">Fechar</button>
     </div>
   </div>
-  
+
   <script src="/app.js"></script>
   <script>
-    const listaEl = document.getElementById('gruposLista');
-    const modal = document.getElementById('modalEditar');
-    const editGroupIdEl = document.getElementById('editGroupId');
-    const editGroupLinkEl = document.getElementById('editGroupLink');
-
-    function toggleMenu() {
-      document.getElementById('navMenu').classList.toggle('active');
-    }
-
-    function abrirModal(id, link) {
-      editGroupIdEl.value = id;
-      editGroupLinkEl.value = link;
-      modal.classList.add('active');
-    }
-
-    function fecharModal() {
-      modal.classList.remove('active');
+    function getCategoryName(id) {
+      if (typeof CATEGORIES === 'undefined') return id;
+      const category = CATEGORIES.find(cat => cat.id === id);
+      return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1);
     }
 
     async function carregarMeusGrupos() {
       try {
         const gruposLocais = await buscarGruposLocais();
+        const lista = document.getElementById('gruposLista');
+
         if (gruposLocais.length === 0) {
-          listaEl.innerHTML = '<p style="text-align:center; padding: 20px;">Você ainda não enviou nenhum grupo.</p>';
+          lista.innerHTML = `
+            <div class="empty">
+              <p style="font-size: 60px;">📭</p>
+              <h3>Nenhum grupo enviado ainda</h3>
+              <p>Envie seu primeiro grupo e comece a divulgar!</p>
+            </div>
+          `;
           return;
         }
 
         const ids = gruposLocais.map(g => g.id).join(',');
-        const grupos = await supabaseFetch(`grupos?id=in.(${ids})`);
-        
-        listaEl.innerHTML = grupos.map(renderizarGrupo).join('');
+        const gruposAPI = await supabaseFetch(`grupos?id=in.(${ids})`);
+
+        const grupos = gruposLocais.map(local => {
+          const api = gruposAPI.find(g => g.id === local.id);
+          return api || local;
+        });
+
+        const recemAprovado = grupos.find(g => 
+          g.aprovado && !localStorage.getItem(`visto_${g.id}`)
+        );
+
+        if (recemAprovado) {
+          document.getElementById('modalParabens').classList.add('active');
+          localStorage.setItem(`visto_${recemAprovado.id}`, 'true');
+        }
+
+        lista.innerHTML = grupos.map(grupo => renderizarGrupo(grupo)).join('');
+
       } catch (error) {
-        console.error('Erro ao carregar grupos:', error);
-        listaEl.innerHTML = '<p style="text-align:center; padding: 20px; color: var(--cor-vermelho);">Erro ao carregar seus grupos. Tente novamente.</p>';
+        console.error('Erro:', error);
+        document.getElementById('gruposLista').innerHTML = 
+          '<div class="empty">Erro ao carregar grupos. Tente novamente.</div>';
       }
     }
-    
+
     function renderizarGrupo(grupo) {
-      let statusClass = 'status-pendente';
-      let statusTexto = '⏳ Análise Pendente';
+      let statusClass = 'pendente';
+      let statusTexto = '⏳ Enviado para análise';
       let acoes = '';
 
       if (grupo.aprovado) {
-        statusClass = 'status-aprovado';
+        statusClass = 'aprovado';
         statusTexto = '✅ Aprovado';
-        acoes = `<button class="btn btn-verde btn-impulsionar" onclick="impulsionar('${grupo.id}')">
-                   <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.428a1 1 0 00.949-.317l4-6a1 1 0 00-1.53-1.318l-3.23 2.423L9.5 6.5l7 14a1 1 0 001.788 0l-7-14z"></path></svg>
-                   Impulsionar
-                 </button>`;
+        acoes = `
+          <a href="${grupo.link}" target="_blank" class="btn btn-success">Entrar no Grupo</a>
+          ${podeImpulsionar(grupo) ? 
+            `<button class="btn btn-primary" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>` :
+            `<span class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</span>`
+          }
+        `;
       } else if (grupo.mensagem_admin) {
-        statusClass = 'status-reprovado';
+        statusClass = 'reprovado';
         statusTexto = '❌ Reprovado';
       }
 
-      return \`
-        <div class="grupo-item \${statusClass}">
-          <div class="grupo-foto-wrapper">
-            <img src="\${grupo.foto_url || 'https://via.placeholder.com/100'}" class="grupo-foto">
-            <button class="btn-editar" onclick="abrirModal('\${grupo.id}', '\${grupo.link}')" title="Editar">
-                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-            </button>
-          </div>
+      return `
+        <div class="grupo-item ${statusClass}">
+          <img src="${grupo.foto_url || 'https://via.placeholder.com/120'}" class="grupo-foto">
           <div class="grupo-info">
-            <div class="grupo-titulo">\${grupo.nome}</div>
-            <div class="grupo-status">\${statusTexto}</div>
-            <p class="grupo-desc">\${grupo.descricao || 'Sem descrição.'}</p>
-            \${grupo.mensagem_admin ? \`
+            <div class="grupo-titulo">${grupo.nome}</div>
+            <span class="grupo-status status-${statusClass}">${statusTexto}</span>
+            <div class="grupo-desc">${grupo.descricao || 'Sem descrição'}</div>
+            <div><strong>Categoria:</strong> ${getCategoryName(grupo.categoria)}</div>
+            <div><strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}</div>
+            
+            ${grupo.mensagem_admin ? `
               <div class="mensagem-admin">
-                <strong>Motivo da Reprovação:</strong> \${grupo.mensagem_admin}<br>
-                <small>Remova o grupo, corrija e envie novamente ou contate o suporte: <a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a></small>
+                <strong>📩 Mensagem do Admin:</strong><br>
+                ${grupo.mensagem_admin}
               </div>
-            \` : ''}
-            <div class="grupo-actions">
-              \${acoes}
+            ` : ''}
+
+            <div class="grupo-actions" style="margin-top: 15px;">
+              ${acoes}
+              <button class="btn btn-danger" onclick="removerGrupo('${grupo.id}')">🗑️ Remover</button>
             </div>
           </div>
         </div>
-      \`;
+      `;
     }
 
-    async function salvarGrupo() {
-      const id = editGroupIdEl.value;
-      const link = editGroupLinkEl.value;
+    function podeImpulsionar(grupo) {
+      if (!grupo.ultimo_boost) return true;
+      const duasHoras = 2 * 60 * 60 * 1000;
+      return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras;
+    }
 
-      if (!id || !link) return;
+    function tempoRestante(grupo) {
+      if (!grupo.ultimo_boost) return '0min';
+      const duasHoras = 2 * 60 * 60 * 1000;
+      const passado = Date.now() - new Date(grupo.ultimo_boost).getTime();
+      const restante = duasHoras - passado;
+      const minutos = Math.ceil(restante / 60000);
+      return `${minutos}min`;
+    }
 
+    async function impulsionar(id) {
       try {
-        await supabaseFetch(\`grupos?id=eq.\${id}\`, {
+        await supabaseFetch(`grupos?id=eq.${id}`, {
           method: 'PATCH',
-          body: JSON.stringify({ link: link, aprovado: false, mensagem_admin: null }),
+          body: JSON.stringify({ ultimo_boost: new Date().toISOString() })
         });
-        alert('Grupo atualizado! Ele foi enviado para análise novamente.');
-        fecharModal();
+        alert('🚀 Grupo impulsionado! Ele aparecerá em destaque.');
         carregarMeusGrupos();
       } catch (error) {
-        alert('Erro ao salvar: ' + error.message);
+        alert('Erro ao impulsionar: ' + error.message);
       }
     }
 
-    async function removerGrupo() {
-      const id = editGroupIdEl.value;
-      if (!id) return;
-      
-      if (!confirm('Tem certeza que deseja remover este grupo permanentemente?')) return;
+    async function removerGrupo(id) {
+      if (!confirm('Tem certeza que deseja remover este grupo?')) return;
 
       try {
         await removerGrupoLocal(id);
-        await supabaseFetch(\`grupos?id=eq.\${id}\`, { method: 'DELETE' });
+        await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
         alert('Grupo removido com sucesso!');
-        fecharModal();
         carregarMeusGrupos();
       } catch (error) {
         alert('Erro ao remover: ' + error.message);
       }
     }
-    
-    // Funções de impulsionar e de manipulação local (buscarGruposLocais, removerGrupoLocal)
-    // devem existir no seu app.js ou serem adicionadas aqui se não existirem.
-    async function impulsionar(id) {
-      alert('Função de impulsionar ainda não implementada.');
-      // Lógica para impulsionar o grupo...
+
+    function fecharModal() {
+      document.getElementById('modalParabens').classList.remove('active');
     }
 
-    document.addEventListener('DOMContentLoaded', carregarMeusGrupos);
+    carregarMeusGrupos();
   </script>
 </body>
 </html>
