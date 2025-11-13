@@ -20,6 +20,8 @@
       --gray-dark: #0f0f0f;
       --border-color: #dee2e6;
       --shadow: 0 2px 4px rgba(0,0,0,0.05);
+      --danger-red: #ef4444;
+      --pending-gray: #6b7280;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -29,7 +31,7 @@
     }
     .container { max-width: 900px; margin: 0 auto; padding: 0 15px; }
 
-    /* Sidebar */
+    /* Sidebar & Header (sem alterações) */
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s; }
     .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--header-bg); box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 1001; transition: right 0.3s; padding: 20px; }
@@ -40,54 +42,119 @@
     .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-primary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
     .sidebar a:hover { background-color: var(--bg-color); }
     .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; }
-    
-    /* Header */
     .main-header { background-color: var(--header-bg); padding: 15px 0; border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 998; }
     .header-content { display: flex; justify-content: space-between; align-items: center; }
     .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; color: var(--text-primary); text-decoration: none; }
     .nav-buttons { display: flex; align-items: center; gap: 10px; }
     .menu-toggle { background: none; border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; }
     .menu-toggle span { display: block; width: 22px; height: 2px; background: #0b0b0b; }
-    
     .btn { padding: 10px 20px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-primary-white { background-color: white; color: var(--gray-dark); border-color: var(--border-color); }
     .btn-primary-white:hover { background-color: #f8f9fa; }
     .btn-dark { background-color: var(--gray-dark); color: white; border-color: var(--gray-dark); }
     .btn-dark:hover { background-color: #0b0b0b; }
     
-    /* Content */
-    .content-section { padding: 40px 0; }
-    h1 { color: var(--text-primary); margin-bottom: 10px; font-size: 28px; }
-    .page-description { color: var(--text-secondary); margin-bottom: 30px; font-size: 16px; }
-
-    .grupo-item { border: 1px solid var(--border-color); background-color: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s; }
-    .grupo-item:hover { border-color: var(--accent-green); box-shadow: 0 4px 12px rgba(13, 139, 62, 0.1); }
-    .grupo-item.aprovado { border-left: 4px solid #25d366; }
-    .grupo-item.reprovado { border-left: 4px solid #ef4444; }
-    .grupo-foto { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; flex-shrink: 0; background-color: #f0f0f0; }
-    .grupo-info { flex: 1; }
-    .grupo-titulo { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .grupo-status { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
-    .status-pendente { background: #fef3c7; color: #92400e; }
-    .status-aprovado { background: #d1fae5; color: #065f46; }
-    .status-reprovado { background: #fee2e2; color: #991b1b; }
-    .grupo-desc { color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; }
-    .grupo-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+    /* --- NOVOS ESTILOS --- */
     
-    .boost-timer { font-size: 13px; color: var(--text-secondary); margin-top: 8px; display: inline-block; padding: 8px 16px; background-color: #f3f4f6; border-radius: 8px; }
-    .mensagem-admin { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 12px; border-radius: 4px; font-size: 14px; }
+    /* Centralizar Header da página */
+    .content-section .container h1, .content-section .container .page-description {
+        text-align: center;
+    }
+
+    .grupo-item { 
+      background-color: var(--card-bg); 
+      border-radius: 16px; 
+      padding: 25px; 
+      margin-bottom: 25px; 
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centraliza tudo */
+      transition: all 0.3s;
+    }
+    .grupo-item:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+
+    .grupo-foto-container {
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .grupo-foto { 
+      width: 120px; 
+      height: 120px; 
+      object-fit: cover; 
+      border-radius: 50%; /* Foto redonda */
+      border: 4px solid var(--header-bg);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .remove-btn-icon {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background: var(--danger-red);
+        color: white;
+        border: 2px solid var(--header-bg);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 10;
+        transition: all 0.2s;
+    }
+    .remove-btn-icon:hover { transform: scale(1.1); }
+    
+    .grupo-info { 
+      flex: 1; 
+      text-align: center; 
+      width: 100%;
+    }
+    .grupo-titulo { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .grupo-desc { color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5; font-size: 15px; }
+    .grupo-details { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
+    
+    .card-footer-action {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .btn-large {
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 12px;
+    }
+
+    .btn-impulsionar { background-color: var(--accent-green); color: white; }
+    .btn-impulsionar:hover { background-color: var(--accent-green-hover); }
+    .btn-reprovado { background-color: var(--danger-red); color: white; cursor: not-allowed; opacity: 0.8; }
+    .btn-pendente { background-color: var(--pending-gray); color: white; cursor: not-allowed; opacity: 0.8; }
+    
+    .boost-timer { 
+      display: block;
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
+      background-color: #e9ecef;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    .mensagem-admin { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-top: 12px; border-radius: 4px; font-size: 14px; text-align: left; }
     .empty { text-align: center; padding: 60px 20px; background-color: var(--card-bg); border-radius: 12px; }
     
-    /* Modal */
+    /* Modal (sem alterações) */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
     .modal.active { display: flex; }
     .modal-content { background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; }
-    
-    @media (max-width: 768px) {
-      .grupo-item { flex-direction: column; }
-      .grupo-foto { width: 100%; height: 180px; }
-      .nav-buttons { flex-wrap: wrap; }
-    }
   </style>
 </head>
 <body>
@@ -98,18 +165,9 @@
       <h3>Menu</h3>
       <button class="close-sidebar" id="closeSidebar">&times;</button>
     </div>
-    <a href="/">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-      Home
-    </a>
-    <a href="/termos-uso/">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-      Termos de Uso
-    </a>
-    <a href="/politica-privacidade/">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-      Política de Privacidade
-    </a>
+    <a href="/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Home</a>
+    <a href="/termos-uso/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Termos de Uso</a>
+    <a href="/politica-privacidade/"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Política de Privacidade</a>
   </aside>
 
   <header class="main-header">
@@ -118,9 +176,7 @@
       <div class="nav-buttons">
         <a href="/enviar-grupo/" class="btn btn-primary-white">ENVIAR GRUPO</a>
         <a href="/meus-grupos/" class="btn btn-dark">MEUS GRUPOS</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
@@ -133,7 +189,6 @@
     </div>
   </main>
 
-  <!-- Modal de Parabéns -->
   <div id="modalParabens" class="modal">
     <div class="modal-content">
       <h2 style="color: #25d366;">🎉 Parabéns!</h2>
@@ -154,17 +209,8 @@
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebarOverlay');
       const closeBtn = document.getElementById('closeSidebar');
-      
-      const openMenu = () => {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-      };
-
-      const closeMenu = () => {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-      };
-
+      const openMenu = () => { sidebar.classList.add('active'); overlay.classList.add('active'); };
+      const closeMenu = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); };
       toggle.addEventListener('click', openMenu);
       closeBtn.addEventListener('click', closeMenu);
       overlay.addEventListener('click', closeMenu);
@@ -178,12 +224,11 @@
 
     async function carregarMeusGrupos() {
       const lista = document.getElementById('gruposLista');
-      lista.innerHTML = '<p>Carregando seus grupos...</p>';
+      lista.innerHTML = '<p style="text-align:center;">Carregando seus grupos...</p>';
       try {
         const gruposLocais = await buscarGruposLocais();
         if (gruposLocais.length === 0) {
-          lista.innerHTML = `
-            <div class="empty">
+          lista.innerHTML = `<div class="empty">
               <p style="font-size: 60px;">📭</p>
               <h3>Nenhum grupo enviado ainda</h3>
               <p>Que tal enviar seu primeiro grupo agora?</p>
@@ -197,7 +242,7 @@
         
         const grupos = gruposLocais.map(local => {
           const apiData = gruposAPI.find(g => g.id === local.id);
-          return apiData ? { ...local, ...apiData } : local; // Merge local and API data
+          return apiData ? { ...local, ...apiData } : local;
         });
 
         const recemAprovado = grupos.find(g => g.aprovado && !localStorage.getItem(`visto_${g.id}`));
@@ -207,53 +252,48 @@
         }
 
         lista.innerHTML = grupos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(renderizarGrupo).join('');
-
       } catch (error) {
         console.error('Erro:', error);
-        lista.innerHTML = '<div class="empty">Ocorreu um erro ao carregar seus grupos. Por favor, tente recarregar a página.</div>';
+        lista.innerHTML = '<div class="empty">Ocorreu um erro ao carregar seus grupos. Tente recarregar a página.</div>';
       }
     }
 
     function renderizarGrupo(grupo) {
-      let statusClass = 'pendente';
-      let statusTexto = '⏳ Enviado para análise';
-      let acoes = '';
+      let actionButtonHTML = '';
 
-      if (grupo.aprovado) {
-        statusClass = 'aprovado';
-        statusTexto = '✅ Aprovado';
-        acoes = `
-          <a href="${grupo.link}" target="_blank" class="btn btn-success">Entrar no Grupo</a>
-          ${podeImpulsionar(grupo) ? 
-            `<button class="btn btn-primary" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>` :
-            `<span class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</span>`
-          }
-        `;
-      } else if (grupo.mensagem_admin) {
-        statusClass = 'reprovado';
-        statusTexto = '❌ Reprovado';
+      if (grupo.aprovado) { // Aprovado
+        if (podeImpulsionar(grupo)) {
+          actionButtonHTML = `<button class="btn btn-large btn-impulsionar" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>`;
+        } else {
+          actionButtonHTML = `<div class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</div>`;
+        }
+      } else if (grupo.mensagem_admin) { // Reprovado
+        actionButtonHTML = `<button class="btn btn-large btn-reprovado" disabled>❌ Reprovado</button>`;
+      } else { // Pendente
+        actionButtonHTML = `<button class="btn btn-large btn-pendente" disabled>⏳ Em Análise</button>`;
       }
 
       return `
-        <div class="grupo-item ${statusClass}">
-          <img src="${grupo.foto_url || 'https://via.placeholder.com/100?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
+        <div class="grupo-item">
+          <div class="grupo-foto-container">
+            <img src="${grupo.foto_url || 'https://via.placeholder.com/120?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
+            <button class="remove-btn-icon" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">🗑️</button>
+          </div>
           <div class="grupo-info">
             <div class="grupo-titulo">${grupo.nome}</div>
-            <span class="grupo-status status-${statusClass}">${statusTexto}</span>
             <div class="grupo-desc">${grupo.descricao || 'Sem descrição'}</div>
-            <div><strong>Categoria:</strong> ${getCategoryName(grupo.categoria)}</div>
-            <div><strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}</div>
+            <div class="grupo-details">
+              <strong>Categoria:</strong> ${getCategoryName(grupo.categoria)} &bull; <strong>Tipo:</strong> ${grupo.tipo.toUpperCase()}
+            </div>
             
             ${grupo.mensagem_admin ? `
               <div class="mensagem-admin">
                 <strong>📩 Mensagem do Admin:</strong><br>
                 ${grupo.mensagem_admin}
-              </div>
-            ` : ''}
+              </div>` : ''}
 
-            <div class="grupo-actions" style="margin-top: 15px;">
-              ${acoes}
-              <button class="btn btn-danger" onclick="removerGrupo('${grupo.id}')">🗑️ Remover</button>
+            <div class="card-footer-action">
+              ${actionButtonHTML}
             </div>
           </div>
         </div>
@@ -289,8 +329,7 @@
     }
 
     async function removerGrupo(id) {
-      if (!confirm('Tem certeza que deseja remover este grupo?')) return;
-
+      if (!confirm('Tem certeza que deseja remover este grupo? Esta ação não pode ser desfeita.')) return;
       try {
         await removerGrupoLocal(id);
         await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
