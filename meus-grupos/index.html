@@ -18,6 +18,7 @@
       --text-tertiary: #AAAAAA;
       --action-green: #22C55E;
       --action-red: #EF4444;
+      --action-blue: #3b82f6;
       --border-color: #333333;
       --shadow-color: rgba(150, 150, 150, 0.1);
     }
@@ -29,176 +30,148 @@
     }
     .container { max-width: 900px; margin: 0 auto; padding: 0 15px; }
 
-    /* --- HEADER --- */
-    .main-header { 
-      background-color: var(--bg-main); 
-      padding: 20px 0; 
-      border-bottom: 1px solid var(--border-color); 
-      position: sticky; 
-      top: 0; 
-      z-index: 998; 
-    }
+    /* --- Sidebar & Header --- */
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
+    .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s; }
+    .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: #111; border-left: 1px solid var(--border-color); box-shadow: -4px 0 15px rgba(0,0,0,0.2); z-index: 1001; transition: right 0.3s; padding: 20px; }
+    .sidebar.active { right: 0; }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .sidebar h3 { font-size: 20px; color: var(--action-green); }
+    .close-sidebar { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-secondary); }
+    .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-primary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
+    .sidebar a:hover { background-color: var(--bg-container); }
+    .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-secondary); }
+    
+    .main-header { background-color: var(--bg-main); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 998; }
     .header-content { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-size: 24px; font-weight: 900; color: var(--text-primary); text-decoration: none; }
     .nav-buttons { display: flex; align-items: center; gap: 12px; }
+    .menu-toggle { background: none; border: 1px solid var(--border-color); width: 42px; height: 42px; border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; padding: 10px; }
+    .menu-toggle span { display: block; width: 22px; height: 2px; background: var(--text-primary); border-radius: 1px; }
     
-    .btn { 
-      padding: 10px 22px; 
-      border-radius: 8px; 
-      border: 1px solid transparent; 
-      font-size: 14px; 
-      font-weight: 700; 
-      text-decoration: none; 
-      cursor: pointer; 
-      transition: all 0.2s; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px;
-      text-transform: uppercase;
-    }
+    .btn { padding: 10px 22px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
     .btn-send { background-color: var(--action-green); color: var(--text-primary); }
     .btn-send:hover { background-color: #16a34a; }
     .btn-my-groups-active { background-color: var(--bg-container); color: var(--text-primary); border-color: var(--text-primary); }
-    
+
+    /* --- NOVAS CAIXAS DE INFO --- */
+    .info-box { padding: 15px 20px; border-radius: 12px; margin-bottom: 30px; font-size: 15px; line-height: 1.6; display: flex; align-items: flex-start; gap: 15px; }
+    .info-box strong { font-weight: 700; }
+    .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
+    .info-box a:hover { text-decoration: underline; }
+    .info-box .emoji { font-size: 20px; }
+    .info-box.blue { background-color: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--action-blue); color: #bfdbfe; }
+    .info-box.gray { background-color: var(--bg-container-light); border-left: 4px solid var(--text-secondary); color: var(--text-tertiary); }
+
     /* --- CONTENT --- */
     .content-section { padding: 50px 0; }
     .content-section .container h1 { text-align: center; font-size: 36px; font-weight: 900; margin-bottom: 10px; }
     .content-section .container .page-description { text-align: center; color: var(--text-secondary); margin-bottom: 40px; font-size: 16px; }
 
     /* --- GRUPO CARD --- */
-    .grupo-item { 
-      background-color: var(--bg-container); 
-      border-radius: 16px; 
-      padding: 25px; 
-      margin-bottom: 25px; 
-      box-shadow: 0 4px 12px var(--shadow-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+    .grupo-item { background-color: var(--bg-container); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px var(--shadow-color); display: flex; flex-direction: column; align-items: center; transition: all 0.3s ease; position: relative; }
     .grupo-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color); }
-    
-    .remove-btn-icon {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: transparent;
-        color: var(--action-red);
-        border: none;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        transition: all 0.2s;
-    }
-    .remove-btn-icon:hover { transform: scale(1.2); color: #c02b2b; }
 
-    .grupo-foto { 
-      width: 100px; 
-      height: 100px; 
-      object-fit: cover; 
-      border-radius: 8px; /* Cantos levemente arredondados */
-      border: 2px solid var(--text-primary);
-      margin-bottom: 20px;
-    }
+    .card-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
+    .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .icon-btn svg { width: 18px; height: 18px; }
+    .icon-btn.edit-btn { color: var(--text-tertiary); }
+    .icon-btn.edit-btn:hover { background-color: var(--action-blue); color: white; }
+    .icon-btn.remove-btn { color: var(--action-red); }
+    .icon-btn.remove-btn:hover { background-color: var(--action-red); color: white; }
     
-    .grupo-info { 
-      text-align: center; 
-      width: 100%;
-    }
+    /* Nova foto container */
+    .grupo-foto-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background-color: var(--bg-main); }
+    .grupo-foto { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .grupo-item:hover .grupo-foto { transform: scale(1.05); }
+
+    .grupo-info { text-align: center; width: 100%; }
     .grupo-titulo { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
     .grupo-desc { color: var(--text-secondary); margin-bottom: 15px; line-height: 1.6; font-size: 15px; }
-    .grupo-details { font-size: 13px; color: var(--text-tertiary); margin-bottom: 25px; }
+    .grupo-details { font-size: 13px; color: var(--text-tertiary); margin-bottom: 25px; text-transform: uppercase; }
     
-    .card-footer-action {
-        width: 100%;
-    }
-
-    .btn-large {
-        width: 100%;
-        padding: 16px 20px;
-        font-size: 16px;
-        font-weight: 700;
-        border-radius: 12px;
-        text-transform: uppercase;
-        border: none;
-    }
+    .card-footer-action { width: 100%; }
+    .btn-large { width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; text-transform: uppercase; border: none; }
     .btn-impulsionar { background-color: var(--action-green); color: var(--text-primary); box-shadow: 0 4px 15px -5px var(--action-green); }
     .btn-impulsionar:hover { background-color: #16a34a; transform: translateY(-2px); }
-    .btn-reprovado { background-color: var(--action-red); color: var(--text-primary); cursor: default; }
-    .btn-pendente { background-color: var(--text-secondary); color: var(--bg-container); cursor: default; }
+    .boost-timer { display: block; width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; background-color: var(--bg-container-light); color: var(--text-primary); text-align: center; }
     
-    .boost-timer { 
-      display: block;
-      width: 100%;
-      padding: 16px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 12px;
-      background-color: var(--bg-container-light);
-      color: var(--text-primary);
-      text-align: center;
-    }
-
-    .mensagem-admin { background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--action-red); padding: 12px; margin-top: 15px; border-radius: 4px; font-size: 14px; text-align: left; color: #fecaca; }
     .empty { text-align: center; padding: 60px 20px; background-color: var(--bg-container); border-radius: 12px; }
 
     /* --- FOOTER --- */
-    .main-footer {
-        text-align: center;
-        padding: 40px 0 20px 0;
-        border-top: 1px solid var(--bg-container-light);
-        margin-top: 50px;
-    }
-    .main-footer p {
-        color: var(--text-secondary);
-        font-size: 14px;
-    }
+    .main-footer { text-align: center; padding: 40px 0 20px 0; border-top: 1px solid var(--bg-container-light); margin-top: 50px; }
+    .main-footer p { color: var(--text-secondary); font-size: 14px; }
   </style>
 </head>
 <body>
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>Menu</h3>
+      <button class="close-sidebar" id="closeSidebar">&times;</button>
+    </div>
+    <a href="/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</a>
+    <a href="/termos-uso/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>Termos de Uso</a>
+    <a href="/politica-privacidade/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>Política de Privacidade</a>
+  </aside>
+
   <header class="main-header">
     <div class="container header-content">
-      <a href="/" class="logo">KDEFY GRUPOS</a>
+      <a href="/" class="logo">MEUS GRUPOS</a>
       <div class="nav-buttons">
         <a href="/enviar-grupo/" class="btn btn-send">ENVIAR GRUPO</a>
-        <a href="/meus-grupos/" class="btn btn-my-groups-active">MEUS GRUPOS</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
 
   <main class="content-section">
     <div class="container">
-      <h1>Meus Grupos</h1>
+      <h1 style="margin-top: 20px;">Seja Bem-Vindo(a)</h1>
       <p class="page-description">Acompanhe o status e gerencie os grupos que você enviou.</p>
+
+      <div class="info-box blue">
+        <span class="emoji">ℹ️</span>
+        <div><strong>Aviso Importante:</strong> Todos os grupos são analisados antes da publicação. Certifique-se de que seu conteúdo segue nossas diretrizes. Leia os <a href="/termos-uso/">Termos de Uso</a> para mais detalhes.</div>
+      </div>
+
       <div id="gruposLista"></div>
     </div>
   </main>
   
   <footer class="main-footer">
     <div class="container">
+        <div class="info-box gray">
+            <span class="emoji">💡</span>
+            <div><strong>Dica:</strong> Se um grupo for removido, você pode enviá-lo novamente, mas evite apagar e reenviar com frequência. Para alterar o link ou a imagem, use o botão de edição (✏️) no card do seu grupo.</div>
+        </div>
       <p>© 2025 Kdefy. Todos os direitos reservados.</p>
     </div>
   </footer>
 
   <script src="/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', carregarMeusGrupos);
+    document.addEventListener('DOMContentLoaded', () => {
+      setupSidebar();
+      carregarMeusGrupos();
+    });
 
-    function getCategoryName(id) {
-      if (typeof CATEGORIES === 'undefined' || !id) return 'Outros';
-      const category = CATEGORIES.find(cat => cat.id === id);
-      return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');
+    function setupSidebar() {
+      const toggle = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const closeBtn = document.getElementById('closeSidebar');
+      if (!toggle || !sidebar || !overlay || !closeBtn) return;
+      const openMenu = () => { sidebar.classList.add('active'); overlay.classList.add('active'); };
+      const closeMenu = () => { sidebar.classList.remove('active'); overlay.classList.remove('active'); };
+      toggle.addEventListener('click', openMenu);
+      closeBtn.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', closeMenu);
     }
 
     async function carregarMeusGrupos() {
+      // (lógica de carregamento permanece a mesma)
       const lista = document.getElementById('gruposLista');
       lista.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Carregando seus grupos...</p>';
       try {
@@ -212,30 +185,26 @@
             </div>`;
           return;
         }
-
         const ids = gruposLocais.map(g => g.id);
         const gruposAPI = await supabaseFetch(`grupos?id=in.(${ids.join(',')})`);
-        
         const grupos = gruposLocais.map(local => {
           const apiData = gruposAPI.find(g => g.id === local.id);
           return apiData ? { ...local, ...apiData } : local;
         });
-
         lista.innerHTML = grupos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(renderizarGrupo).join('');
       } catch (error) {
         console.error('Erro:', error);
-        lista.innerHTML = '<div class="empty"><h3 style="color:var(--text-primary);">Ocorreu um erro</h3><p style="color:var(--text-secondary);">Não foi possível carregar seus grupos. Tente recarregar a página.</p></div>';
+        lista.innerHTML = '<div class="empty"><h3 style="color:var(--text-primary);">Ocorreu um erro</h3><p style="color:var(--text-secondary);">Não foi possível carregar. Tente recarregar a página.</p></div>';
       }
     }
 
     function renderizarGrupo(grupo) {
       let actionButtonHTML = '';
-
       if (grupo.aprovado) {
         if (podeImpulsionar(grupo)) {
-          actionButtonHTML = `<button class="btn-large btn-impulsionar" onclick="impulsionar('${grupo.id}')">🚀 Impulsionar</button>`;
+          actionButtonHTML = `<button class="btn-large btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>`;
         } else {
-          actionButtonHTML = `<div class="boost-timer">⏰ Próximo boost em ${tempoRestante(grupo)}</div>`;
+          actionButtonHTML = `<div class="boost-timer">⏰ PRÓXIMO BOOST EM ${tempoRestante(grupo)}</div>`;
         }
       } else if (grupo.mensagem_admin) {
         actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
@@ -243,23 +212,24 @@
         actionButtonHTML = `<button class="btn-large btn-pendente" disabled>EM ANÁLISE</button>`;
       }
 
+      const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+      const trashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
+
       return `
         <div class="grupo-item">
-          <button class="remove-btn-icon" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-          </button>
-          <img src="${grupo.foto_url || 'https://via.placeholder.com/100?text=K'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
+          <div class="card-actions">
+             <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar grupo">${editIcon}</button>
+             <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">${trashIcon}</button>
+          </div>
+          <div class="grupo-foto-container">
+            <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
+          </div>
           <div class="grupo-info">
             <div class="grupo-titulo">${grupo.nome}</div>
             <div class="grupo-desc">${grupo.descricao || 'Sem descrição.'}</div>
             <div class="grupo-details">
-              <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria).toUpperCase()} &bull; <strong>TIPO:</strong> ${grupo.tipo.toUpperCase()}
+              <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria)} &bull; <strong>TIPO:</strong> ${grupo.tipo}
             </div>
-            ${grupo.mensagem_admin ? `
-              <div class="mensagem-admin">
-                <strong>Mensagem do Admin:</strong><br>
-                ${grupo.mensagem_admin}
-              </div>` : ''}
             <div class="card-footer-action">
               ${actionButtonHTML}
             </div>
@@ -268,48 +238,18 @@
       `;
     }
 
-    function podeImpulsionar(grupo) {
-      if (!grupo.ultimo_boost) return true;
-      const duasHoras = 2 * 60 * 60 * 1000;
-      return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras;
+    // (Funções de lógica como podeImpulsionar, tempoRestante, impulsionar, removerGrupo permanecem)
+    function getCategoryName(id) { if (typeof CATEGORIES === 'undefined' || !id) return 'Outros'; const category = CATEGORIES.find(cat => cat.id === id); return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');}
+    function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
+    function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
+    async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch (error) { alert('Erro ao impulsionar: ' + error.message); button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
+    async function removerGrupo(id) { if (!confirm('Tem certeza que deseja apagar este grupo? Esta ação é permanente.')) return; try { await removerGrupoLocal(id); await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); carregarMeusGrupos(); } catch (error) { alert('Erro ao remover: ' + error.message); } }
+
+    // Placeholder para a nova função de edição
+    function editarGrupo(id) {
+      alert('A função de editar o grupo ' + id + ' será implementada em breve!');
     }
 
-    function tempoRestante(grupo) {
-      if (!grupo.ultimo_boost) return '0min';
-      const duasHoras = 2 * 60 * 60 * 1000;
-      const passado = Date.now() - new Date(grupo.ultimo_boost).getTime();
-      const restante = duasHoras - passado;
-      const minutos = Math.ceil(restante / 60000);
-      return `${minutos}min`;
-    }
-
-    async function impulsionar(id) {
-      const button = event.target;
-      button.disabled = true;
-      button.textContent = 'Impulsionando...';
-      try {
-        await supabaseFetch(`grupos?id=eq.${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ ultimo_boost: new Date().toISOString() })
-        });
-        carregarMeusGrupos(); // Recarrega para mostrar o timer
-      } catch (error) {
-        alert('Erro ao impulsionar: ' + error.message);
-        button.disabled = false;
-        button.textContent = '🚀 Impulsionar';
-      }
-    }
-
-    async function removerGrupo(id) {
-      if (!confirm('Tem certeza que deseja apagar este grupo? Esta ação é permanente.')) return;
-      try {
-        await removerGrupoLocal(id);
-        await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
-        carregarMeusGrupos();
-      } catch (error) {
-        alert('Erro ao remover: ' + error.message);
-      }
-    }
   </script>
 </body>
 </html>
