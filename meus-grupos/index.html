@@ -111,23 +111,6 @@
     /* --- FOOTER --- */
     .main-footer { text-align: center; padding: 40px 0 20px 0; border-top: 1px solid var(--bg-container-light); margin-top: 50px; }
     .main-footer p { color: var(--text-secondary); font-size: 14px; }
-    
-    #btnTrocarFoto {
-      padding: 10px 18px;
-      background: #0a84ff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 500;
-      transition: 0.2s;
-    }
-
-    #btnTrocarFoto:hover {
-       opacity: 0.85;
-    }
-
   </style>
 </head>
 <body>
@@ -227,8 +210,13 @@
 
       const reader = new FileReader();
       reader.onload = () => {
-        preview.src = reader.result;
-        preview.dataset.base64 = reader.result.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+        const base64 = reader.result;
+        const prefix = base64.substring(0, base64.indexOf(",") + 1);
+        const semPrefixo = base64.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+
+        preview.src = base64;
+        preview.dataset.prefix = prefix;
+        preview.dataset.base64 = semPrefixo;
         preview.style.display = "block";
       };
       reader.readAsDataURL(file);
@@ -316,7 +304,7 @@
            <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">${trashIcon}</button>
         </div>
         <div class="grupo-foto-container">
-          <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" alt="Foto do grupo ${grupo.nome}" class="grupo-foto">
+          <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
         </div>
         <div class="grupo-info">
           <div class="grupo-titulo">${grupo.nome}</div>
@@ -343,10 +331,22 @@
 
     if (grupo.foto_url) {
       preview.src = grupo.foto_url;
-      preview.dataset.base64 = "";
+
+      if (grupo.foto_url.startsWith("data:image")) {
+        const prefix = grupo.foto_url.substring(0, grupo.foto_url.indexOf(",") + 1);
+        const semPrefixo = grupo.foto_url.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
+        preview.dataset.prefix = prefix;
+        preview.dataset.base64 = semPrefixo;
+      } else {
+        preview.dataset.prefix = "";
+        preview.dataset.base64 = "";
+      }
+
       preview.style.display = "block";
     } else {
       preview.style.display = "none";
+      preview.dataset.prefix = "";
+      preview.dataset.base64 = "";
     }
 
     document.getElementById('editModalOverlay').style.display = 'flex';
@@ -358,24 +358,23 @@
 
   async function salvarEdicao() {
     const id = document.getElementById('editGroupId').value;
-
     const grupo = meusGrupos.find(g => g.id === id);
     if (!grupo) return;
 
     const link = document.getElementById('editLink').value.trim();
     const preview = document.getElementById('editFotoPreview');
 
-    let foto_final = grupo.foto_url || "";
-    const novaFoto = preview.dataset.base64 || "";
-    const mudouFoto = novaFoto !== "" && novaFoto !== grupo.foto_url;
+    const base64 = preview.dataset.base64 || "";
+    const prefix = preview.dataset.prefix || "";
+
+    let foto_final = grupo.foto_url;
+
+    const mudouFoto = base64 !== "" && (prefix + base64) !== grupo.foto_url;
     const mudouLink = link !== grupo.link;
 
-    if (!mudouFoto && !mudouLink) {
-      alert("Nenhuma alteração foi feita.");
-      return;
-    }
+    if (!mudouFoto && !mudouLink) return;
 
-    if (mudouFoto) foto_final = novaFoto;
+    if (mudouFoto) foto_final = prefix + base64;
 
     const saveBtn = document.getElementById('saveEdit');
     const originalText = saveBtn.textContent;
@@ -389,15 +388,13 @@
           foto_url: foto_final,
           link: link,
           aprovado: false,
-          mensagem_admin: 'Grupo em reanálise após edição.' 
+          mensagem_admin: 'Grupo em reanálise após edição.'
         })
       });
 
       fecharModalEdicao();
       setTimeout(() => carregarMeusGrupos(), 500);
 
-    } catch (error) {
-      alert('Erro ao salvar as alterações: ' + error.message);
     } finally {
       saveBtn.textContent = originalText;
       saveBtn.disabled = false;
@@ -407,8 +404,6 @@
   function getCategoryName(id) { if (typeof CATEGORIES === 'undefined' || !id) return 'Outros'; const category = CATEGORIES.find(cat => cat.id === id); return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');}
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
   function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
-  async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch (error) { alert('Erro ao impulsionar: ' + error.message); button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
-  async function removerGrupo(id) { if (!confirm('Tem certeza que deseja apagar este grupo?')) return; try { await removerGrupoLocal(id); await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); carregarMeusGrupos(); } catch (error) { alert('Erro ao remover: ' + error.message); } }
+  async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
+  async function removerGrupo(id) { if (!confirm('Tem certeza que deseja apagar este grupo?')) return; try { await removerGrupoLocal(id); await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); carregarMeusGrupos(); } catch {} }
 </script>
-</body>
-</html>
