@@ -160,19 +160,27 @@
     </div>
   </footer>
 
-  <!-- MODAL DE EDIÇÃO -->
+    <!-- MODAL DE EDIÇÃO -->
   <div class="modal-overlay" id="editModalOverlay">
     <div class="modal" id="editModal">
       <h2>Editar Grupo</h2>
       <input type="hidden" id="editGroupId">
+
       <div class="form-group">
-        <label for="editFotoUrl">URL da Foto</label>
+        <label for="editFotoUrl">Foto (URL ou Upload)</label>
+
         <input type="url" id="editFotoUrl" placeholder="https://exemplo.com/imagem.png">
+
+        <input type="file" id="editFotoFile" accept="image/*" style="margin-top:10px;">
+
+        <img id="editFotoPreview" style="max-width:200px; margin-top:10px; display:none; border-radius:6px;">
       </div>
+
       <div class="form-group">
         <label for="editLink">Link do Grupo</label>
         <input type="url" id="editLink" placeholder="https://chat.whatsapp.com/...">
       </div>
+
       <div class="modal-actions">
         <button class="btn btn-cancel" id="cancelEdit">Cancelar</button>
         <button class="btn btn-send" id="saveEdit">Salvar Alterações</button>
@@ -188,7 +196,34 @@
       setupSidebar();
       setupModal();
       carregarMeusGrupos();
+      setupImagePreview();
     });
+
+    function setupImagePreview() {
+      const urlInput = document.getElementById("editFotoUrl");
+      const fileInput = document.getElementById("editFotoFile");
+      const preview = document.getElementById("editFotoPreview");
+
+      urlInput.addEventListener("input", () => {
+        if (urlInput.value.trim() !== "") {
+          preview.src = urlInput.value;
+          preview.style.display = "block";
+        }
+      });
+
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.src = reader.result;
+          preview.style.display = "block";
+          urlInput.value = "";
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     function setupSidebar() {
       const toggle = document.getElementById('menuToggle');
@@ -296,6 +331,14 @@
         document.getElementById('editFotoUrl').value = grupo.foto_url || '';
         document.getElementById('editLink').value = grupo.link || '';
 
+        const preview = document.getElementById('editFotoPreview');
+        if (grupo.foto_url) {
+          preview.src = grupo.foto_url;
+          preview.style.display = "block";
+        } else {
+          preview.style.display = "none";
+        }
+
         document.getElementById('editModalOverlay').style.display = 'flex';
     }
 
@@ -305,7 +348,20 @@
 
     async function salvarEdicao() {
         const id = document.getElementById('editGroupId').value;
-        const foto_url = document.getElementById('editFotoUrl').value.trim();
+
+        const url = document.getElementById('editFotoUrl').value.trim();
+        const file = document.getElementById('editFotoFile').files[0];
+
+        let foto_final = url;
+
+        if (file) {
+            const reader = new FileReader();
+            foto_final = await new Promise(res => {
+                reader.onload = () => res(reader.result);
+                reader.readAsDataURL(file);
+            });
+        }
+
         const link = document.getElementById('editLink').value.trim();
         const saveBtn = document.getElementById('saveEdit');
         
@@ -319,7 +375,7 @@
             await supabaseFetch(`grupos?id=eq.${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify({ 
-                    foto_url: foto_url, 
+                    foto_url: foto_final, 
                     link: link, 
                     aprovado: false, 
                     mensagem_admin: 'Grupo em reanálise após edição.' 
@@ -327,10 +383,7 @@
             });
 
             fecharModalEdicao();
-            // Adiciona um pequeno delay para dar tempo do BD processar antes de recarregar
-            setTimeout(() => {
-                carregarMeusGrupos();
-            }, 500); 
+            setTimeout(() => carregarMeusGrupos(), 500);
 
         } catch (error) {
             alert('Erro ao salvar as alterações: ' + error.message);
@@ -339,7 +392,6 @@
             saveBtn.disabled = false;
         }
     }
-
 
     // --- FUNÇÕES DE LÓGICA EXISTENTES ---
     function getCategoryName(id) { if (typeof CATEGORIES === 'undefined' || !id) return 'Outros'; const category = CATEGORIES.find(cat => cat.id === id); return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');}
