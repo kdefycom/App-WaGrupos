@@ -200,6 +200,10 @@
     setupImagePreviewHidden();
   });
 
+  function popup(msg) {
+    alert(msg);
+  }
+
   function setupImagePreviewHidden() {
     const fileInput = document.getElementById("editFotoFile");
     const preview = document.getElementById("editFotoPreview");
@@ -372,7 +376,10 @@
     const mudouFoto = base64 !== "" && (prefix + base64) !== grupo.foto_url;
     const mudouLink = link !== grupo.link;
 
-    if (!mudouFoto && !mudouLink) return;
+    if (!mudouFoto && !mudouLink) {
+      popup("Nenhuma alteração foi feita.");
+      return;
+    }
 
     if (mudouFoto) foto_final = prefix + base64;
 
@@ -393,6 +400,7 @@
       });
 
       fecharModalEdicao();
+      popup("Alterações enviadas para análise. Aguarde a aprovação.");
       setTimeout(() => carregarMeusGrupos(), 500);
 
     } finally {
