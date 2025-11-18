@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Grupos - KDefy</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%2322C55E;stop-opacity:1'/><stop offset='100%' style='stop-color:%2316a34a;stop-opacity:1'/></linearGradient></defs><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='url(%23grad)'>K</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%23111111;stop-opacity:1'/><stop offset='100%' style='stop-color:%23444444;stop-opacity:1'/></linearGradient></defs><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='url(%23grad)'>K</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -29,17 +29,17 @@
 </script>
   <style>
     :root {
-      --bg-main: #000000;
-      --bg-container: #1A1A1A;
-      --bg-container-light: #222222;
-      --text-primary: #FFFFFF;
-      --text-secondary: #888888;
-      --text-tertiary: #AAAAAA;
-      --action-green: #22C55E;
+      --bg-main: #e0e0e0;
+      --bg-container: #ffffff;
+      --bg-container-light: #f5f5f5;
+      --text-primary: #111111;
+      --text-secondary: #555555;
+      --text-tertiary: #888888;
+      --action-green: #333333;
       --action-red: #EF4444;
-      --action-blue: #3b82f6;
-      --border-color: #333333;
-      --shadow-color: rgba(150, 150, 150, 0.1);
+      --action-blue: #000000;
+      --border-color: #cccccc;
+      --shadow-color: rgba(0,0,0,0.1);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -50,15 +50,15 @@
     .container { max-width: 900px; margin: 0 auto; padding: 0 15px; }
 
     /* --- Sidebar & Header --- */
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
     .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s; }
-    .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: #111; border-left: 1px solid var(--border-color); box-shadow: -4px 0 15px rgba(0,0,0,0.2); z-index: 1001; transition: right 0.3s; padding: 20px; }
+    .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: var(--bg-container); border-left: 1px solid var(--border-color); box-shadow: -4px 0 15px rgba(0,0,0,0.1); z-index: 1001; transition: right 0.3s; padding: 20px; }
     .sidebar.active { right: 0; }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
     .sidebar h3 { font-size: 20px; color: var(--action-green); }
     .close-sidebar { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-secondary); }
     .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-primary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
-    .sidebar a:hover { background-color: var(--bg-container); }
+    .sidebar a:hover { background-color: var(--bg-container-light); }
     .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-secondary); }
     
     .main-header { background-color: var(--bg-main); padding: 20px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 998; }
@@ -70,8 +70,8 @@
     
     .btn { padding: 10px 22px; border-radius: 8px; border: 1px solid transparent; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
     .btn-send { background-color: var(--action-green); color: var(--text-primary); }
-    .btn-send:hover { background-color: #16a34a; }
-    .btn-my-groups-active { background-color: var(--bg-container); color: var(--text-primary); border-color: var(--text-primary); }
+    .btn-send:hover { background-color: #111111; }
+    .btn-my-groups-active { background-color: var(--bg-container-light); color: var(--text-primary); border-color: var(--text-primary); }
 
     /* --- NOVAS CAIXAS DE INFO --- */
     .info-box { padding: 15px 20px; border-radius: 12px; margin-bottom: 30px; font-size: 15px; line-height: 1.6; display: flex; align-items: flex-start; gap: 15px; }
@@ -79,7 +79,7 @@
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
-    .info-box.blue { background-color: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--action-blue); color: #bfdbfe; }
+    .info-box.blue { background-color: #e0e0e0; border-left: 4px solid var(--action-blue); color: #000000; }
     .info-box.gray { background-color: var(--bg-container-light); border-left: 4px solid var(--text-secondary); color: var(--text-tertiary); }
 
     /* --- CONTENT --- */
@@ -92,7 +92,7 @@
     .grupo-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color); }
 
     .card-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
-    .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .icon-btn { background: rgba(0,0,0,0.05); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .icon-btn svg { width: 18px; height: 18px; }
     .icon-btn.edit-btn { color: var(--text-tertiary); }
     .icon-btn.edit-btn:hover { background-color: var(--action-blue); color: white; }
@@ -111,15 +111,15 @@
     .card-footer-action { width: 100%; }
     .btn-large { width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; text-transform: uppercase; border: none; cursor: pointer; }
     .btn-impulsionar { background-color: var(--action-green); color: var(--text-primary); box-shadow: 0 4px 15px -5px var(--action-green); }
-    .btn-impulsionar:hover { background-color: #16a34a; transform: translateY(-2px); }
+    .btn-impulsionar:hover { background-color: #111111; transform: translateY(-2px); }
     .boost-timer, .btn-large[disabled] { display: block; width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; background-color: var(--bg-container-light); color: var(--text-primary); text-align: center; cursor: not-allowed; }
     .btn-reprovado { background-color: var(--action-red) !important; color: white !important; }
     
     .empty { text-align: center; padding: 60px 20px; background-color: var(--bg-container); border-radius: 12px; }
 
     /* --- MODAL DE EDIÇÃO --- */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1002; display: none; align-items: center; justify-content: center; }
-    .modal { background: var(--bg-container); padding: 30px; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border-color); }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1002; display: none; align-items: center; justify-content: center; }
+    .modal { background: var(--bg-container); padding: 30px; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
     .modal h2 { margin-bottom: 20px; font-size: 22px; }
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-secondary); }
