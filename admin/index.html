@@ -178,13 +178,29 @@
   <script>
     let grupoAtual = null;
 
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
     async function login() {
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
+      const loginError = document.getElementById('loginError');
+      loginError.textContent = '';
+
+      if (!username || !password) {
+        loginError.textContent = 'Por favor, preencha todos os campos.';
+        return;
+      }
 
       try {
+        const passwordHash = await sha256(password);
         const admins = await supabaseFetch(
-          `admin_users?username=eq.${username}&password_hash=eq.${password}`
+          `admin_users?username=eq.${username}&password_hash=eq.${passwordHash}`
         );
 
         if (admins.length > 0) {
@@ -193,10 +209,11 @@
           document.getElementById('adminPanel').style.display = 'block';
           carregarGrupos();
         } else {
-          document.getElementById('loginError').textContent = 'Usuário ou senha incorretos';
+          loginError.textContent = 'Usuário ou senha incorretos';
         }
       } catch (error) {
-        document.getElementById('loginError').textContent = 'Erro ao fazer login';
+        loginError.textContent = 'Erro ao fazer login. Verifique o console para mais detalhes.';
+        console.error('Login error:', error);
       }
     }
 
