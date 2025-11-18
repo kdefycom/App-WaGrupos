@@ -1,0 +1,203 @@
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+      color: #111111;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #000000;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #555555;
+      margin-bottom: 30px;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #111111;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #cccccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: border 0.3s;
+      background-color: #f5f5f5;
+      color: #111111;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #333333;
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background: #333333;
+      color: white;
+    }
+    .btn-primary:hover { background: #000000; }
+
+    .btn-secondary {
+      background: #555555;
+      color: white;
+    }
+    .btn-secondary:hover { background: #333333; }
+
+    .btn-back {
+      background: #f5f5f5;
+      color: #111111;
+    }
+
+    .preview-img {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 20px auto;
+      display: block;
+      border: 3px solid #000000;
+    }
+
+    .regras-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .regra-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      color: #111111;
+    }
+
+    .regra-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .tipo-btn {
+      flex: 1;
+      padding: 40px 20px;
+      border: 3px solid #cccccc;
+      background: #ffffff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111111;
+    }
+
+    .tipo-btn:hover {
+      border-color: #000000;
+      transform: translateY(-5px);
+    }
+
+    .tipo-btn.whatsapp { border-color: #333333; }
+    .tipo-btn.telegram { border-color: #555555; }
+    .tipo-btn.canal_whatsapp { border-color: #25D366; }
+    .tipo-btn.instagram { border-color: #E4405F; }
+
+    .tipo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background: #d4d4d4;
+      color: #111111;
+      border: 1px solid #999999;
+    }
+
+    .alert-error {
+      background: #f0d4d4;
+      color: #721c24;
+      border: 1px solid #d4a0a0;
+    }
+
+    .upload-area {
+      border: 2px dashed #000000;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      background: #ffffff;
+      color: #111111;
+    }
+
+    .upload-area:hover { background: #f5f5f5; }
+    .upload-area input { display: none; }
+    
+    .spinner { 
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border-left-color: #000;
+        animation: spin 1s ease infinite;
+        display: none; /* Hidden by default */
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) { .tipo-grid { grid-template-columns: 1fr; } }
