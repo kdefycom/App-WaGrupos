@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,15 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enviar Grupo - KDefy</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f0f0f0'/><text x='50' y='78' font-size='80' font-family='-apple-system,BlinkMacSystemFont,sans-serif' font-weight='bold' text-anchor='middle' fill='%23000000'>K</text></svg>">
-  <link rel="stylesheet" href="style.css">
-  
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Enviar Grupo - Kdefy Grupos",
   "url": "https://app.kdefy.com/enviar-grupo/",
-  "description": "Envie seu grupo de WhatsApp, Telegram, Canal do WhatsApp ou Instagram para ser listado no Kdefy Grupos.",
+  "description": "Envie seu grupo de WhatsApp ou Telegram para ser listado no Kdefy Grupos. Compartilhe seu grupo com a comunidade.",
   "inLanguage": "pt-BR",
   "publisher": {
     "@type": "Organization",
@@ -27,28 +24,209 @@
   }
 }
 </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+      color: #111111;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #000000;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #555555;
+      margin-bottom: 30px;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #111111;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #cccccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: border 0.3s;
+      background-color: #f5f5f5;
+      color: #111111;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #333333;
+    }
+
+    textarea { min-height: 100px; resize: vertical; }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background: #333333;
+      color: white;
+    }
+    .btn-primary:hover { background: #000000; }
+
+    .btn-secondary {
+      background: #555555;
+      color: white;
+    }
+    .btn-secondary:hover { background: #333333; }
+
+    .btn-back {
+      background: #f5f5f5;
+      color: #111111;
+    }
+
+    .preview-img {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 20px auto;
+      display: block;
+      border: 3px solid #000000;
+    }
+
+    .regras-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .regra-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      color: #111111;
+    }
+
+    .regra-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .tipo-btn {
+      flex: 1;
+      padding: 40px 20px;
+      border: 3px solid #cccccc;
+      background: #ffffff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111111;
+    }
+
+    .tipo-btn:hover {
+      border-color: #000000;
+      transform: translateY(-5px);
+    }
+
+    .tipo-btn.whatsapp { border-color: #333333; }
+    .tipo-btn.telegram { border-color: #555555; }
+
+    .tipo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .alert-success {
+      background: #d4d4d4;
+      color: #111111;
+      border: 1px solid #999999;
+    }
+
+    .alert-error {
+      background: #f0d4d4;
+      color: #721c24;
+      border: 1px solid #d4a0a0;
+    }
+
+    .upload-area {
+      border: 2px dashed #000000;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      background: #ffffff;
+      color: #111111;
+    }
+
+    .upload-area:hover { background: #f5f5f5; }
+    .upload-area input { display: none; }
+
+    @media (max-width: 768px) { .tipo-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
   <div class="container">
     <div class="card">
       <h1>➕ Enviar Grupo</h1>
-      <p class="subtitle">Compartilhe seu link com a comunidade</p>
+      <p class="subtitle">Compartilhe seu grupo com a comunidade</p>
 
       <!-- Step 1: Escolher Tipo -->
       <div id="step1" class="step active">
-        <label>Escolha o tipo do seu link:</label>
+        <label>Escolha o tipo do grupo:</label>
         <div class="tipo-grid">
           <button class="tipo-btn whatsapp" onclick="escolherTipo('whatsapp')">
-            📱<br>Grupo de WhatsApp
+            📱<br>WhatsApp
           </button>
           <button class="tipo-btn telegram" onclick="escolherTipo('telegram')">
-            ✈️<br>Grupo de Telegram
-          </button>
-          <button class="tipo-btn canal_whatsapp" onclick="escolherTipo('canal_whatsapp')">
-            📢<br>Canal do WhatsApp
-          </button>
-          <button class="tipo-btn instagram" onclick="escolherTipo('instagram')">
-            📸<br>Grupo do Instagram
+            ✈️<br>Telegram
           </button>
         </div>
         <a href="/" class="btn btn-back">← Voltar</a>
@@ -57,7 +235,7 @@
       <!-- Step 2: Validar Link -->
       <div id="step2" class="step">
         <div id="alert"></div>
-        <label>Cole o link do seu <span id="tipoTexto"></span>:</label>
+        <label>Cole o link do grupo <span id="tipoTexto"></span>:</label>
         <input type="url" id="linkInput" placeholder="https://">
         <button class="btn btn-primary" onclick="validarLink()">Validar Link</button>
         <button class="btn btn-back" onclick="voltarStep(1)">← Voltar</button>
@@ -89,13 +267,174 @@
         <label>Seu Email *</label>
         <input type="email" id="emailInput" placeholder="seu@email.com" required>
 
-        <button id="enviarBtn" class="btn btn-secondary" onclick="enviarGrupo()">Enviar para Análise</button>
+        <button class="btn btn-secondary" onclick="enviarGrupo()">Enviar para Análise</button>
         <button class="btn btn-back" onclick="voltarStep(2)">← Voltar</button>
       </div>
     </div>
   </div>
 
   <script src="/app.js"></script>
-  <script src="script.js"></script>
+  <script>
+    let tipoSelecionado = '';
+    let linkValidado = '';
+    let fotoUrl = 'https://via.placeholder.com/300';
+
+    const REGRAS = [
+      'Proibido conteúdo pornográfico',
+      'Proibido brigas e discussões',
+      'Proibido racismo',
+      'Proibido assédio',
+      'Respeitar LGPD',
+      'Proibido spam',
+      'Proibido links maliciosos'
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      popularCategorias();
+    });
+
+    function popularCategorias() {
+      const select = document.getElementById('categoriaSelect');
+      if (!select || typeof CATEGORIES === 'undefined') {
+        console.error('Elemento select ou array de CATEGORIAS não encontrado.');
+        return;
+      }
+
+      select.innerHTML = ''; // Limpa as opções estáticas
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Selecione...';
+      select.appendChild(defaultOption);
+
+      CATEGORIES.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.name;
+        select.appendChild(option);
+      });
+    }
+
+    function mostrarStep(numero) {
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      document.getElementById(`step${numero}`).classList.add('active');
+    }
+
+    function voltarStep(numero) {
+      mostrarStep(numero);
+    }
+
+    function escolherTipo(tipo) {
+      tipoSelecionado = tipo;
+      document.getElementById('tipoTexto').textContent = tipo === 'whatsapp' ? 'WhatsApp' : 'Telegram';
+      mostrarStep(2);
+    }
+
+    async function validarLink() {
+      const link = document.getElementById('linkInput').value.trim();
+      const alert = document.getElementById('alert');
+
+      if (!link) {
+        alert.innerHTML = '<div class="alert alert-error">Por favor, cole o link do grupo.</div>';
+        return;
+      }
+
+      const isWhatsApp = tipoSelecionado === 'whatsapp';
+      const isTelegram = tipoSelecionado === 'telegram';
+
+      if (isWhatsApp && !link.startsWith('https://chat.whatsapp.com/')) {
+        alert.innerHTML = '<div class="alert alert-error">Link de WhatsApp inválido. Deve começar com https://chat.whatsapp.com/</div>';
+        return;
+      }
+
+      if (isTelegram && !link.startsWith('https://t.me/')) {
+        alert.innerHTML = '<div class="alert alert-error">Link de Telegram inválido. Deve começar com https://t.me/</div>';
+        return;
+      }
+
+      try {
+        const grupos = await supabaseFetch(`grupos?link=eq.${encodeURIComponent(link)}`);
+        if (grupos.length > 0) {
+          alert.innerHTML = '<div class="alert alert-error">Este link já foi cadastrado!</div>';
+          return;
+        }
+
+        alert.innerHTML = '<div class="alert alert-success">✓ Link válido! Carregando preview...</div>';
+        linkValidado = link;
+
+        setTimeout(() => {
+          renderizarRegras();
+          mostrarStep(3);
+        }, 1000);
+
+      } catch (error) {
+        alert.innerHTML = '<div class="alert alert-error">Erro ao validar link. Tente novamente.</div>';
+      }
+    }
+
+    function renderizarRegras() {
+      const grid = document.getElementById('regrasGrid');
+      grid.innerHTML = REGRAS.map((regra, i) => `
+        <div class="regra-item">
+          <input type="checkbox" id="regra${i}" checked>
+          <label for="regra${i}" style="margin: 0;">${regra}</label>
+        </div>
+      `).join('');
+    }
+
+    function alterarFoto() {
+      const file = document.getElementById('fotoUpload').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          fotoUrl = e.target.result;
+          document.getElementById('previewImg').src = fotoUrl;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function enviarGrupo() {
+      const nome = document.getElementById('nomeInput').value.trim();
+      const descricao = document.getElementById('descInput').value.trim();
+      const categoria = document.getElementById('categoriaSelect').value;
+      const email = document.getElementById('emailInput').value.trim();
+
+      if (!nome || !categoria || !email) {
+        alert('Por favor, preencha todos os campos obrigatórios (*)');
+        return;
+      }
+
+      const regras = REGRAS.filter((_, i) => 
+        document.getElementById(`regra${i}`).checked
+      );
+
+      const grupo = {
+        nome,
+        link: linkValidado,
+        tipo: tipoSelecionado,
+        descricao,
+        categoria,
+        foto_url: fotoUrl,
+        email,
+        regras: JSON.stringify(regras),
+        aprovado: false
+      };
+
+      try {
+        const resultado = await supabaseFetch('grupos', {
+          method: 'POST',
+          body: JSON.stringify(grupo)
+        });
+
+        await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
+
+        alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
+        window.location.href = '/meus-grupos/';
+      } catch (error) {
+        alert('Erro ao enviar grupo: ' + error.message);
+      }
+    }
+  </script>
 </body>
 </html>
