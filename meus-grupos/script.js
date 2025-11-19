@@ -77,15 +77,14 @@
       const ids = gruposLocais.map(g => g.id);
       const gruposAPI = await supabaseFetch(`grupos?id=in.(${ids.join(',')})`);
       
-      // Sincronizar grupos locais com os do servidor
       const idsAPI = new Set(gruposAPI.map(g => g.id));
       const gruposSincronizados = [];
       for (const grupoLocal of gruposLocais) {
         if (idsAPI.has(grupoLocal.id)) {
           const apiData = gruposAPI.find(g => g.id === grupoLocal.id);
+          // Prioriza os dados da API sobre os locais para ter o status mais recente
           gruposSincronizados.push({ ...grupoLocal, ...apiData });
         } else {
-          // Se o grupo existe localmente mas não na API, foi removido pelo admin
           await removerGrupoLocal(grupoLocal.id);
         }
       }
@@ -128,7 +127,7 @@
        }
     } else {
       actionButtonHTML = `<button class="btn-large" disabled>EM ANÁLISE</button>`;
-      if (grupo.mensagem_admin) {
+      if (grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reanálise')) {
         statusInfoHTML = `<div class="status-info-analise">${grupo.mensagem_admin}</div>`;
       }
     }
@@ -232,7 +231,7 @@
     saveBtn.disabled = true;
 
     try {
-      await supabaseFetch(`grupos?id=eq.${id}`, {
+      const [updatedGroup] = await supabaseFetch(`grupos?id=eq.${id}`, {
         method: 'PATCH',
         body: JSON.stringify({ 
           foto_url: foto_final,
@@ -241,6 +240,9 @@
           mensagem_admin: 'Grupo em reanálise após edição.'
         })
       });
+
+      // Atualiza o grupo localmente também
+      await salvarGrupoLocal(updatedGroup);
 
       fecharModalEdicao();
       await customAlert("Alterações enviadas para análise. Aguarde a aprovação.", "Sucesso");
@@ -266,6 +268,7 @@
 
     try { 
       await removerGrupoLocal(id); 
+      // Não é necessário deletar da API aqui se o admin já o fez, mas mantemos para o usuário poder deletar.
       await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); 
       carregarMeusGrupos(); 
     } catch {}
