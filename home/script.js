@@ -1,3 +1,4 @@
+
     let currentCategory = null;
     let currentGroupType = 'whatsapp';
     let categoriasExpandidas = false;
@@ -214,6 +215,7 @@
       const container = document.getElementById('grupos');
       container.innerHTML = grupos.map(grupo => {
         const placeholderImg = 'https://via.placeholder.com/300x320.png?text=Sem+Imagem';
+        const buttonText = grupo.tipo === 'canal_whatsapp' ? 'Ver Canal' : 'Entrar no Grupo';
         return `
           <div class="grupo-card ${grupo.vip ? 'vip' : ''}">
             <div class="card-image-container">
@@ -224,7 +226,7 @@
               <span class="card-category">${getCategoryName(grupo.categoria)}</span>
               <h3 class="grupo-title" title="${grupo.nome}">${grupo.nome}</h3>
               <p class="grupo-desc">${grupo.descricao || 'Este grupo não possui uma descrição.'}</p>
-              <a href="${grupo.link}" target="_blank" class="card-button">Entrar no Grupo</a>
+              <a href="${grupo.link}" target="_blank" class="card-button">${buttonText}</a>
             </div>
           </div>
         `;
