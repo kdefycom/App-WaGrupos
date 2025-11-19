@@ -84,9 +84,9 @@
     .card-content { padding: 15px; }
     .card-category { display: inline-block; background-color: var(--gray-dark); color: white; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
     .grupo-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .grupo-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; height: 42px; overflow: hidden; }
-    .card-button { display: block; width: 100%; padding: 12px; text-align: center; background-color: var(--gray-dark); color: white; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.2s; }
-    .card-button:hover { background-color: #000000; }
+    .grupo-desc { font-size: 16px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.5; height: 48px; overflow: hidden; }
+    .card-button { display: block; width: 100%; padding: 12px; text-align: center; background-color: #28a745; color: white; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all 0.2s; }
+    .card-button:hover { background-color: #218838; }
     .loading, .empty { text-align: center; padding: 60px 20px; grid-column: 1 / -1; font-size: 18px; color: var(--text-secondary); }
 
     .section-title { text-align: center; margin-top: -8px; margin-bottom: 25px; font-size: 24px; font-weight: 700; }
