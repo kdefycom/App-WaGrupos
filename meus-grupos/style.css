@@ -7,12 +7,12 @@
       --text-secondary: #555555;
       --text-tertiary: #888888;
       --action-green: #28a745;
-      --action-red: #EF4444;
-      --action-blue: #4A90E2;
+      --action-red: #FF1744;
+      --action-blue: #0000FF;
       --border-color: #cccccc;
       --shadow-color: rgba(0,0,0,0.1);
     }
-    @keyframes pulse {
+    @keyframes pulse-green {
       0% { transform: scale(1); box-shadow: 0 4px 15px -5px rgba(40, 167, 69, 0.6); }
       50% { transform: scale(1.04); box-shadow: 0 6px 20px -5px rgba(40, 167, 69, 0.9); }
       100% { transform: scale(1); box-shadow: 0 4px 15px -5px rgba(40, 167, 69, 0.6); }
@@ -55,7 +55,7 @@
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
-    .info-box.blue { background-color: #eaf2ff; border-left: 4px solid var(--action-blue); color: #1c3d5a; }
+    .info-box.blue { background-color: #e6e6ff; border-left: 4px solid var(--action-blue); color: #000033; }
     .info-box.gray { background-color: #2C2C2C; border-left: 4px solid #555555; color: #E0E0E0; }
 
     /* --- CONTENT --- */
@@ -86,9 +86,10 @@
     
     .card-footer-action { width: 100%; }
     .btn-large { width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; text-transform: uppercase; border: none; cursor: pointer; }
-    .btn-impulsionar { background-color: var(--action-green); color: white; animation: pulse 2s infinite ease-in-out; }
+    .btn-impulsionar { background-color: var(--action-green); color: white; animation: pulse-green 2s infinite ease-in-out; }
     .btn-impulsionar:hover { background-color: #218838; transform: translateY(-2px); animation-play-state: paused; }
-    .boost-timer, .btn-large[disabled] { display: block; width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; background-color: var(--bg-container-light); color: var(--text-primary); text-align: center; cursor: not-allowed; }
+    .boost-timer { display: block; width: 100%; padding: 16px 20px; font-size: 16px; font-weight: 700; border-radius: 12px; background-color: #e0e0e0; color: #555555; text-align: center; cursor: not-allowed; }
+    .btn-large[disabled]:not(.btn-reprovado) { background-color: #2C2C2C; color: #E0E0E0; cursor: not-allowed; }
     .btn-reprovado { background-color: var(--action-red) !important; color: white !important; }
     
     .empty { text-align: center; padding: 60px 20px; background-color: var(--bg-container); border-radius: 12px; }
