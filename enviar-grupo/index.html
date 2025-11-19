@@ -114,6 +114,58 @@
         filter: brightness(1.2);
     }
     /* ALERT END */
+
+    /* --- Feedback de Validação do Link --- */
+
+    /* Caixa de Alerta de Validação */
+    .alert {
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: left;
+        border: 1px solid;
+    }
+    .alert-error {
+        background-color: #4d2a2a;
+        color: #ffc2c2;
+        border-color: #883a3a;
+    }
+    .alert-success {
+        background-color: #2a4d3e;
+        color: #c2ffe5;
+        border-color: #3a8862;
+    }
+
+    /* Botão Prosseguir */
+    #prosseguirBtn {
+        transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #prosseguirBtn:not([disabled]) {
+        background-color: var(--custom-alert-btn-primary-bg, #4A90E2);
+        cursor: pointer;
+        animation: pulse-blue 2s infinite;
+    }
+    
+    #prosseguirBtn:not([disabled]):hover {
+        filter: brightness(1.15);
+        animation: none; /* Pausa a animação ao passar o mouse */
+    }
+
+    /* Animação Pulsante para o Botão Ativo */
+    @keyframes pulse-blue {
+        0% {
+            box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.6);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(74, 144, 226, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(74, 144, 226, 0);
+        }
+    }
+
   </style>
 </head>
 <body>
