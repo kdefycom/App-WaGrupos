@@ -1,4 +1,4 @@
- 
+
   let meusGrupos = [];
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -61,22 +61,41 @@
     lista.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Carregando seus grupos...</p>';
     try {
       const gruposLocais = await buscarGruposLocais();
-      if (gruposLocais.length === 0) {
-        lista.innerHTML = `<div class="empty">
+      
+      const emptyStateHTML = `<div class="empty">
             <p style="font-size: 60px;">📭</p>
             <h3 style="margin:10px 0; color:var(--text-primary);">Nenhum grupo enviado ainda</h3>
             <p style="color:var(--text-secondary);">Que tal enviar seu primeiro grupo agora?</p>
             <a href="/enviar-grupo/" class="btn btn-send" style="margin-top: 20px;">➕ Enviar Novo Grupo</a>
           </div>`;
+
+      if (gruposLocais.length === 0) {
+        lista.innerHTML = emptyStateHTML;
         return;
       }
+      
       const ids = gruposLocais.map(g => g.id);
       const gruposAPI = await supabaseFetch(`grupos?id=in.(${ids.join(',')})`);
       
-      meusGrupos = gruposLocais.map(local => {
-        const apiData = gruposAPI.find(g => g.id === local.id);
-        return apiData ? { ...local, ...apiData } : local;
-      });
+      // Sincronizar grupos locais com os do servidor
+      const idsAPI = new Set(gruposAPI.map(g => g.id));
+      const gruposSincronizados = [];
+      for (const grupoLocal of gruposLocais) {
+        if (idsAPI.has(grupoLocal.id)) {
+          const apiData = gruposAPI.find(g => g.id === grupoLocal.id);
+          gruposSincronizados.push({ ...grupoLocal, ...apiData });
+        } else {
+          // Se o grupo existe localmente mas não na API, foi removido pelo admin
+          await removerGrupoLocal(grupoLocal.id);
+        }
+      }
+
+      meusGrupos = gruposSincronizados;
+
+      if (meusGrupos.length === 0) {
+        lista.innerHTML = emptyStateHTML;
+        return;
+      }
 
       lista.innerHTML = meusGrupos
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -84,22 +103,34 @@
         .join('');
 
     } catch (error) {
+      console.error("Erro ao carregar grupos:", error);
       lista.innerHTML = '<div class="empty"><h3 style="color:var(--text-primary);">Ocorreu um erro</h3><p style="color:var(--text-secondary);">Não foi possível carregar. Tente recarregar a página.</p></div>';
     }
   }
 
   function renderizarGrupo(grupo) {
     let actionButtonHTML = '';
+    let statusInfoHTML = '';
+
+    const isReprovado = grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reprovado');
+
     if (grupo.aprovado) {
       if (podeImpulsionar(grupo)) {
         actionButtonHTML = `<button class="btn-large btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>`;
       } else {
         actionButtonHTML = `<div class="boost-timer">⏰ PRÓXIMO BOOST EM ${tempoRestante(grupo)}</div>`;
       }
-    } else if (grupo.mensagem_admin && grupo.mensagem_admin.includes('reprovado')) {
+    } else if (isReprovado) {
        actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
+       const motivo = grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim();
+       if (motivo) {
+         statusInfoHTML = `<div class="status-info-reprovado"><strong>Motivo:</strong> ${motivo}</div>`;
+       }
     } else {
       actionButtonHTML = `<button class="btn-large" disabled>EM ANÁLISE</button>`;
+      if (grupo.mensagem_admin) {
+        statusInfoHTML = `<div class="status-info-analise">${grupo.mensagem_admin}</div>`;
+      }
     }
 
     const tipoEntidade = grupo.tipo === 'canal_whatsapp' ? 'canal' : 'grupo';
@@ -124,6 +155,7 @@
           <div class="card-footer-action">
             ${actionButtonHTML}
           </div>
+          ${statusInfoHTML}
         </div>
       </div>
     `;

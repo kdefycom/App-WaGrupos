@@ -49,14 +49,14 @@
     .btn-send:hover { background-color: #111111; }
     .btn-my-groups-active { background-color: var(--bg-container-light); color: var(--text-primary); border-color: var(--text-primary); }
 
-    /* --- NOVAS CAIXAS DE INFO --- */
+    /* --- CAIXAS DE INFO --- */
     .info-box { padding: 15px 20px; border-radius: 12px; margin-bottom: 30px; font-size: 15px; line-height: 1.6; display: flex; align-items: flex-start; gap: 15px; }
     .info-box strong { font-weight: 700; }
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
     .info-box.blue { background-color: #e6e6ff; border-left: 4px solid var(--action-blue); color: #000033; }
-    .info-box.gray { background-color: #2C2C2C; border-left: 4px solid #555555; color: #E0E0E0; }
+    .info-box.gray { background-color: #f0f0f0; border-left: 4px solid #555555; color: #333333; }
 
     /* --- CONTENT --- */
     .content-section { padding: 50px 0; }
@@ -92,6 +92,25 @@
     .btn-large[disabled]:not(.btn-reprovado) { background-color: #2C2C2C; color: #E0E0E0; cursor: not-allowed; }
     .btn-reprovado { background-color: var(--action-red) !important; color: white !important; }
     
+    .status-info-reprovado, .status-info-analise {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .status-info-reprovado {
+        background-color: #ffe6e6;
+        border-left: 4px solid var(--action-red);
+        color: #550000;
+    }
+    .status-info-analise {
+        background-color: #e6f2ff;
+        border-left: 4px solid #0066cc;
+        color: #002244;
+    }
+
     .empty { text-align: center; padding: 60px 20px; background-color: var(--bg-container); border-radius: 12px; }
 
     /* --- MODAL DE EDIÇÃO --- */
