@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -28,6 +29,95 @@
 }
 </script>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ALERT START */
+    :root {
+      --custom-alert-bg: #1E1E1E;
+      --custom-alert-text: #E0E0E0;
+      --custom-alert-title: #FFFFFF;
+      --custom-alert-border: #444444;
+      --custom-alert-overlay: rgba(0, 0, 0, 0.7);
+      --custom-alert-btn-primary-bg: #4A90E2;
+      --custom-alert-btn-primary-text: #FFFFFF;
+      --custom-alert-btn-secondary-bg: #333333;
+      --custom-alert-btn-secondary-text: #E0E0E0;
+    }
+    .custom-alert-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--custom-alert-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .custom-alert-overlay.active {
+      opacity: 1;
+    }
+    .custom-alert-box {
+      background: var(--custom-alert-bg);
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid var(--custom-alert-border);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      transform: scale(0.95);
+      transition: transform 0.2s ease-in-out;
+    }
+    .custom-alert-overlay.active .custom-alert-box {
+        transform: scale(1);
+    }
+    .custom-alert-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--custom-alert-title);
+      margin: 0 0 10px 0;
+    }
+    .custom-alert-message {
+      font-size: 16px;
+      color: var(--custom-alert-text);
+      margin: 0 0 24px 0;
+      line-height: 1.5;
+    }
+    .custom-alert-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .custom-alert-button {
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      flex-grow: 1;
+    }
+    .custom-alert-button.primary {
+      background-color: var(--custom-alert-btn-primary-bg);
+      color: var(--custom-alert-btn-primary-text);
+    }
+    .custom-alert-button.primary:hover {
+        filter: brightness(1.1);
+    }
+    .custom-alert-button.secondary {
+      background-color: var(--custom-alert-btn-secondary-bg);
+      color: var(--custom-alert-btn-secondary-text);
+    }
+    .custom-alert-button.secondary:hover {
+        filter: brightness(1.2);
+    }
+    /* ALERT END */
+  </style>
 </head>
 <body>
 
@@ -105,5 +195,118 @@
   </div>
 </div>
 
+<script>
+/* ALERT START */
+function createAlert(message, title = 'Aviso', confirmText = 'OK') {
+    return new Promise((resolve) => {
+        // Remove qualquer alerta existente para evitar duplicatas
+        const existingAlert = document.querySelector('.custom-alert-overlay');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        const alertOverlay = document.createElement('div');
+        alertOverlay.className = 'custom-alert-overlay';
+
+        const alertBox = document.createElement('div');
+        alertBox.className = 'custom-alert-box';
+
+        alertBox.innerHTML = `
+            <div class="custom-alert-title">${title}</div>
+            <div class="custom-alert-message">${message}</div>
+            <div class="custom-alert-buttons">
+                <button class="custom-alert-button primary">${confirmText}</button>
+            </div>
+        `;
+
+        alertOverlay.appendChild(alertBox);
+        document.body.appendChild(alertOverlay);
+        
+        // Força o navegador a aplicar o estilo inicial (opacity 0)
+        window.getComputedStyle(alertOverlay).opacity;
+        
+        // Adiciona a classe 'active' para iniciar a transição
+        alertOverlay.classList.add('active');
+
+        const confirmButton = alertBox.querySelector('.primary');
+
+        const closeAlert = () => {
+            alertOverlay.classList.remove('active');
+            alertOverlay.addEventListener('transitionend', () => {
+                if(alertOverlay.parentElement) {
+                    alertOverlay.remove();
+                }
+                resolve(true);
+            }, { once: true });
+        };
+
+        confirmButton.addEventListener('click', closeAlert);
+        alertOverlay.addEventListener('click', (e) => {
+            if (e.target === alertOverlay) {
+                closeAlert();
+            }
+        });
+    });
+}
+
+function createConfirm(message, title = 'Confirmação', confirmText = 'Confirmar', cancelText = 'Cancelar') {
+    return new Promise((resolve) => {
+        const existingAlert = document.querySelector('.custom-alert-overlay');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+
+        const alertOverlay = document.createElement('div');
+        alertOverlay.className = 'custom-alert-overlay';
+
+        const alertBox = document.createElement('div');
+        alertBox.className = 'custom-alert-box';
+
+        alertBox.innerHTML = `
+            <div class="custom-alert-title">${title}</div>
+            <div class="custom-alert-message">${message}</div>
+            <div class="custom-alert-buttons">
+                <button class="custom-alert-button secondary">${cancelText}</button>
+                <button class="custom-alert-button primary">${confirmText}</button>
+            </div>
+        `;
+
+        alertOverlay.appendChild(alertBox);
+        document.body.appendChild(alertOverlay);
+
+        window.getComputedStyle(alertOverlay).opacity;
+        alertOverlay.classList.add('active');
+
+        const primaryButton = alertBox.querySelector('.primary');
+        const secondaryButton = alertBox.querySelector('.secondary');
+
+        const close = (value) => {
+            alertOverlay.classList.remove('active');
+            alertOverlay.addEventListener('transitionend', () => {
+                 if(alertOverlay.parentElement) {
+                    alertOverlay.remove();
+                }
+                resolve(value);
+            }, { once: true });
+        };
+
+        primaryButton.addEventListener('click', () => close(true));
+        secondaryButton.addEventListener('click', () => close(false));
+        alertOverlay.addEventListener('click', (e) => {
+            if (e.target === alertOverlay) {
+                close(false);
+            }
+        });
+    });
+}
+
+// Funções globais para facilitar a chamada
+window.customAlert = createAlert;
+window.customConfirm = createConfirm;
+/* ALERT END */
+</script>
+
 <script src="/app.js"></script>
 <script src="script.js"></script>
+</body>
+</html>

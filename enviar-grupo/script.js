@@ -163,7 +163,7 @@
       const email = document.getElementById('emailInput').value.trim();
 
       if (!nome || !categoria || !email) {
-        alert('Por favor, preencha todos os campos obrigatórios (*)');
+        await customAlert('Por favor, preencha todos os campos obrigatórios (*)', 'Campos Obrigatórios');
         return;
       }
 
@@ -191,9 +191,9 @@
 
         await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
 
-        alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
+        await customAlert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.', 'Sucesso');
         window.location.href = '/meus-grupos/';
       } catch (error) {
-        alert('Erro ao enviar grupo: ' + error.message);
+        await customAlert('Erro ao enviar grupo: ' + error.message, 'Erro');
       }
     }
