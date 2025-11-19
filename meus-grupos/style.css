@@ -67,6 +67,18 @@
     .grupo-item { background-color: var(--bg-container); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 12px var(--shadow-color); display: flex; flex-direction: column; align-items: center; transition: all 0.3s ease; position: relative; }
     .grupo-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px var(--shadow-color); }
 
+    .grupo-id {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      background-color: var(--bg-main);
+      padding: 3px 6px;
+      border-radius: 6px;
+      z-index: 10;
+    }
     .card-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
     .icon-btn { background: rgba(0,0,0,0.05); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .icon-btn svg { width: 18px; height: 18px; }

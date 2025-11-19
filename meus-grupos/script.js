@@ -138,6 +138,7 @@
 
     return `
       <div class="grupo-item" id="grupo-${grupo.id}">
+        <span class="grupo-id">#${grupo.id}</span>
         <div class="card-actions">
            <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar ${tipoEntidade}">${editIcon}</button>
            <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover ${tipoEntidade}">${trashIcon}</button>
