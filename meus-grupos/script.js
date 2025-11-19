@@ -8,6 +8,10 @@
     setupImagePreviewHidden();
   });
 
+  function popup(msg) {
+    alert(msg);
+  }
+
   function setupImagePreviewHidden() {
     const fileInput = document.getElementById("editFotoFile");
     const preview = document.getElementById("editFotoPreview");
@@ -181,7 +185,7 @@
     const mudouLink = link !== grupo.link;
 
     if (!mudouFoto && !mudouLink) {
-      customAlert("Nenhuma alteração foi feita.", "Aviso");
+      popup("Nenhuma alteração foi feita.");
       return;
     }
 
@@ -204,11 +208,9 @@
       });
 
       fecharModalEdicao();
-      await customAlert("Alterações enviadas para reanálise. O status do grupo mudará para 'Em Análise'.", "Sucesso");
-      carregarMeusGrupos();
+      popup("Alterações enviadas para análise. Aguarde a aprovação.");
+      setTimeout(() => carregarMeusGrupos(), 500);
 
-    } catch(error) {
-        customAlert('Ocorreu um erro ao salvar as alterações.', 'Erro');
     } finally {
       saveBtn.textContent = originalText;
       saveBtn.disabled = false;
@@ -219,16 +221,4 @@
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
   function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
   async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
-  async function removerGrupo(id) {
-    const userConfirmed = await customConfirm('Tem certeza que deseja apagar este grupo?', 'Apagar Grupo');
-    if (!userConfirmed) return;
-
-    try {
-      await removerGrupoLocal(id);
-      await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' });
-      await customAlert('Grupo removido com sucesso!', 'Removido');
-      carregarMeusGrupos();
-    } catch (error) {
-      customAlert('Erro ao remover o grupo.', 'Erro');
-    }
-  }
+  async function removerGrupo(id) { if (!confirm('Tem certeza que deseja apagar este grupo?')) return; try { await removerGrupoLocal(id); await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); carregarMeusGrupos(); } catch {} }

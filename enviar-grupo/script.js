@@ -1,3 +1,4 @@
+
     let tipoSelecionado = '';
     let linkValidado = '';
     let fotoUrl = 'https://via.placeholder.com/300';
@@ -162,7 +163,7 @@
       const email = document.getElementById('emailInput').value.trim();
 
       if (!nome || !categoria || !email) {
-        customAlert('Por favor, preencha todos os campos obrigatórios (*)', 'Atenção');
+        alert('Por favor, preencha todos os campos obrigatórios (*)');
         return;
       }
 
@@ -190,10 +191,9 @@
 
         await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
 
-        await customAlert('Grupo enviado para análise! Você receberá um email quando for aprovado.', '✅ Enviado!');
+        alert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.');
         window.location.href = '/meus-grupos/';
-
       } catch (error) {
-        customAlert('Erro ao enviar grupo: ' + error.message, 'Erro');
+        alert('Erro ao enviar grupo: ' + error.message);
       }
     }
