@@ -102,14 +102,15 @@
       actionButtonHTML = `<button class="btn-large" disabled>EM ANÁLISE</button>`;
     }
 
+    const tipoEntidade = grupo.tipo === 'canal_whatsapp' ? 'canal' : 'grupo';
     const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
     const trashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
 
     return `
       <div class="grupo-item" id="grupo-${grupo.id}">
         <div class="card-actions">
-           <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar grupo">${editIcon}</button>
-           <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover grupo">${trashIcon}</button>
+           <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar ${tipoEntidade}">${editIcon}</button>
+           <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover ${tipoEntidade}">${trashIcon}</button>
         </div>
         <div class="grupo-foto-container">
           <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
@@ -217,9 +218,14 @@
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
   function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
   async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
-  async function removerGrupo(id) { 
-    const confirm = await customConfirm('Tem certeza que deseja apagar este grupo?', 'Confirmar Exclusão');
+  async function removerGrupo(id) {
+    const grupo = meusGrupos.find(g => g.id === id);
+    if (!grupo) return;
+
+    const tipoEntidade = grupo.tipo === 'canal_whatsapp' ? 'canal' : 'grupo';
+    const confirm = await customConfirm(`Tem certeza que deseja apagar este ${tipoEntidade}?`, 'Confirmar Exclusão');
     if (!confirm) return;
+
     try { 
       await removerGrupoLocal(id); 
       await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); 
