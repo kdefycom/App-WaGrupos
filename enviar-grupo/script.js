@@ -51,6 +51,12 @@
 
     function voltarStep(numero) {
       mostrarStep(numero);
+      if (numero === 1) {
+        document.getElementById('linkInput').value = '';
+        document.getElementById('alert').innerHTML = '';
+        document.getElementById('prosseguirBtn').disabled = true;
+        linkValidado = '';
+      }
     }
 
     function escolherTipo(tipo) {
