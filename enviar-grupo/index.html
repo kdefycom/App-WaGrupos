@@ -37,16 +37,16 @@
         <label>Escolha o tipo do grupo:</label>
         <div class="tipo-grid">
           <button class="tipo-btn whatsapp" onclick="escolherTipo('whatsapp')">
-            📱<br>WhatsApp
+            📱<br>Grupos de WhatsApp
           </button>
           <button class="tipo-btn telegram" onclick="escolherTipo('telegram')">
-            ✈️<br>Telegram
+            ✈️<br>Grupos de Telegram
           </button>
           <button class="tipo-btn instagram" onclick="escolherTipo('instagram')">
-            📷<br>Instagram
+            📷<br>Grupos de Instagram
           </button>
           <button class="tipo-btn whatsapp-channel" onclick="escolherTipo('canal_whatsapp')">
-            📢<br>Canal do WhatsApp
+            📢<br>Canais do WhatsApp
           </button>
         </div>
         <a href="/" class="btn btn-back">← Voltar</a>
@@ -57,7 +57,7 @@
         <div id="alert"></div>
         <label>Cole o link do <span id="tipoTexto"></span>:</label>
         <input type="url" id="linkInput" placeholder="https://">
-        <button class="btn btn-primary" onclick="validarLink()">Validar Link</button>
+        <button id="prosseguirBtn" class="btn btn-primary" onclick="prosseguirParaDetalhes()" disabled>Prosseguir</button>
         <button class="btn btn-back" onclick="voltarStep(1)">← Voltar</button>
       </div>
 

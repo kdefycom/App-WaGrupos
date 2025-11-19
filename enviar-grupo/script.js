@@ -1,6 +1,8 @@
+
     let tipoSelecionado = '';
     let linkValidado = '';
     let fotoUrl = 'https://via.placeholder.com/300';
+    let debounceTimer;
 
     const REGRAS = [
       'Proibido conteúdo pornográfico',
@@ -14,6 +16,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       popularCategorias();
+      document.getElementById('linkInput').addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(validarLinkEmTempoReal, 500);
+      });
     });
 
     function popularCategorias() {
@@ -23,7 +29,7 @@
         return;
       }
 
-      select.innerHTML = ''; // Limpa as opções estáticas
+      select.innerHTML = ''; 
 
       const defaultOption = document.createElement('option');
       defaultOption.value = '';
@@ -52,13 +58,13 @@
       let tipoTexto = '';
       switch (tipo) {
         case 'whatsapp':
-          tipoTexto = 'WhatsApp';
+          tipoTexto = 'Grupo de WhatsApp';
           break;
         case 'telegram':
-          tipoTexto = 'Telegram';
+          tipoTexto = 'Grupo de Telegram';
           break;
         case 'instagram':
-          tipoTexto = 'Instagram';
+          tipoTexto = 'Grupo de Instagram';
           break;
         case 'canal_whatsapp':
           tipoTexto = 'Canal do WhatsApp';
@@ -68,62 +74,66 @@
       mostrarStep(2);
     }
 
-    async function validarLink() {
+    async function validarLinkEmTempoReal() {
       const link = document.getElementById('linkInput').value.trim();
-      const alert = document.getElementById('alert');
+      const alertDiv = document.getElementById('alert');
+      const prosseguirBtn = document.getElementById('prosseguirBtn');
+      prosseguirBtn.disabled = true;
 
       if (!link) {
-        alert.innerHTML = '<div class="alert alert-error">Por favor, cole o link.</div>';
+        alertDiv.innerHTML = '';
         return;
       }
 
       let isValid = false;
-      switch (tipoSelecionado) {
-        case 'whatsapp':
-          isValid = link.startsWith('https://chat.whatsapp.com/');
-          break;
-        case 'telegram':
-          isValid = link.startsWith('https://t.me/');
-          break;
-        case 'instagram':
-          isValid = link.startsWith('https://www.instagram.com/') || link.startsWith('https://instagram.com/');
-          break;
-        case 'canal_whatsapp':
-          isValid = link.startsWith('https://whatsapp.com/channel/');
-          break;
+      const tipoTexto = document.getElementById('tipoTexto').textContent || tipoSelecionado;
+
+      const patterns = {
+          whatsapp: /^https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9\\-_?=&]+$/,
+          telegram: /^https:\/\/t\.me\/[a-zA-Z0-9_]+$/,
+          instagram: /^https:\/\/ig\.me\/j\/[a-zA-Z0-9\\-_=\\/]+$/,
+          canal_whatsapp: /^https:\/\/whatsapp\.com\/channel\/[a-zA-Z0-9\\-_]+$/
+      };
+
+      const regex = patterns[tipoSelecionado];
+      if (regex) {
+          isValid = regex.test(link);
       }
 
       if (!isValid) {
-        alert.innerHTML = `<div class="alert alert-error">Link de ${tipoSelecionado} inválido.</div>`;
+        alertDiv.innerHTML = `<div class=\"alert alert-error\">Link de ${tipoTexto} inválido.</div>`;
         return;
       }
 
       try {
-        const grupos = await supabaseFetch(`grupos?link=eq.${encodeURIComponent(link)}`);
+        const baseLink = link.split('?')[0];
+        const grupos = await supabaseFetch(`grupos?link=like.${encodeURIComponent(baseLink)}*`);
+
         if (grupos.length > 0) {
-          alert.innerHTML = '<div class="alert alert-error">Este link já foi cadastrado!</div>';
+          alertDiv.innerHTML = '<div class=\"alert alert-error\">Este link já foi cadastrado!</div>';
           return;
         }
 
-        alert.innerHTML = '<div class="alert alert-success">✓ Link válido! Carregando preview...</div>';
+        alertDiv.innerHTML = '<div class=\"alert alert-success\">✓ Link válido!</div>';
         linkValidado = link;
-
-        setTimeout(() => {
-          renderizarRegras();
-          mostrarStep(3);
-        }, 1000);
+        prosseguirBtn.disabled = false;
 
       } catch (error) {
-        alert.innerHTML = '<div class="alert alert-error">Erro ao validar link. Tente novamente.</div>';
+        alertDiv.innerHTML = '<div class=\"alert alert-error\">Erro ao verificar o link.</div>';
       }
+    }
+
+    function prosseguirParaDetalhes() {
+      renderizarRegras();
+      mostrarStep(3);
     }
 
     function renderizarRegras() {
       const grid = document.getElementById('regrasGrid');
       grid.innerHTML = REGRAS.map((regra, i) => `
-        <div class="regra-item">
-          <input type="checkbox" id="regra${i}" checked>
-          <label for="regra${i}" style="margin: 0;">${regra}</label>
+        <div class=\"regra-item\">
+          <input type=\"checkbox\" id=\"regra${i}\" checked>
+          <label for=\"regra${i}\" style=\"margin: 0;\">${regra}</label>
         </div>
       `).join('');
     }
