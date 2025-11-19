@@ -1,7 +1,7 @@
 
     let tipoSelecionado = '';
     let linkValidado = '';
-    let fotoUrl = 'https://via.placeholder.com/300';
+    let fotoFile = null; // Para armazenar o objeto do arquivo da foto
     let debounceTimer;
 
     const REGRAS = [
@@ -20,6 +20,8 @@
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(validarLinkEmTempoReal, 500);
       });
+      // Adiciona o listener para o input de foto
+      document.getElementById('fotoUpload').addEventListener('change', alterarFoto);
     });
 
     function popularCategorias() {
@@ -28,14 +30,11 @@
         console.error('Elemento select ou array de CATEGORIAS não encontrado.');
         return;
       }
-
-      select.innerHTML = ''; 
-
+      select.innerHTML = '';
       const defaultOption = document.createElement('option');
       defaultOption.value = '';
       defaultOption.textContent = 'Selecione...';
       select.appendChild(defaultOption);
-
       CATEGORIES.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat.id;
@@ -63,18 +62,10 @@
       tipoSelecionado = tipo;
       let tipoTexto = '';
       switch (tipo) {
-        case 'whatsapp':
-          tipoTexto = 'Grupo de WhatsApp';
-          break;
-        case 'telegram':
-          tipoTexto = 'Grupo de Telegram';
-          break;
-        case 'instagram':
-          tipoTexto = 'Grupo de Instagram';
-          break;
-        case 'canal_whatsapp':
-          tipoTexto = 'Canal do WhatsApp';
-          break;
+        case 'whatsapp': tipoTexto = 'Grupo de WhatsApp'; break;
+        case 'telegram': tipoTexto = 'Grupo de Telegram'; break;
+        case 'instagram': tipoTexto = 'Grupo de Instagram'; break;
+        case 'canal_whatsapp': tipoTexto = 'Canal do WhatsApp'; break;
       }
       document.getElementById('tipoTexto').textContent = tipoTexto;
       mostrarStep(2);
@@ -85,7 +76,7 @@
       const alertDiv = document.getElementById('alert');
       const prosseguirBtn = document.getElementById('prosseguirBtn');
       prosseguirBtn.disabled = true;
-      alertDiv.className = 'alert'; // Limpa classes de cor
+      alertDiv.className = 'alert';
 
       if (!link) {
         alertDiv.innerHTML = '';
@@ -152,17 +143,64 @@
 
     function alterarFoto() {
       const file = document.getElementById('fotoUpload').files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          fotoUrl = e.target.result;
-          document.getElementById('previewImg').src = fotoUrl;
-        };
-        reader.readAsDataURL(file);
+      if (!file) {
+        fotoFile = null;
+        return;
       }
+      fotoFile = file; // Armazena o arquivo para o upload
+
+      // Gera uma pré-visualização para o usuário
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('previewImg').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function uploadFotoParaStorage(file) {
+        if (!file) return null;
+        
+        // As variáveis SUPABASE_URL e SUPABASE_KEY devem estar disponíveis globalmente
+        if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_KEY === 'undefined') {
+            console.error('As variáveis SUPABASE_URL e SUPABASE_KEY não estão definidas.');
+            await customAlert('Erro de configuração: Não foi possível conectar ao serviço de armazenamento.', 'Erro');
+            return null;
+        }
+
+        const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+        
+        try {
+            const response = await fetch(`${SUPABASE_URL}/storage/v1/object/fotos_grupos/${fileName}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': file.type,
+                },
+                body: file
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erro desconhecido no upload');
+            }
+
+            // Constrói a URL pública da imagem
+            const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/fotos_grupos/${fileName}`;
+            return publicUrl;
+
+        } catch (error) {
+            console.error('Erro ao fazer upload da foto:', error);
+            await customAlert(`Houve um erro ao enviar sua foto: ${error.message}`, 'Erro de Upload');
+            return null;
+        }
     }
 
     async function enviarGrupo() {
+      const enviarBtn = document.querySelector('#step3 .btn-primary');
+      enviarBtn.disabled = true;
+      enviarBtn.textContent = 'Enviando...';
+
       const nome = document.getElementById('nomeInput').value.trim();
       const descricao = document.getElementById('descInput').value.trim();
       const categoria = document.getElementById('categoriaSelect').value;
@@ -170,13 +208,26 @@
 
       if (!nome || !categoria || !email) {
         await customAlert('Por favor, preencha todos os campos obrigatórios (*)', 'Campos Obrigatórios');
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = '➕ Enviar Grupo';
         return;
       }
 
-      const regras = REGRAS.filter((_, i) => 
+      let finalFotoUrl = null;
+      if (fotoFile) {
+        finalFotoUrl = await uploadFotoParaStorage(fotoFile);
+        if (!finalFotoUrl) {
+          // Se o upload falhar, interrompe o processo e reativa o botão
+          enviarBtn.disabled = false;
+          enviarBtn.textContent = '➕ Enviar Grupo';
+          return;
+        }
+      }
+
+      const regras = REGRAS.filter((_, i) =>
         document.getElementById(`regra${i}`).checked
       );
-      
+
       const tipoEntidade = tipoSelecionado === 'canal_whatsapp' ? 'Canal' : 'Grupo';
 
       const data = {
@@ -185,7 +236,7 @@
         tipo: tipoSelecionado,
         descricao,
         categoria,
-        foto_url: fotoUrl,
+        foto_url: finalFotoUrl, // Usa a URL do Storage ou null se não houver foto
         email,
         regras: JSON.stringify(regras),
         aprovado: false
@@ -203,5 +254,8 @@
         window.location.href = '/meus-grupos/';
       } catch (error) {
         await customAlert(`Erro ao enviar ${tipoEntidade.toLowerCase()}: ` + error.message, 'Erro');
+        // Reativa o botão em caso de falha no envio do grupo
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = '➕ Enviar Grupo';
       }
     }
