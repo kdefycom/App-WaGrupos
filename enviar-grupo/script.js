@@ -85,6 +85,7 @@
       const alertDiv = document.getElementById('alert');
       const prosseguirBtn = document.getElementById('prosseguirBtn');
       prosseguirBtn.disabled = true;
+      alertDiv.className = 'alert'; // Limpa classes de cor
 
       if (!link) {
         alertDiv.innerHTML = '';
@@ -92,13 +93,14 @@
       }
 
       let isValid = false;
-      const tipoTexto = document.getElementById('tipoTexto').textContent || tipoSelecionado;
+      const tipoEntidade = tipoSelecionado === 'canal_whatsapp' ? 'Canal' : 'Grupo';
+      const placeholderText = document.getElementById('tipoTexto').textContent || `de ${tipoEntidade}`;
 
       const patterns = {
-          whatsapp: /^https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9\\-_?=&]+$/,
-          telegram: /^https:\/\/t\.me\/[a-zA-Z0-9_]+$/,
-          instagram: /^https:\/\/ig\.me\/j\/[a-zA-Z0-9\\-_=\\/]+$/,
-          canal_whatsapp: /^https:\/\/whatsapp\.com\/channel\/[a-zA-Z0-9\\-_]+$/
+          whatsapp: /^https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9\-_?=&]+$/,
+          telegram: /^https:\/\/t\.me\/([a-zA-Z0-9_]{5,})$/,
+          instagram: /^https:\/\/ig\.me\/j\/[a-zA-Z0-9\-_=\/]+$/,
+          canal_whatsapp: /^https:\/\/whatsapp\.com\/channel\/[a-zA-Z0-9\-_]+$/
       };
 
       const regex = patterns[tipoSelecionado];
@@ -107,7 +109,8 @@
       }
 
       if (!isValid) {
-        alertDiv.innerHTML = `<div class=\"alert alert-error\">Link de ${tipoTexto} inválido.</div>`;
+        alertDiv.innerHTML = `Link de ${placeholderText} inválido.`;
+        alertDiv.className = 'alert alert-error';
         return;
       }
 
@@ -116,16 +119,19 @@
         const grupos = await supabaseFetch(`grupos?link=like.${encodeURIComponent(baseLink)}*`);
 
         if (grupos.length > 0) {
-          alertDiv.innerHTML = '<div class=\"alert alert-error\">Este link já foi cadastrado!</div>';
+          alertDiv.innerHTML = 'Este link já foi cadastrado!';
+          alertDiv.className = 'alert alert-error';
           return;
         }
 
-        alertDiv.innerHTML = '<div class=\"alert alert-success\">✓ Link válido!</div>';
+        alertDiv.innerHTML = '✓ Link válido!';
+        alertDiv.className = 'alert alert-success';
         linkValidado = link;
         prosseguirBtn.disabled = false;
 
       } catch (error) {
-        alertDiv.innerHTML = '<div class=\"alert alert-error\">Erro ao verificar o link.</div>';
+        alertDiv.innerHTML = 'Erro ao verificar o link.';
+        alertDiv.className = 'alert alert-error';
       }
     }
 
@@ -137,9 +143,9 @@
     function renderizarRegras() {
       const grid = document.getElementById('regrasGrid');
       grid.innerHTML = REGRAS.map((regra, i) => `
-        <div class=\"regra-item\">
-          <input type=\"checkbox\" id=\"regra${i}\" checked>
-          <label for=\"regra${i}\" style=\"margin: 0;\">${regra}</label>
+        <div class="regra-item">
+          <input type="checkbox" id="regra${i}" checked>
+          <label for="regra${i}" style="margin: 0;">${regra}</label>
         </div>
       `).join('');
     }
@@ -170,8 +176,10 @@
       const regras = REGRAS.filter((_, i) => 
         document.getElementById(`regra${i}`).checked
       );
+      
+      const tipoEntidade = tipoSelecionado === 'canal_whatsapp' ? 'Canal' : 'Grupo';
 
-      const grupo = {
+      const data = {
         nome,
         link: linkValidado,
         tipo: tipoSelecionado,
@@ -186,14 +194,14 @@
       try {
         const resultado = await supabaseFetch('grupos', {
           method: 'POST',
-          body: JSON.stringify(grupo)
+          body: JSON.stringify(data)
         });
 
-        await salvarGrupoLocal({ ...grupo, id: resultado[0].id });
+        await salvarGrupoLocal({ ...data, id: resultado[0].id });
 
-        await customAlert('✅ Grupo enviado para análise! Você receberá um email quando for aprovado.', 'Sucesso');
+        await customAlert(`✅ ${tipoEntidade} enviado para análise! Você receberá um email quando for aprovado.`, 'Sucesso');
         window.location.href = '/meus-grupos/';
       } catch (error) {
-        await customAlert('Erro ao enviar grupo: ' + error.message, 'Erro');
+        await customAlert(`Erro ao enviar ${tipoEntidade.toLowerCase()}: ` + error.message, 'Erro');
       }
     }
