@@ -168,11 +168,11 @@
 
   <div class="modal-overlay" id="editModalOverlay">
   <div class="modal" id="editModal">
-    <h2>Editar Grupo</h2>
+    <h2 id="editModalTitle">Editar Grupo</h2>
     <input type="hidden" id="editGroupId">
 
     <div class="form-group">
-      <label>Foto do Grupo</label>
+      <label id="editFotoLabel">Foto do Grupo</label>
 
       <div style="width:100%; aspect-ratio:16/9; background:#111; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
         <img id="editFotoPreview" style="width:100%; height:100%; object-fit:cover; display:none;">
@@ -184,7 +184,7 @@
     </div>
 
     <div class="form-group">
-      <label for="editLink">Link do Grupo</label>
+      <label for="editLink" id="editLinkLabel">Link do Grupo</label>
       <input type="url" id="editLink" placeholder="https://chat.whatsapp.com/...">
     </div>
 

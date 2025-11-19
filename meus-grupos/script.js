@@ -133,6 +133,12 @@
     const grupo = meusGrupos.find(g => g.id === id);
     if (!grupo) return;
 
+    const tipoEntidade = grupo.tipo === 'canal_whatsapp' ? 'Canal' : 'Grupo';
+
+    document.getElementById('editModalTitle').textContent = `Editar ${tipoEntidade}`;
+    document.getElementById('editFotoLabel').textContent = `Foto do ${tipoEntidade}`;
+    document.getElementById('editLinkLabel').textContent = `Link do ${tipoEntidade}`;
+
     document.getElementById('editGroupId').value = id;
     document.getElementById('editLink').value = grupo.link || '';
 
