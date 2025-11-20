@@ -49,7 +49,7 @@
                 title.textContent = 'Grupos de Telegram em Destaque';
                 break;
             case 'instagram':
-                title.textContent = 'Perfis do Instagram em Destaque';
+                title.textContent = 'Grupos de Instagram em Destaque';
                 break;
             case 'canal_whatsapp':
                 title.textContent = 'Canais do WhatsApp em Destaque';
