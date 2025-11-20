@@ -55,8 +55,8 @@
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
-    .info-box.blue { background-color: #e7f3ff; border-left: 4px solid var(--action-blue); color: #002b5c; }
-    .info-box.gray { background-color: #f0f0f0; border-left: 4px solid #65676b; color: #333333; }
+    .info-box.blue { background-color: #0d47a1; border-left: 4px solid #1976d2; color: #ffffff; }
+    .info-box.gray { background-color: #2C2C2C; border-left: 4px solid #555555; color: #E0E0E0; }
 
     /* --- CONTENT --- */
     .content-section { padding: 50px 0; }
