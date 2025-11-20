@@ -94,15 +94,16 @@ textarea { min-height: 100px; resize: vertical; }
 .btn-secondary:hover { background: #333333; }
 
 .btn-back {
-  background: #f5f5f5;
-  color: #111111;
-    display: block;
-    text-align: center;
-    margin-top: 20px;
+  background: #2C2C2C;
+  color: white;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
 }
 
 .btn-back:hover {
-    background: #e0e0e0;
+    background: #1a1a1a;
 }
 
 .preview-img {
