@@ -12,15 +12,15 @@
     
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #2C2C2C;
-      color: white;
+      background: #1E1E1E; /* Fundo Principal */
+      color: #FFFFFF; /* Texto Principal */
       padding: 20px;
     }
 
     .login-screen {
       max-width: 400px;
       margin: 100px auto;
-      background: #1E1E1E;
+      background: #2C2C2C; /* Fundo Secundário */
       padding: 40px;
       border-radius: 12px;
     }
@@ -31,19 +31,19 @@
       margin: 0 auto;
     }
 
-    h1 {
-      margin-bottom: 30px;
-      color: #0f3460;
+    h1, h2 {
+      color: #FFFFFF; /* Texto Principal */
+      margin-bottom: 20px;
     }
 
     input, textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 15px;
-      border: 2px solid #0f3460;
+      border: 1px solid #444; /* Borda sutil */
       border-radius: 8px;
-      background: #16213e;
-      color: white;
+      background: #2C2C2C; /* Fundo Secundário */
+      color: #FFFFFF; /* Texto Principal */
       font-size: 14px;
     }
 
@@ -62,12 +62,15 @@
     .btn-danger { background: #ef4444; color: white; }
     .btn-warning { background: #f59e0b; color: white; }
 
-    .grupo-card {
-      background: #16213e;
+    .grupo-card, .stat-card, .modal-content {
+      background: #2C2C2C; /* Fundo Secundário */
       padding: 20px;
       margin-bottom: 20px;
       border-radius: 12px;
-      border-left: 4px solid #e94560;
+    }
+
+    .grupo-card {
+       border-left: 4px solid #e94560;
     }
 
     .grupo-header {
@@ -90,17 +93,14 @@
       margin-bottom: 30px;
     }
 
-    .stat-card {
-      background: #16213e;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
     .stat-number {
       font-size: 32px;
       font-weight: bold;
       color: #e94560;
+    }
+    
+    .text-secondary {
+        color: #AAAAAA; /* Texto Secundário */
     }
 
     .modal {
@@ -118,23 +118,16 @@
 
     .modal.active { display: flex; }
 
-    .modal-content {
-      background: #16213e;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-    }
   </style>
 </head>
 <body>
   <!-- Tela de Login -->
   <div id="loginScreen" class="login-screen">
-    <h1 style="color: #e94560;">🔐 Admin Login</h1>
+    <h1 style="text-align: center;">🔐 Admin Login</h1>
     <input type="text" id="username" placeholder="Usuário">
     <input type="password" id="password" placeholder="Senha">
     <button class="btn btn-primary" style="width: 100%;" onclick="login()">Entrar</button>
-    <div id="loginError" style="color: #ef4444; margin-top: 10px;"></div>
+    <div id="loginError" style="color: #ef4444; margin-top: 10px; text-align: center;"></div>
   </div>
 
   <!-- Painel Admin -->
@@ -148,19 +141,19 @@
     <div class="stats">
       <div class="stat-card">
         <div class="stat-number" id="totalGrupos">0</div>
-        <div>Total de Grupos</div>
+        <div class="text-secondary">Total de Grupos</div>
       </div>
       <div class="stat-card">
         <div class="stat-number" id="pendentes">0</div>
-        <div>Pendentes</div>
+        <div class="text-secondary">Pendentes</div>
       </div>
       <div class="stat-card">
         <div class="stat-number" id="aprovados">0</div>
-        <div>Aprovados</div>
+        <div class="text-secondary">Aprovados</div>
       </div>
       <div class="stat-card">
         <div class="stat-number" id="vips">0</div>
-        <div>VIPs</div>
+        <div class="text-secondary">VIPs</div>
       </div>
     </div>
 
@@ -173,7 +166,7 @@
       <h2>📩 Enviar Mensagem</h2>
       <textarea id="mensagemTexto" rows="4" placeholder="Digite a mensagem..."></textarea>
       <button class="btn btn-success" onclick="enviarMensagem()">Enviar</button>
-      <button class="btn btn-danger" onclick="fecharModal()">Cancelar</button>
+      <button class="btn" onclick="fecharModal()">Cancelar</button>
     </div>
   </div>
 
@@ -253,8 +246,8 @@
             <img src="${grupo.foto_url || 'https://via.placeholder.com/100'}" class="grupo-foto">
             <div style="flex: 1;">
               <h3>${grupo.nome}</h3>
-              <p style="color: #aaa;">${grupo.tipo.toUpperCase()} | ${grupo.categoria}</p>
-              <p style="color: #aaa;">Email: ${grupo.email}</p>
+              <p class="text-secondary">${grupo.tipo.toUpperCase()} | ${grupo.categoria}</p>
+              <p class="text-secondary">Email: ${grupo.email}</p>
               <a href="${grupo.link}" target="_blank" style="color: #e94560;">${grupo.link}</a>
             </div>
           </div>
