@@ -1,60 +1,24 @@
-# KDefy Grupos: A Comunidade de Grupos de WhatsApp e Telegram
+# KDefy Grupos - Divulgação de Grupos de WhatsApp e Telegram
 
-Bem-vindo(a) ao **KDefy Grupos**! 👋
+Este é o repositório do projeto **KDefy Grupos**, uma plataforma para encontrar e divulgar grupos de WhatsApp e Telegram. O site permite que usuários pesquisem, filtrem e enviem novos grupos para a comunidade.
 
-Este é o lugar onde construímos uma plataforma aberta e vibrante para que todos possam encontrar e compartilhar os melhores grupos de WhatsApp e Telegram. Se você quer divulgar seu grupo, encontrar uma nova comunidade ou ajudar a construir uma ferramenta incrível, você está no lugar certo!
+## Funcionalidades
 
-## ✨ Nossa Missão
+- **Listagem de Grupos**: Navegue por grupos de WhatsApp e Telegram.
+- **Busca e Filtro**: Pesquise por nome, descrição ou filtre por categoria.
+- **Envio de Grupos**: Usuários podem submeter seus próprios grupos para serem listados.
+- **Painel de Administração**: Um painel seguro para gerenciar e aprovar os grupos enviados.
+- **Sistema de Cache**: Utiliza IndexedDB para armazenar grupos localmente e melhorar a performance.
 
-Acreditamos que comunidades online são poderosas. Nossa missão é criar o melhor e mais seguro diretório de grupos, conectando pessoas com interesses em comum de forma simples e direta.
+## Setup do Banco de Dados (Supabase)
 
-## 🚀 Como Funciona
+Para rodar este projeto, você precisará de um projeto no [Supabase](https://supabase.com/). Execute os seguintes comandos no **SQL Editor** do seu projeto.
 
--   **Explore:** Navegue por centenas de grupos, organizados por categorias.
--   **Busque:** Encontre exatamente o que procura com nossa ferramenta de busca.
--   **Contribua:** Envie seu próprio grupo para que outras pessoas possam encontrá-lo.
--   **Seguro:** Um painel de administração garante que apenas grupos de qualidade sejam aprovados.
+### 1. Tabela de Grupos (`grupos`)
 
-## 🤝 Quer Ajudar? Contribua com o Projeto!
-
-Nós amamos a ajuda da comunidade! Se você tem ideias, encontrou um bug ou quer escrever código, sua contribuição é muito bem-vinda.
-
-**Não sabe por onde começar? Aqui vão algumas ideias:**
-
-1.  **Reporte um Bug:** Encontrou algo que não funciona como deveria? [Abra uma Issue](https://github.com/kdefycom/App-WaGrupos/issues) e nos conte.
-2.  **Sugira uma Melhoria:** Tem uma ideia para uma nova funcionalidade? Adoraríamos ouvir!
-3.  **Escreva Código:** Pegue uma `issue` aberta, faça um `fork` do projeto e envie um `Pull Request`!
-
-**Passos para Contribuir com Código:**
-
-1.  Faça um **Fork** deste repositório.
-2.  Crie uma nova branch para sua funcionalidade: `git checkout -b minha-nova-feature`
-3.  Faça o commit de suas alterações: `git commit -m 'feat: Adiciona minha nova feature'`
-4.  Envie para a sua branch: `git push origin minha-nova-feature`
-5.  Abra um **Pull Request** aqui no GitHub.
-
-## 🛠️ Setup do Ambiente de Desenvolvimento
-
-Pronto para colocar a mão na massa? Aqui está o que você precisa para rodar o projeto localmente.
-
-**Você vai precisar de:**
-
--   Uma conta gratuita no [Supabase](https://supabase.com/).
--   Um editor de código como o VS Code.
-
-**Passo 1: Configure o Banco de Dados no Supabase**
-
-1.  Crie um novo projeto no Supabase.
-2.  Vá para o **SQL Editor**.
-3.  Copie e cole o código abaixo e execute-o para criar as tabelas e as regras de segurança necessárias.
+Esta tabela armazena todas as informações dos grupos enviados.
 
 ```sql
-/* 
-  ========================================
-  TABELA DE GRUPOS
-  Armazena todos os grupos enviados.
-  ========================================
-*/
 CREATE TABLE grupos (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   nome TEXT NOT NULL,
@@ -74,79 +38,80 @@ CREATE TABLE grupos (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Índices para otimizar as buscas
+-- Índices para otimizar as consultas
 CREATE INDEX idx_grupos_aprovado ON grupos(aprovado);
 CREATE INDEX idx_grupos_vip ON grupos(vip, posicao_vip);
 CREATE INDEX idx_grupos_created ON grupos(created_at DESC);
+```
 
-/* 
-  ========================================
-  TABELA DE ADMINISTRADORES
-  Controla o acesso ao painel de admin.
-  ========================================
-*/
+### 2. Tabela de Administradores (`admin_users`)
+
+Esta tabela armazena os usuários que podem acessar o painel de administração.
+
+```sql
 CREATE TABLE admin_users (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
+```
 
-/*
-  ========================================
-  POLÍTICAS DE SEGURANÇA (RLS)
-  Garantem que os dados estejam seguros.
-  ========================================
-*/
--- Habilita a segurança em nível de linha
+**Importante:** Para adicionar um administrador, você deve inserir um `username` e o **hash SHA-256** da senha. **Nunca salve a senha em texto puro.**
+
+**Exemplo de como inserir um admin:**
+
+```sql
+-- Lembre-se de substituir 'seu_hash_sha256_aqui' pelo hash real da sua senha
+INSERT INTO admin_users (username, password_hash) 
+VALUES ('seu_usuario_admin', 'seu_hash_sha256_aqui');
+```
+
+Para gerar o hash SHA-256 de uma senha, você pode usar o console do navegador na página de admin do projeto com o seguinte comando:
+```javascript
+// 1. Abra o console (F12) na página de admin
+// 2. Cole e execute este código, trocando 'sua_senha_segura'
+async function sha256(m) {
+  const b = new TextEncoder().encode(m);
+  const d = await crypto.subtle.digest('SHA-256', b);
+  return Array.from(new Uint8Array(d)).map(h => h.toString(16).padStart(2, '0')).join('');
+}
+sha256('sua_senha_segura').then(h => console.log(h));
+```
+
+### 3. Políticas de Segurança (Row Level Security - RLS)
+
+Estas políticas garantem que os usuários só possam acessar os dados permitidos.
+
+```sql
+-- Habilitar RLS nas tabelas
 ALTER TABLE grupos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
 
--- Regra 1: Todos podem ver os grupos que já foram aprovados.
+-- Política: Todos podem visualizar grupos que foram aprovados.
 CREATE POLICY "Grupos aprovados são públicos" ON grupos
   FOR SELECT USING (aprovado = true);
 
--- Regra 2: Qualquer pessoa pode enviar um novo grupo.
+-- Política: Qualquer usuário pode enviar um novo grupo para análise.
 CREATE POLICY "Qualquer um pode enviar grupos" ON grupos
   FOR INSERT WITH CHECK (true);
 
--- Regra 3: Administradores com a chave de serviço têm acesso total.
-CREATE POLICY "Admin total" ON grupos 
-  FOR ALL USING (auth.role() = 'service_role');
-  
--- Regra 4: Permite a consulta de usuários no login do admin.
+-- Política: Administradores têm acesso total à tabela de grupos.
+-- (Crie esta política de acordo com a sua lógica de autenticação no Supabase)
+-- Exemplo: CREATE POLICY "Admin total" ON grupos FOR ALL USING (auth.role() = 'service_role');
+-- Adapte para a sua regra de admin.
+
+-- Política: Permite que a função de login consulte a tabela de admin.
 CREATE POLICY "Admin login" ON admin_users FOR SELECT USING (true);
+
 ```
 
-**Passo 2: Crie um Usuário Administrador**
+### 4. Configuração no `app.js`
 
-Por segurança, **nunca salve senhas diretamente**. Salve apenas um "hash" (uma versão criptografada) dela.
+Lembre-se de configurar suas chaves do Supabase no arquivo `app.js`:
 
-1.  **Gere o Hash:** No painel do seu projeto, tem uma página de admin. Abra o console do desenvolvedor (F12) e use a função `sha256('sua_senha_aqui')` para gerar o hash da sua senha.
-2.  **Insira no Banco:** Execute o comando SQL abaixo, substituindo o usuário e o hash gerado.
-
-```sql
--- Exemplo para inserir seu usuário admin
-INSERT INTO admin_users (username, password_hash) 
-VALUES ('meu-admin', 'hash_gerado_no_passo_anterior');
+```javascript
+/* Config Supabase */
+const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
+const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
 ```
-
-**Passo 3: Conecte o Projeto ao Supabase**
-
-1.  No arquivo `app.js`, encontre as seguintes linhas:
-    ```javascript
-    /* Config Supabase */
-    const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
-    const SUPABASE_KEY = 'SUA_CHAVE_ANON_AQUI';
-    ```
-2.  Substitua `'https://SEU_PROJETO.supabase.co'` e `'SUA_CHAVE_ANON_AQUI'` pelas credenciais do seu projeto Supabase, que você encontra em **Project Settings > API**.
-
-Pronto! Agora você pode abrir o `index.html` e ver o projeto rodando.
-
-## 📄 Licença
-
-Este projeto é de código aberto e está licenciado sob a Licença MIT. Sinta-se à vontade para usar, modificar e distribuir!
-
----
-
-Feito com ❤️ pela comunidade.

@@ -117,3 +117,89 @@ const ICONS = {
   
   tecnologia: '<svg fill="#1a1a1a" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>'
 };
+
+/* Req */
+async function supabaseFetch(endpoint, options = {}) {
+  const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation',
+    ...options.headers
+  };
+
+  const response = await fetch(url, { ...options, headers });
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error || 'Erro na requisição');
+  }
+  return response.json();
+}
+
+const DB_NAME = 'kdefy_grupos';
+const DB_VERSION = 1;
+let db;
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      db = request.result;
+      resolve(db);
+    };
+    
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('grupos')) {
+        db.createObjectStore('grupos', { keyPath: 'id' });
+      }
+    };
+  });
+}
+
+async function salvarGrupoLocal(grupo) {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['grupos'], 'readwrite');
+    const store = transaction.objectStore('grupos');
+    const request = store.put(grupo);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function buscarGruposLocais() {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['grupos'], 'readonly');
+    const store = transaction.objectStore('grupos');
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function removerGrupoLocal(id) {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['grupos'], 'readwrite');
+    const store = transaction.objectStore('grupos');
+    const request = store.delete(id);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function limparIndexDB() {
+  await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(['grupos'], 'readwrite');
+    const store = transaction.objectStore('grupos');
+    const request = store.clear();
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
