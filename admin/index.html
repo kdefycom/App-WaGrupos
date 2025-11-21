@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - KDefy Grupos</title>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #1a1a2e;
@@ -14,36 +15,40 @@
       padding: 20px;
     }
 
+    /* TELA DE LOGIN ESTILIZADA */
     .login-screen {
       max-width: 400px;
       margin: 100px auto;
-      background: #16213e;
+      background: #2C2C2C;
       padding: 40px;
       border-radius: 12px;
+      border: 1px solid #e94560;
+      box-shadow: 0 0 12px #e94560;
     }
 
-    .admin-panel {
-      display: none;
-      max-width: 1200px;
-      margin: 0 auto;
+    .login-screen h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #e94560;
     }
 
-    h1 {
-      margin-bottom: 30px;
-      color: #0f3460;
-    }
-
-    input, textarea {
+    .login-input {
       width: 100%;
       padding: 12px;
       margin-bottom: 15px;
-      border: 2px solid #0f3460;
       border-radius: 8px;
-      background: #16213e;
+      background: #1E1E1E;
+      border: 1px solid #e94560;
       color: white;
-      font-size: 14px;
+      font-size: 15px;
     }
 
+    .login-input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #e94560;
+    }
+
+    /* BOTÕES */
     .btn {
       padding: 12px 24px;
       border: none;
@@ -58,6 +63,12 @@
     .btn-success { background: #25d366; color: white; }
     .btn-danger { background: #ef4444; color: white; }
     .btn-warning { background: #f59e0b; color: white; }
+
+    .admin-panel {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     .grupo-card {
       background: #16213e;
@@ -124,47 +135,40 @@
     }
   </style>
 </head>
+
 <body>
-  <!-- Tela de Login -->
+
+  <!-- TELA DE LOGIN -->
   <div id="loginScreen" class="login-screen">
-    <h1 style="color: #e94560;">🔐 Admin Login</h1>
-    <input type="text" id="username" placeholder="Usuário">
-    <input type="password" id="password" placeholder="Senha">
+    <h1>🔐 Admin Login</h1>
+
+    <input class="login-input" type="text" id="username" placeholder="E-mail do Admin">
+    <input class="login-input" type="password" id="password" placeholder="Senha">
+
     <button class="btn btn-primary" style="width: 100%;" onclick="login()">Entrar</button>
-    <div id="loginError" style="color: #ef4444; margin-top: 10px;"></div>
+
+    <div id="loginError" style="color: #ef4444; margin-top: 10px; text-align:center;"></div>
   </div>
 
-  <!-- Painel Admin -->
+  <!-- PAINEL ADMIN -->
   <div id="adminPanel" class="admin-panel">
+
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
       <h1>⚙️ Painel Admin</h1>
       <button class="btn btn-danger" onclick="logout()">Sair</button>
     </div>
 
-    <!-- Estatísticas -->
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-number" id="totalGrupos">0</div>
-        <div>Total de Grupos</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="pendentes">0</div>
-        <div>Pendentes</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="aprovados">0</div>
-        <div>Aprovados</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number" id="vips">0</div>
-        <div>VIPs</div>
-      </div>
+      <div class="stat-card"><div class="stat-number" id="totalGrupos">0</div>Total de Grupos</div>
+      <div class="stat-card"><div class="stat-number" id="pendentes">0</div>Pendentes</div>
+      <div class="stat-card"><div class="stat-number" id="aprovados">0</div>Aprovados</div>
+      <div class="stat-card"><div class="stat-number" id="vips">0</div>VIPs</div>
     </div>
 
     <div id="gruposLista"></div>
   </div>
 
-  <!-- Modal para Mensagem -->
+  <!-- MODAL -->
   <div id="modalMensagem" class="modal">
     <div class="modal-content">
       <h2>📩 Enviar Mensagem</h2>
@@ -175,50 +179,43 @@
   </div>
 
   <script src="../app.js"></script>
+
   <script>
     let grupoAtual = null;
 
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      return hashHex;
-    }
-
+    /* NOVO LOGIN — SUPABASE AUTH */
     async function login() {
-      const username = document.getElementById('username').value;
+      const email = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const loginError = document.getElementById('loginError');
-      loginError.textContent = '';
+      const errorBox = document.getElementById('loginError');
 
-      if (!username || !password) {
-        loginError.textContent = 'Por favor, preencha todos os campos.';
+      errorBox.textContent = "";
+
+      if (!email || !password) {
+        errorBox.textContent = "Preencha todos os campos.";
         return;
       }
 
-      try {
-        const passwordHash = await sha256(password);
-        const admins = await supabaseFetch(
-          `admin_users?username=eq.${username}&password_hash=eq.${passwordHash}`
-        );
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
-        if (admins.length > 0) {
-          sessionStorage.setItem('admin_auth', 'true');
-          document.getElementById('loginScreen').style.display = 'none';
-          document.getElementById('adminPanel').style.display = 'block';
-          carregarGrupos();
-        } else {
-          loginError.textContent = 'Usuário ou senha incorretos';
-        }
-      } catch (error) {
-        loginError.textContent = 'Erro ao fazer login. Verifique o console para mais detalhes.';
-        console.error('Login error:', error);
+      if (error) {
+        errorBox.textContent = "Credenciais inválidas.";
+        return;
       }
+
+      sessionStorage.setItem("admin_auth", "true");
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+
+      carregarGrupos();
     }
 
     function logout() {
-      sessionStorage.removeItem('admin_auth');
+      supabase.auth.signOut();
+      sessionStorage.removeItem("admin_auth");
       location.reload();
     }
 
@@ -366,13 +363,13 @@
         alert('Erro: ' + error.message);
       }
     }
-
-    // Verificar se está logado
-    if (sessionStorage.getItem('admin_auth') === 'true') {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
+    
+    if (sessionStorage.getItem("admin_auth") === "true") {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
       carregarGrupos();
     }
   </script>
+
 </body>
 </html>
