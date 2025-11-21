@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - KDefy Grupos</title>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #1a1a2e;
@@ -15,40 +14,36 @@
       padding: 20px;
     }
 
-    /* LOGIN */
     .login-screen {
       max-width: 400px;
-      margin: 120px auto;
-      background: #2C2C2C;
+      margin: 100px auto;
+      background: #16213e;
       padding: 40px;
       border-radius: 12px;
-      border: 1px solid #ffffff;
-      box-shadow: 0 0 10px #ffffff33;
     }
 
-    .login-screen h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: white;
+    .admin-panel {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .login-input {
+    h1 {
+      margin-bottom: 30px;
+      color: #0f3460;
+    }
+
+    input, textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 15px;
+      border: 2px solid #0f3460;
       border-radius: 8px;
-      background: #1E1E1E;
-      border: 1px solid #ffffff;
+      background: #16213e;
       color: white;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    .login-input:focus {
-      outline: none;
-      box-shadow: 0 0 10px #ffffff;
-    }
-
-    /* BOTÕES */
     .btn {
       padding: 12px 24px;
       border: none;
@@ -63,13 +58,6 @@
     .btn-success { background: #25d366; color: white; }
     .btn-danger { background: #ef4444; color: white; }
     .btn-warning { background: #f59e0b; color: white; }
-
-    /* PAINEL */
-    .admin-panel {
-      display: none;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
 
     .grupo-card {
       background: #16213e;
@@ -112,7 +100,6 @@
       color: #e94560;
     }
 
-    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -137,40 +124,47 @@
     }
   </style>
 </head>
-
 <body>
-
-  <!-- LOGIN -->
+  <!-- Tela de Login -->
   <div id="loginScreen" class="login-screen">
-    <h1>🔐 Admin Login</h1>
-
-    <input class="login-input" type="text" id="username" placeholder="E-mail do Admin">
-    <input class="login-input" type="password" id="password" placeholder="Senha">
-
-    <button class="btn btn-primary" style="width:100%;" onclick="login()">Entrar</button>
-
-    <div id="loginError" style="color:#ef4444;margin-top:10px;text-align:center;"></div>
+    <h1 style="color: #e94560;">🔐 Admin Login</h1>
+    <input type="text" id="username" placeholder="Usuário">
+    <input type="password" id="password" placeholder="Senha">
+    <button class="btn btn-primary" style="width: 100%;" onclick="login()">Entrar</button>
+    <div id="loginError" style="color: #ef4444; margin-top: 10px;"></div>
   </div>
 
-  <!-- PAINEL -->
+  <!-- Painel Admin -->
   <div id="adminPanel" class="admin-panel">
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
       <h1>⚙️ Painel Admin</h1>
       <button class="btn btn-danger" onclick="logout()">Sair</button>
     </div>
 
+    <!-- Estatísticas -->
     <div class="stats">
-      <div class="stat-card"><div class="stat-number" id="totalGrupos">0</div>Total de Grupos</div>
-      <div class="stat-card"><div class="stat-number" id="pendentes">0</div>Pendentes</div>
-      <div class="stat-card"><div class="stat-number" id="aprovados">0</div>Aprovados</div>
-      <div class="stat-card"><div class="stat-number" id="vips">0</div>VIPs</div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalGrupos">0</div>
+        <div>Total de Grupos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pendentes">0</div>
+        <div>Pendentes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="aprovados">0</div>
+        <div>Aprovados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="vips">0</div>
+        <div>VIPs</div>
+      </div>
     </div>
 
     <div id="gruposLista"></div>
   </div>
 
-  <!-- MODAL -->
+  <!-- Modal para Mensagem -->
   <div id="modalMensagem" class="modal">
     <div class="modal-content">
       <h2>📩 Enviar Mensagem</h2>
@@ -181,106 +175,111 @@
   </div>
 
   <script src="../app.js"></script>
-
   <script>
     let grupoAtual = null;
 
-    /* SHA-256 */
     async function sha256(message) {
-      const buffer = new TextEncoder().encode(message);
-      const hash = await crypto.subtle.digest("SHA-256", buffer);
-      return [...new Uint8Array(hash)]
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
     }
 
-    /* LOGIN ANTIGO (FUNCIONAL) */
     async function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const errorBox = document.getElementById("loginError");
-
-      errorBox.textContent = "";
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const loginError = document.getElementById('loginError');
+      loginError.textContent = '';
 
       if (!username || !password) {
-        errorBox.textContent = "Preencha todos os campos.";
+        loginError.textContent = 'Por favor, preencha todos os campos.';
         return;
       }
 
-      const passwordHash = await sha256(password);
-
       try {
+        const passwordHash = await sha256(password);
         const admins = await supabaseFetch(
           `admin_users?username=eq.${username}&password_hash=eq.${passwordHash}`
         );
 
         if (admins.length > 0) {
-          sessionStorage.setItem("admin_auth", "true");
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("adminPanel").style.display = "block";
+          sessionStorage.setItem('admin_auth', 'true');
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('adminPanel').style.display = 'block';
           carregarGrupos();
         } else {
-          errorBox.textContent = "Usuário ou senha incorretos.";
+          loginError.textContent = 'Usuário ou senha incorretos';
         }
-      } catch (err) {
-        errorBox.textContent = "Erro de conexão.";
+      } catch (error) {
+        loginError.textContent = 'Erro ao fazer login. Verifique o console para mais detalhes.';
+        console.error('Login error:', error);
       }
     }
 
     function logout() {
-      sessionStorage.removeItem("admin_auth");
+      sessionStorage.removeItem('admin_auth');
       location.reload();
     }
 
     async function carregarGrupos() {
-      const grupos = await supabaseFetch("grupos?order=created_at.desc");
+      try {
+        const grupos = await supabaseFetch('grupos?order=created_at.desc');
+        
+        const total = grupos.length;
+        const pendentes = grupos.filter(g => !g.aprovado && !g.mensagem_admin).length;
+        const aprovados = grupos.filter(g => g.aprovado).length;
+        const vips = grupos.filter(g => g.vip).length;
 
-      const total = grupos.length;
-      const pendentes = grupos.filter(g => !g.aprovado && !g.mensagem_admin).length;
-      const aprovados = grupos.filter(g => g.aprovado).length;
-      const vips = grupos.filter(g => g.vip).length;
+        document.getElementById('totalGrupos').textContent = total;
+        document.getElementById('pendentes').textContent = pendentes;
+        document.getElementById('aprovados').textContent = aprovados;
+        document.getElementById('vips').textContent = vips;
 
-      document.getElementById("totalGrupos").textContent = total;
-      document.getElementById("pendentes").textContent = pendentes;
-      document.getElementById("aprovados").textContent = aprovados;
-      document.getElementById("vips").textContent = vips;
-
-      renderizarGrupos(grupos);
+        renderizarGrupos(grupos);
+      } catch (error) {
+        console.error('Erro:', error);
+      }
     }
 
     function renderizarGrupos(grupos) {
-      const lista = document.getElementById("gruposLista");
-      lista.innerHTML = grupos.map(g => `
+      const lista = document.getElementById('gruposLista');
+      lista.innerHTML = grupos.map(grupo => `
         <div class="grupo-card">
           <div class="grupo-header">
-            <img src="${g.foto_url || 'https://via.placeholder.com/100'}" class="grupo-foto">
-            <div style="flex:1;">
-              <h3>${g.nome}</h3>
-              <p style="color:#aaa;">${g.tipo.toUpperCase()} | ${g.categoria}</p>
-              <p style="color:#aaa;">Email: ${g.email}</p>
-              <a href="${g.link}" target="_blank" style="color:#e94560;">${g.link}</a>
+            <img src="${grupo.foto_url || 'https://via.placeholder.com/100'}" class="grupo-foto">
+            <div style="flex: 1;">
+              <h3>${grupo.nome}</h3>
+              <p style="color: #aaa;">${grupo.tipo.toUpperCase()} | ${grupo.categoria}</p>
+              <p style="color: #aaa;">Email: ${grupo.email}</p>
+              <a href="${grupo.link}" target="_blank" style="color: #e94560;">${grupo.link}</a>
             </div>
           </div>
-          <p>${g.descricao || 'Sem descrição'}</p>
-          <div style="margin-top:15px;">
-            ${!g.aprovado ? `
-              <button class="btn btn-success" onclick="aprovar('${g.id}')">Aprovar</button>
-              <button class="btn btn-danger" onclick="reprovar('${g.id}')">Reprovar</button>
+          <p>${grupo.descricao || 'Sem descrição'}</p>
+          <div style="margin-top: 15px;">
+            ${!grupo.aprovado ? `
+              <button class="btn btn-success" onclick="aprovar('${grupo.id}')">✅ Aprovar</button>
+              <button class="btn btn-danger" onclick="reprovar('${grupo.id}')">❌ Reprovar</button>
             ` : `
-              <span style="color:#25d366;">Aprovado</span>
-              ${g.vip ? 
-                `<button class="btn btn-warning" onclick="toggleVip('${g.id}', false)">Remover VIP</button>` :
-                `<button class="btn btn-warning" onclick="toggleVip('${g.id}', true)">Tornar VIP</button>`
+              <span style="color: #25d366;">✅ Aprovado</span>
+              ${grupo.vip ? 
+                `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>` :
+                `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', true)">⭐ Tornar VIP</button>`
               }
             `}
-            <button class="btn btn-primary" onclick="abrirModalMensagem('${g.id}')">Mensagem</button>
-            <button class="btn btn-danger" onclick="deletarGrupo('${g.id}')">Deletar</button>
+            <button class="btn btn-primary" onclick="abrirModalMensagem('${grupo.id}')">📩 Mensagem</button>
+            <button class="btn btn-danger" onclick="deletarGrupo('${grupo.id}')">🗑️ Deletar</button>
           </div>
+          ${grupo.mensagem_admin ? `
+            <div style="background: #f59e0b; color: black; padding: 10px; margin-top: 10px; border-radius: 6px;">
+              <strong>Mensagem enviada:</strong> ${grupo.mensagem_admin}
+            </div>
+          ` : ''}
         </div>
-      `).join("");
+      `).join('');
     }
-    
-        async function aprovar(id) {
+
+    async function aprovar(id) {
       if (!confirm('Aprovar este grupo?')) return;
       try {
         await supabaseFetch(`grupos?id=eq.${id}`, {
@@ -368,12 +367,12 @@
       }
     }
 
-    if (sessionStorage.getItem("admin_auth") === "true") {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("adminPanel").style.display = "block";
+    // Verificar se está logado
+    if (sessionStorage.getItem('admin_auth') === 'true') {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
       carregarGrupos();
     }
   </script>
-
 </body>
 </html>
