@@ -135,7 +135,7 @@ async function criarPagamento() {
     description: $('description').value
   };
 
-  const res = await fetch("http://localhost:8000/criar-pagamento", {
+  const res = await fetch("https://sinuze-api.onrender.com/criar-pagamento", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-api-key": API_KEY },
     body: JSON.stringify(body)
@@ -161,7 +161,7 @@ async function checkPagamento() {
   if (!paymentId) return;
 
   try {
-    const res = await fetch(`http://localhost:8000/aguardar-pagamento/${paymentId}`, {
+    const res = await fetch(`https://sinuze-api.onrender.com/aguardar-pagamento/${paymentId}`, {
       headers: { "x-api-key": API_KEY }
     });
 
@@ -189,7 +189,7 @@ async function checkPagamento() {
 async function cancelarPagamento() {
   if (!paymentId) return;
 
-  const res = await fetch(`http://localhost:8000/cancel/${paymentId}`, {
+  const res = await fetch(`https://sinuze-api.onrender.com/cancel/${paymentId}`, {
     method: "DELETE",
     headers: { "x-api-key": API_KEY }
   });
@@ -229,7 +229,7 @@ $('copy-payload').onclick = () => {
 
 // logs
 $('load-logs').onclick = async () => {
-  const res = await fetch("http://localhost:8000/logs", {
+  const res = await fetch("https://sinuze-api.onrender.com/logs", {
     headers: { "x-api-key": API_KEY }
   });
 
