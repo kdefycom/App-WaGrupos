@@ -2,59 +2,173 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Teste Pagamento PIX</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagamento Sunize PIX</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+  h1 { text-align: center; color: #333; }
+  .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1);}
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+  button { margin-top: 15px; padding: 10px 20px; border: none; border-radius: 4px; background: #007bff; color: #fff; cursor: pointer; }
+  button.cancel { background: #dc3545; }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  #qr-container img { max-width: 300px; display: block; margin: 15px auto; }
+  #status { margin-top: 15px; font-size: 1.2em; text-align: center; }
+  #timer { font-weight: bold; color: #555; margin-top: 10px; text-align: center; }
+</style>
 </head>
 <body>
-<h2>Teste Pagamento PIX</h2>
 
-<button id="criar">Criar Pagamento</button>
-<button id="check">Check Pagamento</button>
-<button id="aguardar">Aguardar Pagamento</button>
+<h1>Pagamento PIX Sunize</h1>
+<div class="container">
+  <div id="form-container">
+    <label>Nome</label>
+    <input type="text" id="name" placeholder="Fulano da Silva">
+    
+    <label>CPF</label>
+    <input type="text" id="document" placeholder="12345678909">
+    
+    <label>Telefone</label>
+    <input type="text" id="phone" placeholder="+5511999999999">
+    
+    <label>Email</label>
+    <input type="email" id="email" placeholder="fulano@example.com">
+    
+    <label>Produto</label>
+    <input type="text" id="product_name" placeholder="Produto Teste">
+    
+    <label>Descrição</label>
+    <input type="text" id="description" placeholder="Descrição mínima">
+    
+    <label>Valor (R$)</label>
+    <input type="number" id="total_amount" value="10">
+    
+    <button id="create-payment">Criar Pagamento</button>
+  </div>
 
-<p>ID: <span id="pagamentoId"></span></p>
-<p>Status: <span id="status"></span></p>
-<p>PIX Payload: <span id="payload"></span></p>
-<img id="qr" style="display:block; margin-top:10px;" />
+  <div id="payment-container" style="display:none;">
+    <h3>Pagamento criado!</h3>
+    <div id="qr-container"></div>
+    <div id="status">Aguardando pagamento...</div>
+    <div id="timer">Tempo restante: 03:00</div>
+    <button id="cancel-payment" class="cancel">Cancelar Pagamento</button>
+    <button id="new-payment" style="margin-top:10px; display:none;">Gerar novo pagamento</button>
+  </div>
+</div>
 
 <script>
-const API_KEY = "23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE"
-let pagamentoId = null
+const API_KEY = "23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE";
+let paymentId = null;
+let timerInterval = null;
+let timeLeft = 180; // 3 minutos
 
-document.getElementById("criar").onclick = async () => {
-  const res = await fetch("http://localhost:8000/criar-pagamento", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": API_KEY },
-    body: JSON.stringify({
-      total_amount: 10,
-      name: "João Teste",
-      document: "12345678909",
-      phone: "+5511999999999",
-      email: "teste@exemplo.com",
-      product_name: "Produto Teste",
-      description: "Descrição mínima"
-    })
-  })
-  const data = await res.json()
-  pagamentoId = data.id
-  document.getElementById("pagamentoId").innerText = data.id
-  document.getElementById("status").innerText = data.status
-  document.getElementById("payload").innerText = data.pix_payload
-  document.getElementById("qr").src = data.qr_base64
+const $ = id => document.getElementById(id);
+
+function formatTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  return `${m}:${s}`;
 }
 
-document.getElementById("check").onclick = async () => {
-  if (!pagamentoId) return alert("Crie um pagamento primeiro")
-  const res = await fetch(`http://localhost:8000/check-payment/${pagamentoId}`)
-  const data = await res.json()
-  document.getElementById("status").innerText = data.status
+async function criarPagamento() {
+  const body = {
+    total_amount: parseFloat($('total_amount').value),
+    name: $('name').value,
+    document: $('document').value,
+    phone: $('phone').value,
+    email: $('email').value,
+    product_name: $('product_name').value,
+    description: $('description').value
+  };
+
+  try {
+    const res = await fetch("http://localhost:8000/criar-pagamento", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY
+      },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    paymentId = data.id;
+    $('qr-container').innerHTML = `<img src="${data.qr_base64}" alt="QR Code PIX">`;
+    $('status').textContent = "Aguardando pagamento...";
+    $('form-container').style.display = 'none';
+    $('payment-container').style.display = 'block';
+    $('new-payment').style.display = 'none';
+    startTimer();
+    checkPagamento();
+  } catch(err) {
+    alert("Erro ao criar pagamento");
+    console.error(err);
+  }
 }
 
-document.getElementById("aguardar").onclick = async () => {
-  if (!pagamentoId) return alert("Crie um pagamento primeiro")
-  const res = await fetch(`http://localhost:8000/aguardar-pagamento/${pagamentoId}`)
-  const data = await res.json()
-  document.getElementById("status").innerText = data.status
+async function checkPagamento() {
+  if(!paymentId) return;
+  try {
+    const res = await fetch(`http://localhost:8000/aguardar-pagamento/${paymentId}`, {
+      headers: { "x-api-key": API_KEY }
+    });
+    const data = await res.json();
+    if(data.success) {
+      $('status').textContent = "Pagamento confirmado!";
+      $('status').style.color = "green";
+      stopTimer();
+    } else if(data.status === "CANCELLED") {
+      $('status').textContent = "Pagamento cancelado!";
+      $('status').style.color = "red";
+      stopTimer();
+    }
+  } catch(err){
+    console.error(err);
+  }
 }
+
+async function cancelarPagamento() {
+  if(!paymentId) return;
+  try {
+    const res = await fetch(`http://localhost:8000/cancel/${paymentId}`, {
+      method: "DELETE",
+      headers: { "x-api-key": API_KEY }
+    });
+    const data = await res.json();
+    $('status').textContent = `Pagamento ${paymentId} cancelado com sucesso!`;
+    $('status').style.color = "red";
+    stopTimer();
+  } catch(err){
+    console.error(err);
+  }
+}
+
+function startTimer() {
+  timeLeft = 180;
+  $('timer').textContent = `Tempo restante: ${formatTime(timeLeft)}`;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    $('timer').textContent = `Tempo restante: ${formatTime(timeLeft)}`;
+    if(timeLeft <= 0) {
+      cancelarPagamento();
+      clearInterval(timerInterval);
+      $('timer').textContent = "Tempo esgotado!";
+      $('new-payment').style.display = 'block';
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+$('create-payment').addEventListener('click', criarPagamento);
+$('cancel-payment').addEventListener('click', cancelarPagamento);
+$('new-payment').addEventListener('click', () => {
+  paymentId = null;
+  $('form-container').style.display = 'block';
+  $('payment-container').style.display = 'none';
+});
 </script>
 </body>
 </html>
