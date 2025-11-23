@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Mini Checkout PIX</title>
+<meta charset="UTF-8">
+<title>Teste Pagamento PIX</title>
 </head>
 <body>
-  <h2>Teste de Pagamento PIX</h2>
-  <form id="checkoutForm">
-    <input type="text" name="name" placeholder="Nome" required><br>
-    <input type="text" name="document" placeholder="CPF (somente números)" required><br>
-    <input type="text" name="phone" placeholder="Telefone (+5511...)" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="text" name="product_name" placeholder="Produto" required><br>
-    <input type="text" name="description" placeholder="Descrição" required><br>
-    <input type="number" name="total_amount" placeholder="Valor (10)" required><br>
-    <button type="submit">Gerar PIX</button>
-  </form>
+<h2>Teste Pagamento PIX</h2>
 
-  <h3>QR Code</h3>
-  <img id="qrcode" src="" alt="QR Code aparecerá aqui" />
+<button id="criar">Criar Pagamento</button>
+<button id="check">Check Pagamento</button>
+<button id="aguardar">Aguardar Pagamento</button>
 
-  <script>
-    const form = document.getElementById('checkoutForm')
-    const qrImg = document.getElementById('qrcode')
+<p>ID: <span id="pagamentoId"></span></p>
+<p>Status: <span id="status"></span></p>
+<p>PIX Payload: <span id="payload"></span></p>
+<img id="qr" style="display:block; margin-top:10px;" />
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
+<script>
+const API_KEY = "23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE"
+let pagamentoId = null
 
-      const formData = new FormData(form)
-      const body = Object.fromEntries(formData.entries())
-
-      // Ajuste de total_amount para número
-      body.total_amount = parseFloat(body.total_amount)
-
-      try {
-        const res = await fetch('http://localhost:8000/criar-pagamento', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': '23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE'
-          },
-          body: JSON.stringify(body)
-        })
-
-        const data = await res.json()
-        if(data.pix_payload) {
-          // Mostra o QR usando a rota /qr/:id
-          qrImg.src = `http://localhost:8000/qr/${data.id}`
-        } else {
-          alert('Erro: Não retornou payload PIX')
-        }
-
-      } catch(err) {
-        console.error(err)
-        alert('Erro ao criar pagamento')
-      }
+document.getElementById("criar").onclick = async () => {
+  const res = await fetch("http://localhost:8000/criar-pagamento", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": API_KEY },
+    body: JSON.stringify({
+      total_amount: 10,
+      name: "João Teste",
+      document: "12345678909",
+      phone: "+5511999999999",
+      email: "teste@exemplo.com",
+      product_name: "Produto Teste",
+      description: "Descrição mínima"
     })
-  </script>
+  })
+  const data = await res.json()
+  pagamentoId = data.id
+  document.getElementById("pagamentoId").innerText = data.id
+  document.getElementById("status").innerText = data.status
+  document.getElementById("payload").innerText = data.pix_payload
+  document.getElementById("qr").src = data.qr_base64
+}
+
+document.getElementById("check").onclick = async () => {
+  if (!pagamentoId) return alert("Crie um pagamento primeiro")
+  const res = await fetch(`http://localhost:8000/check-payment/${pagamentoId}`)
+  const data = await res.json()
+  document.getElementById("status").innerText = data.status
+}
+
+document.getElementById("aguardar").onclick = async () => {
+  if (!pagamentoId) return alert("Crie um pagamento primeiro")
+  const res = await fetch(`http://localhost:8000/aguardar-pagamento/${pagamentoId}`)
+  const data = await res.json()
+  document.getElementById("status").innerText = data.status
+}
+</script>
 </body>
 </html>
