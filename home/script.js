@@ -55,6 +55,13 @@ function setupEventListeners() {
         if (e.key === 'Enter') setSearch(searchInput.value);
     });
     
+    searchInput.addEventListener('input', () => {
+        if (searchInput.value === '' && STATE.searchFilter) {
+            STATE.searchFilter = '';
+            updateUrlAndReload(false);
+        }
+    });
+
     document.getElementById('showMoreCategories').addEventListener('click', () => {
         STATE.categoriasExpandidas = !STATE.categoriasExpandidas;
         renderCategories();
