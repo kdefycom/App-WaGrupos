@@ -89,7 +89,7 @@
     .card-button:hover { background-color: #218838; }
     .loading, .empty { text-align: center; padding: 60px 20px; grid-column: 1 / -1; font-size: 18px; color: var(--text-secondary); }
 
-    .section-title { text-align: center; margin-top: -8px; margin-bottom: 25px; font-size: 24px; font-weight: 700; }
+    .section-title { text-align: center; margin-top: -8px; margin-bottom: 25px; font-size: 24px; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
 
     /* Paginação */
     .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 40px; }

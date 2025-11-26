@@ -129,6 +129,7 @@ function updateSectionTitle() {
     };
     const title = document.getElementById('sectionTitle');
     title.textContent = `${titles[STATE.currentGroupType] || 'Grupos'} em Destaque`;
+    title.style.opacity = 1;
 }
 
 function showLoading(isLoading) {

@@ -25,15 +25,24 @@ function initializePage() {
     STATE.currentPage = page > 0 ? page : 1;
     if (type && ['whatsapp', 'telegram', 'instagram', 'canal_whatsapp'].includes(type)) {
         STATE.currentGroupType = type;
+    } else {
+        STATE.currentGroupType = 'whatsapp';
     }
+
     if (category) {
         STATE.currentCategory = category;
     }
+
+    const searchInput = document.getElementById('searchInput');
     if (search) {
-        document.getElementById('searchInput').value = search;
+        searchInput.value = search;
         STATE.searchFilter = search;
+    } else {
+        searchInput.value = '';
+        STATE.searchFilter = '';
     }
     
+    updateSectionTitle(); // Define o título imediatamente para evitar "piscadelas"
     renderCategories();
     loadGroups();
     updateActiveFilters();
@@ -62,11 +71,19 @@ function setupEventListeners() {
 
 function setFilter(key, value) {
     STATE.currentPage = 1;
+
+    if (key === 'currentGroupType' && STATE.currentGroupType !== value) {
+        STATE.searchFilter = '';
+        document.getElementById('searchInput').value = '';
+        STATE.currentCategory = null; 
+    }
+
     if (key === 'currentCategory' && STATE[key] === value) {
         STATE[key] = null;
     } else {
         STATE[key] = value;
     }
+    
     updateUrlAndReload();
 }
 
@@ -80,7 +97,7 @@ function changePage(newPage) {
     const totalPages = Math.ceil(STATE.totalItems / STATE.itemsPerPage);
     if (newPage > 0 && newPage <= totalPages) {
         STATE.currentPage = newPage;
-        updateUrlAndReload(false); 
+        updateUrlAndReload(); 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
