@@ -1,3 +1,4 @@
+let currentFetchController = null;
 
 const STATE = {
     currentCategory: null,
@@ -33,9 +34,9 @@ function initializePage() {
         STATE.searchFilter = search;
     }
     
-    renderCategories(); // Renderiza as categorias primeiro
-    loadGroups(); // Carrega os grupos
-    updateActiveFilters(); // Atualiza os filtros ativos na UI
+    renderCategories();
+    loadGroups();
+    updateActiveFilters();
 }
 
 function setupEventListeners() {
@@ -62,7 +63,7 @@ function setupEventListeners() {
 function setFilter(key, value) {
     STATE.currentPage = 1;
     if (key === 'currentCategory' && STATE[key] === value) {
-        STATE[key] = null; // Desmarca a categoria
+        STATE[key] = null;
     } else {
         STATE[key] = value;
     }
@@ -85,22 +86,44 @@ function changePage(newPage) {
 }
 
 async function loadGroups() {
-    showLoading(true);
-    const { data, count } = await fetchData();
-    showLoading(false);
-
-    STATE.totalItems = count || 0;
-
-    if (data && data.length > 0) {
-        renderGroups(data);
-    } else {
-        showEmptyMessage();
+    if (currentFetchController) {
+        currentFetchController.abort();
     }
-    updatePagination();
-    updateSectionTitle();
+    currentFetchController = new AbortController();
+    const signal = currentFetchController.signal;
+
+    showLoading(true);
+
+    try {
+        const { data, count } = await fetchData(signal);
+
+        if (signal.aborted) {
+            console.log("Fetch aborted, skipping UI update.");
+            return;
+        }
+
+        STATE.totalItems = count || 0;
+
+        if (data && data.length > 0) {
+            renderGroups(data);
+        } else {
+            showEmptyMessage();
+        }
+        updatePagination();
+        updateSectionTitle();
+
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            showErrorMessage();
+        }
+    } finally {
+        if (!signal.aborted) {
+            showLoading(false);
+        }
+    }
 }
 
-async function fetchData() {
+async function fetchData(signal) {
     const startIndex = (STATE.currentPage - 1) * STATE.itemsPerPage;
     
     let query = `aprovado=eq.true&tipo=eq.${STATE.currentGroupType}`;
@@ -111,20 +134,21 @@ async function fetchData() {
         query += `&or=(nome.ilike.*${encodeURIComponent(STATE.searchFilter)}*,descricao.ilike.*${encodeURIComponent(STATE.searchFilter)}*)`;
     }
 
-    // Combina as buscas de VIP e não-VIP em uma só com ordenação
     const finalQuery = `grupos?${query}&order=vip.desc,created_at.desc&limit=${STATE.itemsPerPage}&offset=${startIndex}`;
 
     try {
-        // Faz a busca dos dados e a contagem total em paralelo
         const [data, countResponse] = await Promise.all([
-            supabaseFetch(finalQuery),
-            supabaseFetch(`grupos?${query}&select=count`, { count: 'exact' })
+            supabaseFetch(finalQuery, { signal }),
+            supabaseFetch(`grupos?${query}&select=count`, { count: 'exact', signal })
         ]);
-        return { data: data, count: countResponse.count };
+        return { data, count: countResponse.count };
     } catch (error) {
-        console.error('Erro ao buscar grupos:', error);
-        showErrorMessage();
-        return { data: [], count: 0 };
+        if (error.name === 'AbortError') {
+            console.log('Fetch aborted');
+        } else {
+            console.error('Erro ao buscar grupos:', error);
+        }
+        throw error;
     }
 }
 
@@ -136,7 +160,6 @@ function updateUrlAndReload(reloadViews = true) {
     if (STATE.searchFilter) params.set('q', STATE.searchFilter);
 
     const newUrl = `${window.location.pathname}?${params.toString()}`;
-    // Usa replaceState para não poluir o histórico do navegador com cada filtro
     history.pushState({}, '', newUrl);
 
     if(reloadViews){
