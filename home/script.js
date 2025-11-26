@@ -33,13 +33,8 @@ function initializePage() {
         STATE.currentCategory = category;
     }
 
-    // Limpa o campo de busca visualmente, mas mantém o filtro se veio da URL
-    document.getElementById('searchInput').value = '';
-    if (search) {
-        STATE.searchFilter = search;
-    } else {
-        STATE.searchFilter = '';
-    }
+    STATE.searchFilter = search || '';
+    document.getElementById('searchInput').value = STATE.searchFilter;
     
     updateSectionTitle();
     renderCategories();
