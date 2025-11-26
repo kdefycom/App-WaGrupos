@@ -138,13 +138,15 @@
 
     return `
       <div class="grupo-item" id="grupo-${grupo.id}">
-        <span class="grupo-id">#${grupo.id}</span>
-        <div class="card-actions">
-           <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar ${tipoEntidade}">${editIcon}</button>
-           <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover ${tipoEntidade}">${trashIcon}</button>
-        </div>
         <div class="grupo-foto-container">
           <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
+        </div>
+        <div class="card-meta-info">
+            <span class="grupo-id">#${grupo.id}</span>
+            <div class="card-actions">
+               <button class="icon-btn edit-btn" onclick="editarGrupo('${grupo.id}')" title="Editar ${tipoEntidade}">${editIcon}</button>
+               <button class="icon-btn remove-btn" onclick="removerGrupo('${grupo.id}')" title="Remover ${tipoEntidade}">${trashIcon}</button>
+            </div>
         </div>
         <div class="grupo-info">
           <div class="grupo-titulo">${grupo.nome}</div>
