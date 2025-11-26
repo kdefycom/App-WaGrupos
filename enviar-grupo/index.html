@@ -101,7 +101,7 @@
         <img id="previewImg" class="preview-img" src="https://via.placeholder.com/300" alt="Preview">
         
         <div class="upload-area" onclick="document.getElementById('fotoUpload').click()">
-          <p>📷 Clique para alterar a foto</p>
+          <p>Clique para alterar a foto</p>
           <input type="file" id="fotoUpload" accept="image/*" onchange="alterarFoto()">
         </div>
 
@@ -120,7 +120,7 @@
         <label>Seu Email *</label>
         <input type="email" id="emailInput" placeholder="seu@email.com" required>
 
-        <button class="btn btn-secondary" onclick="enviarGrupo()">Enviar para Análise</button>
+        <button id="enviarBtn" class="btn btn-secondary" onclick="enviarGrupo()" disabled>Enviar para Análise</button>
         <div class="card-footer">
           Ao enviar seu grupo, você concorda com nossos
           <a href="/terms-privacy/#termos-uso">Termos de Uso</a> e
