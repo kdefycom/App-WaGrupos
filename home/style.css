@@ -98,6 +98,11 @@
     .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
     .pagination .page-info { font-weight: 500; color: var(--text-secondary); }
     
+    .type-filter-btn, #searchButton, .category-item, #showMoreCategories, .card-button, .pagination button, .btn {
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }
+
     @media (max-width: 768px) { 
       .grupos-grid { grid-template-columns: 1fr; } 
       .nav-buttons { flex-wrap: wrap; }
