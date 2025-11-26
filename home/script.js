@@ -89,7 +89,7 @@ async function loadGroups() {
     const { data, count } = await fetchData();
     showLoading(false);
 
-    STATE.totalItems = count;
+    STATE.totalItems = count || 0;
 
     if (data && data.length > 0) {
         renderGroups(data);
