@@ -33,16 +33,15 @@ function initializePage() {
         STATE.currentCategory = category;
     }
 
-    const searchInput = document.getElementById('searchInput');
+    // Limpa o campo de busca visualmente, mas mantém o filtro se veio da URL
+    document.getElementById('searchInput').value = '';
     if (search) {
-        searchInput.value = search;
         STATE.searchFilter = search;
     } else {
-        searchInput.value = '';
         STATE.searchFilter = '';
     }
     
-    updateSectionTitle(); // Define o título imediatamente para evitar "piscadelas"
+    updateSectionTitle();
     renderCategories();
     loadGroups();
     updateActiveFilters();

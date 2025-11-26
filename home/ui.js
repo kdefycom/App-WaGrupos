@@ -141,7 +141,17 @@ function showLoading(isLoading) {
 }
 
 function showEmptyMessage() {
-    document.getElementById('grupos').innerHTML = '<div class="empty">Nenhum grupo encontrado com os filtros selecionados.</div>';
+    const container = document.getElementById('grupos');
+    if (STATE.searchFilter) {
+        const searchTerm = document.createElement('span');
+        searchTerm.style.color = '#2C2C2C';
+        searchTerm.textContent = `"${STATE.searchFilter}"`;
+
+        container.innerHTML = `<div class="empty">Nenhum resultado para a busca por: </div>`;
+        container.firstChild.appendChild(searchTerm);
+    } else {
+        container.innerHTML = '<div class="empty">Nenhum grupo encontrado com os filtros selecionados.</div>';
+    }
 }
 
 function showErrorMessage() {
