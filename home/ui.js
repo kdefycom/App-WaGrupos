@@ -74,12 +74,24 @@ function createCategoryElement(id, name, icon) {
 }
 
 function updateActiveFilters() {
+    const typeMap = {
+        whatsapp: 'whatsappFilter',
+        telegram: 'telegramFilter',
+        instagram: 'instagramFilter',
+        canal_whatsapp: 'whatsappChannelFilter'
+    };
+
     document.querySelectorAll('.type-filter-btn').forEach(el => {
         el.classList.remove('active');
-        if (el.id.startsWith(STATE.currentGroupType.split('_')[0])) { // Handles 'canal_whatsapp' -> 'canal'
-            el.classList.add('active');
-        }
     });
+
+    const activeFilterId = typeMap[STATE.currentGroupType];
+    if (activeFilterId) {
+        const activeButton = document.getElementById(activeFilterId);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+    }
 
     document.querySelectorAll('.category-item').forEach(el => {
         el.classList.remove('active');
