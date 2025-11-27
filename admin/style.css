@@ -140,8 +140,8 @@ input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #444;
     flex-grow: 0; /* Impede que o botão de logout se estique */
 }
 
-.btn-primary { background: #4A90E2; color: white; }
-.btn-primary:hover { background: #4080d0; }
+.btn-primary { background: #e94560; color: white; }
+.btn-primary:hover { background: #d43a55; }
 
 .btn-success { background: #28a745; color: white; }
 .btn-success:hover { background: #218838; }
