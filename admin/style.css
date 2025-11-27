@@ -136,6 +136,10 @@ input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #444;
   flex-grow: 1; /* Faz os botões ocuparem espaço igual */
 }
 
+.logout-btn {
+    flex-grow: 0; /* Impede que o botão de logout se estique */
+}
+
 .btn-primary { background: #4A90E2; color: white; }
 .btn-primary:hover { background: #4080d0; }
 
