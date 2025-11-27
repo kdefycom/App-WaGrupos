@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pacotes VIP - KDefy</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='90' font-size='90'>⭐</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Pacote VIP</h1>
+    <p class="subtitle">Destaque seu grupo na listagem e alcance mais pessoas.</p>
+
+    <div class="benefits-info">
+      <p>Os pacotes VIP são a maneira mais eficaz de aumentar a visibilidade do seu grupo. Ao se tornar VIP, seu grupo ganha uma posição de destaque, alcançando um público maior e mais engajado. O impulsionamento é automático e garante que seu grupo seja visto por milhares de usuários que procuram ativamente por novas comunidades.</p>
+    </div>
+
+    <div class="packages-grid">
+      <!-- Pacote Bronze -->
+      <div class="package-card" id="bronze">
+        <h2>Bronze 🥉</h2>
+        <p class="price">R$5</p>
+        <p class="price-details">Pagamento único</p>
+        <ul>
+          <li>Selo VIP por 7 dias</li>
+          <li>Posição de destaque na categoria</li>
+        </ul>
+        <button class="btn" onclick="comprar('Bronze')">Contratar</button>
+      </div>
+
+      <!-- Pacote Prata -->
+      <div class="package-card" id="silver">
+        <h2>Prata 🥈</h2>
+        <p class="price">R$10</p>
+        <p class="price-details">Pagamento único</p>
+        <ul>
+          <li>Selo VIP por 15 dias</li>
+          <li>Posição de destaque na categoria</li>
+          <li>Notificação para novos membros</li>
+        </ul>
+        <button class="btn" onclick="comprar('Prata')">Contratar</button>
+      </div>
+
+      <!-- Pacote Ouro -->
+      <div class="package-card" id="gold">
+        <h2>Ouro 🥇</h2>
+        <p class="price">R$20</p>
+        <p class="price-details">Pagamento único</p>
+        <ul>
+          <li>Selo VIP por 30 dias</li>
+          <li>Destaque principal na home</li>
+          <li>Notificação para novos membros</li>
+          <li>Disparo em redes sociais</li>
+        </ul>
+        <button class="btn" onclick="comprar('Ouro')">Contratar</button>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+        <p>Antes de efetuar a compra, <a href="/termos-uso/">leia nossos Termos de Uso</a> para entender as regras de impulsionamento e pagamento.</p>
+        <p>&copy; 2024 Kdefy Grupos. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
