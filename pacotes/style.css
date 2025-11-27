@@ -23,6 +23,7 @@
   --bronze: #cd7f32;
   --silver: #c0c0c0;
   --gold: #ffd700;
+  --diamond: #b9f2ff;
 }
 
 body {
@@ -141,3 +142,6 @@ h1 {
 
 #gold { border-top: 8px solid var(--gold); }
 #gold h2, #gold .price { color: var(--gold); }
+
+#diamond { border-top: 8px solid var(--diamond); }
+#diamond h2, #diamond .price { color: var(--diamond); }
