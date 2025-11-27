@@ -52,7 +52,7 @@
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
-    .info-box.blue { background-color: #1976d2; border-left: 4px solid #4A90E2; color: #fff; }
+    .info-box.blue { background-color: #4d2a2a; border-left: 4px solid var(--action-red); color: #ffc2c2; }
     .info-box.gray { background-color: var(--bg-container); border-left: 4px solid var(--border-color); color: var(--text-primary); }
 
     .content-section { padding: 50px 0; }
