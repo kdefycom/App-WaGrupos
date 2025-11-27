@@ -52,7 +52,8 @@
     .info-box a { color: var(--action-blue); text-decoration: none; font-weight: 700; }
     .info-box a:hover { text-decoration: underline; }
     .info-box .emoji { font-size: 20px; }
-    .info-box.blue { background-color: #4d2a2a; border-left: 4px solid var(--action-red); color: #ffc2c2; }
+    .info-box.blue { background-color: #4d2a2a; border-left: 4px solid var(--action-red); color: var(--text-primary); }
+    .info-box.blue strong { color: #FFFFFF; }
     .info-box.gray { background-color: var(--bg-container); border-left: 4px solid var(--border-color); color: var(--text-primary); }
 
     .content-section { padding: 50px 0; }
