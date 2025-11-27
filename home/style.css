@@ -25,10 +25,10 @@
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #1F1F1F; box-shadow: 2px 0 10px rgba(0,0,0,0.5); z-index: 1001; transition: left 0.3s; padding: 20px; border-right: 1px solid var(--border-color); }
     .sidebar.active { left: 0; }
     .sidebar h3 { font-size: 20px; color: var(--text-primary); margin-bottom: 25px; }
-    .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-secondary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
+    .sidebar a { display: flex; align-items: center; gap: 15px; padding: 12px; text-decoration: none; color: var(--text-primary); border-radius: 8px; font-weight: 500; margin-bottom: 8px; }
     .sidebar a:hover { background-color: var(--gray-dark); color: var(--text-primary); }
     .sidebar a.danger:hover { background-color: #ffebee; color: #dc3545; }
-    .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .sidebar svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-secondary);}
 
     /* Header */
     .main-header { background-color: var(--header-bg); padding: 15px 0; position: sticky; top: 0; z-index: 998; border-bottom: 1px solid var(--border-color);}
