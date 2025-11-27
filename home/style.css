@@ -49,12 +49,13 @@
     .filters-section { background-color: var(--card-bg); padding: 30px 0; border-bottom: 1px solid var(--border-color); }
     
     .type-filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
-    .type-filter-btn { padding: 10px 25px; border-radius: 20px; border: 1px solid var(--border-color); background-color: transparent; color: var(--text-secondary); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .type-filter-btn { padding: 10px 25px; border-radius: 20px; border: 1px solid var(--border-color); background-color: transparent; color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .type-filter-btn:hover { background-color: var(--gray-dark); color: var(--text-primary); }
     .type-filter-btn.active { background-color: var(--accent-green); color: white; border-color: var(--accent-green); }
 
     #searchInput { flex-grow: 1; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px 0 0 8px; font-size: 16px; outline: none; background-color: var(--bg-color); color: var(--text-primary); }
     #searchInput:focus { border-color: var(--accent-green); }
+    #searchInput::placeholder { color: var(--text-primary); }
     #searchButton { padding: 0 30px; border: 1px solid var(--accent-green); border-left: 0; background-color: var(--accent-green); color: white; font-size: 16px; font-weight: 700; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; }
     #searchButton:hover { background-color: var(--accent-green-hover); }
     .categories-bar { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px; }
