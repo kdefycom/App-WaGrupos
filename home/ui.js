@@ -75,6 +75,7 @@ function createCategoryElement(id, name, icon) {
 
 function updateActiveFilters() {
     const typeMap = {
+        todos: 'allFilter',
         whatsapp: 'whatsappFilter',
         telegram: 'telegramFilter',
         instagram: 'instagramFilter',
@@ -122,13 +123,14 @@ function getCategoryName(id) {
 
 function updateSectionTitle() {
     const titles = {
-        whatsapp: 'Grupos de WhatsApp',
-        telegram: 'Grupos de Telegram',
-        instagram: 'Grupos de Instagram',
-        canal_whatsapp: 'Canais do WhatsApp'
+        todos: 'Grupos em Destaque',
+        whatsapp: 'Grupos de WhatsApp em Destaque',
+        telegram: 'Grupos de Telegram em Destaque',
+        instagram: 'Grupos de Instagram em Destaque',
+        canal_whatsapp: 'Canais do WhatsApp em Destaque'
     };
     const title = document.getElementById('sectionTitle');
-    title.textContent = `${titles[STATE.currentGroupType] || 'Grupos'} em Destaque`;
+    title.textContent = titles[STATE.currentGroupType] || 'Grupos em Destaque';
     title.style.opacity = 1;
 }
 

@@ -2,7 +2,7 @@ let currentFetchController = null;
 
 const STATE = {
     currentCategory: null,
-    currentGroupType: 'whatsapp',
+    currentGroupType: 'todos', // Default filter is now 'todos'
     categoriasExpandidas: false,
     currentPage: 1,
     itemsPerPage: 25,
@@ -26,7 +26,7 @@ function initializePage() {
     if (type && ['whatsapp', 'telegram', 'instagram', 'canal_whatsapp'].includes(type)) {
         STATE.currentGroupType = type;
     } else {
-        STATE.currentGroupType = 'whatsapp';
+        STATE.currentGroupType = 'todos'; // Default to 'todos' if no type or invalid type
     }
 
     if (category) {
@@ -43,6 +43,7 @@ function initializePage() {
 }
 
 function setupEventListeners() {
+    document.getElementById('allFilter').addEventListener('click', () => setFilter('currentGroupType', 'todos'));
     document.getElementById('whatsappFilter').addEventListener('click', () => setFilter('currentGroupType', 'whatsapp'));
     document.getElementById('telegramFilter').addEventListener('click', () => setFilter('currentGroupType', 'telegram'));
     document.getElementById('instagramFilter').addEventListener('click', () => setFilter('currentGroupType', 'instagram'));
@@ -144,14 +145,21 @@ async function loadGroups() {
 async function fetchData(signal) {
     const startIndex = (STATE.currentPage - 1) * STATE.itemsPerPage;
     
-    let query = `aprovado=eq.true&tipo=eq.${STATE.currentGroupType}`;
-    if (STATE.currentCategory) {
-        query += `&categoria=eq.${STATE.currentCategory}`;
-    }
-    if (STATE.searchFilter) {
-        query += `&or=(nome.ilike.*${encodeURIComponent(STATE.searchFilter)}*,descricao.ilike.*${encodeURIComponent(STATE.searchFilter)}*)`;
+    let queryParts = ['aprovado=eq.true'];
+
+    if (STATE.currentGroupType !== 'todos') {
+        queryParts.push(`tipo=eq.${STATE.currentGroupType}`);
     }
 
+    if (STATE.currentCategory) {
+        queryParts.push(`categoria=eq.${STATE.currentCategory}`);
+    }
+
+    if (STATE.searchFilter) {
+        queryParts.push(`or=(nome.ilike.*${encodeURIComponent(STATE.searchFilter)}*,descricao.ilike.*${encodeURIComponent(STATE.searchFilter)}*)`);
+    }
+
+    const query = queryParts.join('&');
     const finalQuery = `grupos?${query}&order=vip.desc,created_at.desc&limit=${STATE.itemsPerPage}&offset=${startIndex}`;
 
     try {
@@ -173,7 +181,9 @@ async function fetchData(signal) {
 function updateUrlAndReload(reloadViews = true) {
     const params = new URLSearchParams();
     if (STATE.currentPage > 1) params.set('page', STATE.currentPage);
-    if (STATE.currentGroupType !== 'whatsapp') params.set('type', STATE.currentGroupType);
+    if (STATE.currentGroupType !== 'todos') { // Only set type if it's not the default 'todos'
+        params.set('type', STATE.currentGroupType);
+    }
     if (STATE.currentCategory) params.set('category', STATE.currentCategory);
     if (STATE.searchFilter) params.set('q', STATE.searchFilter);
 
