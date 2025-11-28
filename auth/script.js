@@ -147,9 +147,12 @@ function renderizarGrupos(grupos) {
   lista.innerHTML = grupos.map(grupo => {
     const isReprovado = (grupo.mensagem_admin || '').toLowerCase().includes('reprovado');
     const isPendente = !grupo.aprovado && !isReprovado;
+    const solicitouExclusao = grupo.solicitou_exclusao;
 
     let statusBadge = '';
-    if (grupo.aprovado) {
+    if (solicitouExclusao) {
+        statusBadge = `<span class="status-badge status-exclusao">EXCLUSÃO SOLICITADA</span>`;
+    } else if (grupo.aprovado) {
         statusBadge = `<span class="status-badge status-aprovado">Aprovado</span>`;
     } else if (isReprovado) {
         statusBadge = `<span class="status-badge status-reprovado">Reprovado</span>`;
@@ -172,9 +175,13 @@ function renderizarGrupos(grupos) {
     const motivoHTML = isReprovado 
         ? `<div class="status-info-reprovado"><strong>Motivo:</strong> ${grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim()}</div>` 
         : '';
+    
+    const exclusaoHTML = solicitouExclusao
+        ? `<div class="status-info-exclusao"><strong>Aviso:</strong> O usuário solicitou a exclusão deste grupo.</div>`
+        : '';
 
     return `
-      <div class="grupo-item" id="grupo-${grupo.id}">
+      <div class="grupo-item ${solicitouExclusao ? 'grupo-solicitou-exclusao' : ''}" id="grupo-${grupo.id}">
         ${statusBadge}
         <div class="grupo-foto-container">
           <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
@@ -194,6 +201,7 @@ function renderizarGrupos(grupos) {
             <button class="btn btn-danger" onclick="deletarGrupo('${grupo.id}')">Deletar</button>
           </div>
           ${motivoHTML}
+          ${exclusaoHTML}
         </div>
       </div>
     `;

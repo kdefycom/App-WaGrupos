@@ -288,6 +288,7 @@
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
   function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
   async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); openBoostPopup(); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
+  
   async function removerGrupo(id) {
     const grupo = meusGrupos.find(g => g.id === id);
     if (!grupo) return;
@@ -297,9 +298,20 @@
     if (!confirm) return;
 
     try { 
-      await removerGrupoLocal(id); 
-      // Não é necessário deletar da API aqui se o admin já o fez, mas mantemos para o usuário poder deletar.
-      await supabaseFetch(`grupos?id=eq.${id}`, { method: 'DELETE' }); 
+      await removerGrupoLocal(id);
+      
+      // Ação segura: Apenas marca o grupo para exclusão pelo admin
+      await supabaseFetch(`grupos?id=eq.${id}`, { 
+        method: 'PATCH',
+        body: JSON.stringify({ solicitou_exclusao: true, mensagem_admin: 'Usuário solicitou a exclusão.' }) 
+      }); 
+      
+      await customAlert('Sua solicitação de exclusão foi enviada ao administrador. O grupo já foi removido da sua lista.', 'Sucesso');
+      
       carregarMeusGrupos(); 
-    } catch {}
+
+    } catch (error) {
+        console.error("Erro ao solicitar exclusão:", error);
+        await customAlert('Ocorreu um erro ao enviar sua solicitação. Tente novamente.', 'Erro');
+    }
   }
