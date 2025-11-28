@@ -1,9 +1,11 @@
 
   let meusGrupos = [];
+  let boostPopupOverlay, boostPopup, closePopupButton;
 
   document.addEventListener('DOMContentLoaded', () => {
     setupSidebar();
     setupModal();
+    setupBoostPopup(); 
     carregarMeusGrupos();
     setupImagePreviewHidden();
   });
@@ -54,6 +56,33 @@
     });
     cancelBtn.addEventListener('click', fecharModalEdicao);
     saveBtn.addEventListener('click', salvarEdicao);
+  }
+
+  function setupBoostPopup() {
+    boostPopupOverlay = document.getElementById('boost-popup-overlay');
+    boostPopup = document.getElementById('boost-popup');
+    closePopupButton = document.getElementById('close-popup');
+
+    if (boostPopupOverlay && boostPopup && closePopupButton) {
+        closePopupButton.addEventListener('click', closeBoostPopup);
+        boostPopupOverlay.addEventListener('click', (event) => {
+            if (event.target === boostPopupOverlay) {
+                closeBoostPopup();
+            }
+        });
+    }
+  }
+
+  function openBoostPopup() {
+    if (boostPopupOverlay) {
+        boostPopupOverlay.style.display = 'flex';
+    }
+  }
+
+  function closeBoostPopup() {
+    if (boostPopupOverlay) {
+        boostPopupOverlay.style.display = 'none';
+    }
   }
 
   async function carregarMeusGrupos() {
@@ -258,7 +287,7 @@
   function getCategoryName(id) { if (typeof CATEGORIES === 'undefined' || !id) return 'Outros'; const category = CATEGORIES.find(cat => cat.id === id); return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');}
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
   function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
-  async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
+  async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); openBoostPopup(); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
   async function removerGrupo(id) {
     const grupo = meusGrupos.find(g => g.id === id);
     if (!grupo) return;
