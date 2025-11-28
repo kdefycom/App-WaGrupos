@@ -1,4 +1,10 @@
 
+  function escapeHTML(str) {
+    const p = document.createElement('p');
+    p.appendChild(document.createTextNode(str));
+    return p.innerHTML;
+  }
+
   let meusGrupos = [];
   let boostPopupOverlay, boostPopup, closePopupButton;
 
@@ -152,12 +158,12 @@
        actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
        const motivo = grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim();
        if (motivo) {
-         statusInfoHTML = `<div class="status-info-reprovado"><strong>Motivo:</strong> ${motivo}</div>`;
+         statusInfoHTML = `<div class="status-info-reprovado"><strong>Motivo:</strong> ${escapeHTML(motivo)}</div>`;
        }
     } else {
       actionButtonHTML = `<button class="btn-large" disabled>EM ANÁLISE</button>`;
       if (grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reanálise')) {
-        statusInfoHTML = `<div class="status-info-analise">${grupo.mensagem_admin}</div>`;
+        statusInfoHTML = `<div class="status-info-analise">${escapeHTML(grupo.mensagem_admin)}</div>`;
       }
     }
 
@@ -176,8 +182,8 @@
           <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
         </div>
         <div class="grupo-info">
-          <div class="grupo-titulo">${grupo.nome}</div>
-          <div class="grupo-desc">${grupo.descricao || 'Sem descrição.'}</div>
+          <div class="grupo-titulo">${escapeHTML(grupo.nome)}</div>
+          <div class="grupo-desc">${escapeHTML(grupo.descricao || 'Sem descrição.')}</div>
           <div class="grupo-details">
             <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria)} • <strong>TIPO:</strong> ${grupo.tipo}
           </div>
