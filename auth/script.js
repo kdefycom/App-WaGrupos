@@ -160,16 +160,25 @@ function renderizarGrupos(grupos) {
         statusBadge = `<span class="status-badge status-pendente">Pendente</span>`;
     }
 
-    let actionButtonsHTML = '';
-    if (isPendente) {
-        actionButtonsHTML = `
-            <button class="btn btn-success" onclick="aprovar('${grupo.id}')">Aprovar</button>
-            <button class="btn btn-warning" onclick="reprovar('${grupo.id}')">Reprovar</button>
+    let adminActionsHTML = '';
+    if (solicitouExclusao) {
+        adminActionsHTML = `<button class="btn btn-danger" onclick="deletarGrupo('${grupo.id}')">Deletar</button>`;
+    } else {
+        let otherActions = '';
+        if (isPendente) {
+            otherActions = `
+                <button class="btn btn-success" onclick="aprovar('${grupo.id}')">Aprovar</button>
+                <button class="btn btn-warning" onclick="reprovar('${grupo.id}')">Reprovar</button>
+            `;
+        } else if (grupo.aprovado) {
+            otherActions = grupo.vip 
+                ? `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>`
+                : `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', true)">⭐ Tornar VIP</button>`;
+        }
+        adminActionsHTML = `
+            ${otherActions}
+            <button class="btn btn-danger" onclick="deletarGrupo('${grupo.id}')">Deletar</button>
         `;
-    } else if (grupo.aprovado) {
-        actionButtonsHTML = grupo.vip 
-            ? `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>`
-            : `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', true)">⭐ Tornar VIP</button>`;
     }
     
     const motivoHTML = isReprovado 
@@ -197,8 +206,7 @@ function renderizarGrupos(grupos) {
           <a href="${grupo.link}" target="_blank" class="grupo-link">${grupo.link}</a>
           
           <div class="card-footer-action-admin">
-             ${actionButtonsHTML}
-            <button class="btn btn-danger" onclick="deletarGrupo('${grupo.id}')">Deletar</button>
+             ${adminActionsHTML}
           </div>
           ${motivoHTML}
           ${exclusaoHTML}
