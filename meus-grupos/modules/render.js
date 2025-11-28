@@ -46,13 +46,13 @@ function renderizarGrupo(grupo) {
                 <button class="icon-btn remove-btn" data-action="remover" data-id="${grupo.id}" title="Remover ${tipoEntidade}">${trashIcon}</button>
             </div>
             <div class="grupo-foto-container">
-                <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
+                <img src="${escapeHTML(grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem')}" class="grupo-foto">
             </div>
             <div class="grupo-info">
-                <div class="grupo-titulo">${grupo.nome}</div>
-                <div class="grupo-desc">${grupo.descricao || 'Sem descrição.'}</div>
+                <div class="grupo-titulo">${escapeHTML(grupo.nome)}</div>
+                <div class="grupo-desc">${escapeHTML(grupo.descricao || 'Sem descrição.')}</div>
                 <div class="grupo-details">
-                    <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria)} • <strong>TIPO:</strong> ${grupo.tipo}
+                    <strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria)} • <strong>TIPO:</strong> ${escapeHTML(grupo.tipo)}
                 </div>
                 <div class="card-footer-action">
                     ${actionButtonHTML}
