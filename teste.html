@@ -1,254 +1,180 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pagamento Sunize PIX</title>
-
-<style>
-  body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-  h1 { text-align: center; color: #333; }
-  .container {
-    max-width: 650px; margin: auto; background: #fff;
-    padding: 20px; border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  }
-  label { display: block; margin-top: 10px; font-weight: bold; }
-  input { width: 100%; padding: 8px; margin-top: 5px;
-    border-radius: 4px; border: 1px solid #ccc; }
-  button {
-    margin-top: 15px; padding: 10px 20px;
-    border: none; border-radius: 4px;
-    background: #007bff; color: #fff; cursor: pointer;
-  }
-  button.cancel { background: #dc3545; }
-  button:disabled { opacity: .6; cursor: not-allowed; }
-  #qr-container img { max-width: 300px; display: block; margin: 15px auto; }
-  #status { margin-top: 15px; font-size: 1.2em; text-align: center; }
-  #timer { font-weight: bold; color: #555; margin-top: 10px; text-align: center; }
-  .payload-box {
-    background: #eee; padding: 10px; border-radius: 6px;
-    word-break: break-all; margin-top: 10px; font-family: monospace;
-  }
-  .log-box {
-    white-space: pre-wrap; max-height: 300px;
-    overflow-y: auto; background: #eee;
-    padding: 15px; border-radius: 6px; margin-top: 20px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Upload para Supabase</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    main {
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      background-color: #2a2a2a;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    #previewContainer {
+        margin-bottom: 1.5rem;
+    }
+    #previewImg {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 8px;
+      background-color: #3a3a3a;
+    }
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    button, label {
+      cursor: pointer;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      background-color: #007bff;
+      transition: background-color 0.2s;
+    }
+    button:hover, label:hover {
+        background-color: #0056b3;
+    }
+    button:disabled {
+        background-color: #555;
+        cursor: not-allowed;
+    }
+    #fotoUpload {
+        display: none; /* O input real fica escondido */
+    }
+    #resultado {
+      margin-top: 2rem;
+    }
+    #resultado img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    #status {
+        margin-top: 1rem;
+        font-style: italic;
+        color: #aaa;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Painel Sunize</h1>
+  <main>
+    <h1>Teste de Upload de Foto</h1>
+    
+    <div id="previewContainer">
+        <img id="previewImg" src="https://via.placeholder.com/300x200.png?text=Preview" alt="Pré-visualização da imagem">
+    </div>
 
-<div class="container">
+    <div class="button-group">
+        <label for="fotoUpload">Alterar Foto</label>
+        <input type="file" id="fotoUpload" accept="image/*">
+        <button id="enviarBtn">Enviar para Supabase</button>
+    </div>
 
-  <h2>Rotas da API</h2>
-  <ul>
-    <li>POST /criar-pagamento</li>
-    <li>GET /check-payment/:id</li>
-    <li>GET /aguardar-pagamento/:id</li>
-    <li>DELETE /cancel/:id</li>
-    <li>GET /qr/:id</li>
-    <li>GET /pong</li>
-    <li>GET /logs</li>
-  </ul>
+    <div id="status"></div>
+    <div id="resultado"></div>
+  </main>
 
-  <hr>
+  <script>
+    // Credenciais e configuração do Supabase (do seu app.js)
+    const SUPABASE_URL = 'https://aqyaxfrukssndxgctukf.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxeWF4ZnJ1a3NzbmR4Z2N0dWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzMDY0MTYsImV4cCI6MjA3Nzg4MjQxNn0.fqP4BfoGBr-A8piJevWto3DnJByYvLxB9gudq81KvJw';
+    const BUCKET_NAME = 'fotos_grupos';
 
-  <h2>Criar Pagamento</h2>
+    // Elementos do DOM
+    const previewImg = document.getElementById('previewImg');
+    const fotoUploadInput = document.getElementById('fotoUpload');
+    const enviarBtn = document.getElementById('enviarBtn');
+    const statusDiv = document.getElementById('status');
+    const resultadoDiv = document.getElementById('resultado');
 
-  <div id="form-container">
-    <label>Nome</label>
-    <input type="text" id="name">
+    let arquivoFoto = null;
 
-    <label>CPF</label>
-    <input type="text" id="document">
-
-    <label>Telefone</label>
-    <input type="text" id="phone">
-
-    <label>Email</label>
-    <input type="email" id="email">
-
-    <label>Produto</label>
-    <input type="text" id="product_name">
-
-    <label>Descrição</label>
-    <input type="text" id="description">
-
-    <label>Valor (R$)</label>
-    <input type="number" id="total_amount" value="10">
-
-    <button id="create-payment">Criar Pagamento</button>
-  </div>
-
-  <div id="payment-container" style="display:none;">
-    <h3>Pagamento criado!</h3>
-
-    <div id="qr-container"></div>
-
-    <h4>Payload:</h4>
-    <div id="payload-box" class="payload-box"></div>
-    <button id="copy-payload">Copiar Payload</button>
-
-    <div id="status">Aguardando pagamento...</div>
-    <div id="timer">Tempo restante: 03:00</div>
-
-    <button id="cancel-payment" class="cancel">Cancelar Pagamento</button>
-    <button id="new-payment" style="margin-top:10px; display:none;">Gerar novo pagamento</button>
-  </div>
-
-  <hr>
-
-  <h2>Logs</h2>
-  <button id="load-logs">Carregar Logs</button>
-  <a id="download-logs" href="#" download="logs.json">
-    <button>Baixar Logs</button>
-  </a>
-
-  <div id="logs-view" class="log-box" style="display:none;"></div>
-
-</div>
-
-<script>
-const API_KEY = "23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE";
-
-let paymentId = null;
-let timerInterval = null;
-let timeLeft = 180;
-
-const $ = id => document.getElementById(id);
-
-function formatTime(sec){
-  return String(Math.floor(sec/60)).padStart(2,'0') + ":" + String(sec%60).padStart(2,'0');
-}
-
-async function criarPagamento() {
-  const body = {
-    total_amount: parseFloat($('total_amount').value),
-    name: $('name').value,
-    document: $('document').value,
-    phone: $('phone').value,
-    email: $('email').value,
-    product_name: $('product_name').value,
-    description: $('description').value
-  };
-
-  const res = await fetch("https://sinuze-api.onrender.com/criar-pagamento", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": API_KEY },
-    body: JSON.stringify(body)
-  });
-
-  const data = await res.json();
-
-  if (!data.id) return alert("Erro ao criar pagamento.");
-
-  paymentId = data.id;
-
-  $('qr-container').innerHTML = `<img src="${data.qr_base64}">`;
-  $('payload-box').textContent = data.pix_payload;
-
-  $('form-container').style.display = 'none';
-  $('payment-container').style.display = 'block';
-
-  startTimer();
-  checkPagamento();
-}
-
-async function checkPagamento() {
-  if (!paymentId) return;
-
-  try {
-    const res = await fetch(`https://sinuze-api.onrender.com/aguardar-pagamento/${paymentId}`, {
-      headers: { "x-api-key": API_KEY }
+    // Evento para quando o usuário seleciona um arquivo
+    fotoUploadInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        arquivoFoto = file;
+        previewImg.src = URL.createObjectURL(file); // Mostra o preview
+      }
     });
 
-    const d = await res.json();
+    // Evento para o clique no botão de enviar
+    enviarBtn.addEventListener('click', async () => {
+      if (!arquivoFoto) {
+        alert('Por favor, selecione uma imagem primeiro.');
+        return;
+      }
 
-    if (d.status === "CANCELLED") {
-      $('status').textContent = "Pagamento cancelado!";
-      $('status').style.color = "red";
-      $('cancel-payment').disabled = true;
-      $('cancel-payment').textContent = "Esse pagamento já foi cancelado";
-      stopTimer();
-      return;
-    }
+      enviarBtn.disabled = true;
+      enviarBtn.textContent = 'Enviando...';
+      statusDiv.textContent = 'Iniciando upload...';
+      resultadoDiv.innerHTML = '';
 
-    if (d.success) {
-      $('status').textContent = "Pagamento confirmado!";
-      $('status').style.color = "green";
-      stopTimer();
-      return;
-    }
+      try {
+        // 1. Criar um nome de arquivo único para evitar sobreposições
+        const filePath = `public/test-${Date.now()}-${arquivoFoto.name}`;
+        const uploadUrl = `${SUPABASE_URL}/storage/v1/object/${BUCKET_NAME}/${filePath}`;
 
-  } catch {}
-}
+        // 2. Fazer a requisição de upload para o Supabase Storage
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': arquivoFoto.type,
+          },
+          body: arquivoFoto, // O corpo da requisição é o próprio arquivo
+        });
 
-async function cancelarPagamento() {
-  if (!paymentId) return;
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Falha no upload: ${errorData.message}`);
+        }
+        
+        statusDiv.textContent = 'Upload concluído! Gerando URL...';
 
-  const res = await fetch(`https://sinuze-api.onrender.com/cancel/${paymentId}`, {
-    method: "DELETE",
-    headers: { "x-api-key": API_KEY }
-  });
+        // 3. Construir a URL pública da imagem
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${filePath}`;
 
-  $('status').textContent = "Pagamento cancelado!";
-  $('status').style.color = "red";
+        // 4. Exibir a imagem na página
+        resultadoDiv.innerHTML = `
+          <h3>Imagem Enviada com Sucesso!</h3>
+          <p>Esta imagem foi carregada do Supabase Storage:</p>
+          <img src="${publicUrl}" alt="Imagem carregada do Supabase">
+          <p>URL Pública: <a href="${publicUrl}" target="_blank">${publicUrl}</a></p>
+        `;
 
-  $('cancel-payment').disabled = true;
-  $('cancel-payment').textContent = "Esse pagamento já foi cancelado";
+      } catch (error) {
+        console.error('Erro detalhado:', error);
+        statusDiv.textContent = 'Erro!';
+        resultadoDiv.innerHTML = `<p style="color: red;">Ocorreu um erro: ${error.message}</p>`;
+      } finally {
+        enviarBtn.disabled = false;
+        enviarBtn.textContent = 'Enviar para Supabase';
+      }
+    });
+  </script>
 
-  stopTimer();
-}
-
-function startTimer() {
-  timeLeft = 180;
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    $('timer').textContent = "Tempo restante: " + formatTime(timeLeft);
-
-    if (timeLeft <= 0) {
-      cancelarPagamento();
-      $('timer').textContent = "Tempo esgotado!";
-      clearInterval(timerInterval);
-    }
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timerInterval);
-}
-
-// copiar payload
-$('copy-payload').onclick = () => {
-  navigator.clipboard.writeText($('payload-box').textContent);
-  alert("Payload copiado!");
-};
-
-// logs
-$('load-logs').onclick = async () => {
-  const res = await fetch("https://sinuze-api.onrender.com/logs", {
-    headers: { "x-api-key": API_KEY }
-  });
-
-  const d = await res.json();
-
-  $('logs-view').style.display = 'block';
-  $('logs-view').textContent = JSON.stringify(d.data, null, 2);
-
-  const blob = new Blob([JSON.stringify(d.data, null, 2)], { type: "application/json" });
-  $('download-logs').href = URL.createObjectURL(blob);
-};
-
-$('create-payment').onclick = criarPagamento;
-$('cancel-payment').onclick = cancelarPagamento;
-
-$('new-payment').onclick = () => {
-  $('payment-container').style.display = 'none';
-  $('form-container').style.display = 'block';
-};
-</script>
 </body>
 </html>

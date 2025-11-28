@@ -176,6 +176,10 @@
     function alterarFoto() {
       const file = document.getElementById('fotoUpload').files[0];
       if (file) {
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+          customAlert('A imagem é muito grande. O tamanho máximo é de 5MB.', 'Erro');
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
           fotoUrl = e.target.result;
