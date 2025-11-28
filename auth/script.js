@@ -34,7 +34,8 @@ async function fetchAsAdmin(endpoint, options = {}) {
   if (error || !session) {
     console.error('Não está autenticado.');
     document.getElementById('adminPanel').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.body.classList.remove('admin-view');
     throw new Error('Sessão de administrador inválida ou expirada.');
   }
 
@@ -224,11 +225,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data: { session } } = await window.supabase.auth.getSession();
     
     if (session) {
+        document.body.classList.add('admin-view');
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
         carregarGrupos();
     } else {
-        document.getElementById('loginScreen').style.display = 'block';
+        document.body.classList.remove('admin-view');
+        document.getElementById('loginScreen').style.display = 'flex';
         document.getElementById('adminPanel').style.display = 'none';
     }
 });

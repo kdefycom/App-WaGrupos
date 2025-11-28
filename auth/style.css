@@ -5,15 +5,20 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #1A1A19;
   color: #F8F8F7;
-  padding: 20px;
 }
 
-.login-screen {
+/* Aplica padding geral, mas permite centralização na tela de login */
+body.admin-view {
+    padding: 20px;
+}
+
+.login-screen-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100%;
+  padding: 20px;
 }
 
 .login-form {
