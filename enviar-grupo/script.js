@@ -16,6 +16,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       popularCategorias();
+      setupCharCounter(); // Adicionado aqui
+
       document.getElementById('linkInput').addEventListener('input', () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(validarLinkEmTempoReal, 500);
@@ -44,6 +46,23 @@
 
       verificarCamposObrigatorios();
     });
+
+    function setupCharCounter() {
+      const descInput = document.getElementById('descInput');
+      const charCounter = document.getElementById('charCounter');
+      const maxLength = descInput.maxLength;
+
+      descInput.addEventListener('input', () => {
+        const currentLength = descInput.value.length;
+        charCounter.textContent = `${currentLength}/${maxLength}`;
+        
+        if (currentLength > maxLength) {
+          charCounter.classList.add('limite-excedido');
+        } else {
+          charCounter.classList.remove('limite-excedido');
+        }
+      });
+    }
 
     function popularCategorias() {
       const select = document.getElementById('categoriaSelect');
