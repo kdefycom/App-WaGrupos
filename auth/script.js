@@ -73,7 +73,11 @@ async function carregarGrupos() {
     renderizarGrupos(grupos);
   } catch (error) {
     console.error('Erro:', error);
-    document.getElementById('gruposLista').innerHTML = `<p style="text-align:center; padding: 40px; color: #aaa;">${error.message}</p>`;
+    const errorElement = document.getElementById('gruposLista');
+    errorElement.textContent = error.message;
+    errorElement.style.textAlign = 'center';
+    errorElement.style.padding = '40px';
+    errorElement.style.color = '#aaa';
   }
 }
 
@@ -183,7 +187,7 @@ function renderizarGrupos(grupos) {
     }
     
     const motivoHTML = isReprovado 
-        ? `<div class="status-info-reprovado"><strong>Motivo:</strong> ${grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim()}</div>` 
+        ? `<div class="status-info-reprovado"><strong>Motivo:</strong> ${escapeHTML(grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim())}</div>` 
         : '';
     
     const exclusaoHTML = solicitouExclusao
@@ -194,17 +198,17 @@ function renderizarGrupos(grupos) {
       <div class="grupo-item ${solicitouExclusao ? 'grupo-solicitou-exclusao' : ''}" id="grupo-${grupo.id}">
         ${statusBadge}
         <div class="grupo-foto-container">
-          <img src="${grupo.foto_url || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
+          <img src="${escapeHTML(grupo.foto_url) || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
         </div>
         <div class="grupo-info">
-          <div class="grupo-titulo">${grupo.nome}</div>
+          <div class="grupo-titulo">${escapeHTML(grupo.nome)}</div>
           <div class="grupo-details">
-            <span><strong>CATEGORIA:</strong> ${getCategoryName(grupo.categoria)}</span>
-            <span><strong>TIPO:</strong> ${grupo.tipo}</span>
-            <span><strong>EMAIL:</strong> ${grupo.email}</span>
+            <span><strong>CATEGORIA:</strong> ${escapeHTML(getCategoryName(grupo.categoria))}</span>
+            <span><strong>TIPO:</strong> ${escapeHTML(grupo.tipo)}</span>
+            <span><strong>EMAIL:</strong> ${escapeHTML(grupo.email)}</span>
           </div>
-          <div class="grupo-desc">${grupo.descricao || 'Sem descrição.'}</div>
-          <a href="${grupo.link}" target="_blank" class="grupo-link">${grupo.link}</a>
+          <div class="grupo-desc">${escapeHTML(grupo.descricao) || 'Sem descrição.'}</div>
+          <a href="${escapeHTML(grupo.link)}" target="_blank" class="grupo-link">${escapeHTML(grupo.link)}</a>
           
           <div class="card-footer-action-admin">
              ${adminActionsHTML}

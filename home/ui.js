@@ -1,19 +1,30 @@
+
+function escapeHTML(str) {
+    const p = document.createElement("p");
+    p.appendChild(document.createTextNode(str));
+    return p.innerHTML;
+}
+
 function renderGroups(grupos) {
     const container = document.getElementById('grupos');
     container.innerHTML = grupos.map(grupo => {
         const placeholderImg = 'https://via.placeholder.com/300x320.png?text=Sem+Imagem';
         const buttonText = grupo.tipo === 'canal_whatsapp' ? 'Ver Canal' : 'Entrar no Grupo';
+        
+        const nomeSeguro = escapeHTML(grupo.nome);
+        const descricaoSegura = escapeHTML(grupo.descricao || 'Este grupo não possui uma descrição.');
+
         return `
           <div class="grupo-card ${grupo.vip ? 'vip' : ''}">
             <div class="card-image-container">
-              <img src="${grupo.foto_url || placeholderImg}" alt="Imagem do grupo ${grupo.nome}" class="grupo-img" onerror="this.onerror=null;this.src='${placeholderImg}';">
+              <img src="${escapeHTML(grupo.foto_url || placeholderImg)}" alt="Imagem do grupo ${nomeSeguro}" class="grupo-img" onerror="this.onerror=null;this.src='${placeholderImg}';">
               ${grupo.vip ? '<div class="vip-star">⭐</div>' : ''}
             </div>
             <div class="card-content">
               <span class="card-category">${getCategoryName(grupo.categoria)}</span>
-              <h3 class="grupo-title" title="${grupo.nome}">${grupo.nome}</h3>
-              <p class="grupo-desc">${grupo.descricao || 'Este grupo não possui uma descrição.'}</p>
-              <a href="${grupo.link}" target="_blank" class="card-button">${buttonText}</a>
+              <h3 class="grupo-title" title="${nomeSeguro}">${nomeSeguro}</h3>
+              <p class="grupo-desc">${descricaoSegura}</p>
+              <a href="${escapeHTML(grupo.link)}" target="_blank" class="card-button">${buttonText}</a>
             </div>
           </div>
         `;
@@ -68,7 +79,7 @@ function createCategoryElement(id, name, icon) {
     const item = document.createElement('a');
     item.className = 'category-item';
     item.href = 'javascript:void(0)';
-    item.innerHTML = `<div class="category-icon">${icon}</div><span>${name}</span>`;
+    item.innerHTML = `<div class="category-icon">${icon}</div><span>${escapeHTML(name)}</span>`;
     item.onclick = () => setFilter('currentCategory', id);
     return item;
 }
@@ -147,7 +158,7 @@ function showEmptyMessage() {
     if (STATE.searchFilter) {
         const searchTerm = document.createElement('span');
         searchTerm.style.color = '#2C2C2C';
-        searchTerm.textContent = `"${STATE.searchFilter}"`;
+        searchTerm.textContent = `"${escapeHTML(STATE.searchFilter)}"`;
 
         container.innerHTML = `<div class="empty">Nenhum resultado para a busca por: </div>`;
         container.firstChild.appendChild(searchTerm);
