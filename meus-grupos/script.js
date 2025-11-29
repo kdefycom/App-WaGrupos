@@ -97,11 +97,11 @@
     try {
       const gruposLocais = await buscarGruposLocais();
       
-      const emptyStateHTML = `<div class="empty">
-            <p style="font-size: 60px;">📭</p>
-            <h3 style="margin:10px 0; color:var(--text-primary);">Nenhum grupo enviado ainda</h3>
-            <p style="color:var(--text-secondary);">Que tal enviar seu primeiro grupo agora?</p>
-            <a href="/enviar-grupo/" class="btn btn-send" style="margin-top: 20px;">➕ Enviar Novo Grupo</a>
+      const emptyStateHTML = `<div class=\"empty\">
+            <p style=\"font-size: 60px;\">📭</p>
+            <h3 style=\"margin:10px 0; color:var(--text-primary);\">Nenhum grupo enviado ainda</h3>
+            <p style=\"color:var(--text-secondary);\">Que tal enviar seu primeiro grupo agora?</p>
+            <a href=\"/enviar-grupo/\" class=\"btn btn-send\" style=\"margin-top: 20px;\">➕ Enviar Novo Grupo</a>
           </div>`;
 
       if (gruposLocais.length === 0) {
@@ -138,22 +138,31 @@
 
     } catch (error) {
       console.error("Erro ao carregar grupos:", error);
-      lista.innerHTML = '<div class="empty"><h3 style="color:var(--text-primary);">Ocorreu um erro</h3><p style="color:var(--text-secondary);">Não foi possível carregar. Tente recarregar a página.</p></div>';
+      lista.innerHTML = '<div class=\"empty\"><h3 style=\"color:var(--text-primary);\">Ocorreu um erro</h3><p style=\"color:var(--text-secondary);\">Não foi possível carregar. Tente recarregar a página.</p></div>';
     }
   }
 
-  function renderizarGrupo(grupo) {
+    function renderizarGrupo(grupo) {
     let actionButtonHTML = '';
     let statusInfoHTML = '';
 
     const isReprovado = grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reprovado');
 
     if (grupo.aprovado) {
-      if (podeImpulsionar(grupo)) {
-        actionButtonHTML = `<button class="btn-large btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>`;
-      } else {
-        actionButtonHTML = `<div class="boost-timer">⏰ PRÓXIMO BOOST EM ${tempoRestante(grupo)}</div>`;
-      }
+        if (podeImpulsionar(grupo)) {
+            const starIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+            actionButtonHTML = `
+            <div class="action-buttons-container">
+                <button class="btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>
+                <button class="btn-vip" onclick="alertVip('${grupo.id}')">
+                ${starIcon}
+                <span>Super VIP</span>
+                </button>
+            </div>
+            `;
+        } else {
+            actionButtonHTML = `<div class="boost-timer">⏰ PRÓXIMO BOOST EM ${tempoRestante(grupo)}</div>`;
+        }
     } else if (isReprovado) {
        actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
        const motivo = grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim();
