@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagamento Sunize PIX</title>
+
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+  h1 { text-align: center; color: #333; }
+  .container {
+    max-width: 650px; margin: auto; background: #fff;
+    padding: 20px; border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input { width: 100%; padding: 8px; margin-top: 5px;
+    border-radius: 4px; border: 1px solid #ccc; }
+  button {
+    margin-top: 15px; padding: 10px 20px;
+    border: none; border-radius: 4px;
+    background: #007bff; color: #fff; cursor: pointer;
+  }
+  button.cancel { background: #dc3545; }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  #qr-container img { max-width: 300px; display: block; margin: 15px auto; }
+  #status { margin-top: 15px; font-size: 1.2em; text-align: center; }
+  #timer { font-weight: bold; color: #555; margin-top: 10px; text-align: center; }
+  .payload-box {
+    background: #eee; padding: 10px; border-radius: 6px;
+    word-break: break-all; margin-top: 10px; font-family: monospace;
+  }
+  .log-box {
+    white-space: pre-wrap; max-height: 300px;
+    overflow-y: auto; background: #eee;
+    padding: 15px; border-radius: 6px; margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Painel Sunize</h1>
+
+<div class="container">
+
+  <h2>Rotas da API</h2>
+  <ul>
+    <li>POST /criar-pagamento</li>
+    <li>GET /check-payment/:id</li>
+    <li>GET /aguardar-pagamento/:id</li>
+    <li>DELETE /cancel/:id</li>
+    <li>GET /qr/:id</li>
+    <li>GET /pong</li>
+    <li>GET /logs</li>
+  </ul>
+
+  <hr>
+
+  <h2>Criar Pagamento</h2>
+
+  <div id="form-container">
+    <label>Nome</label>
+    <input type="text" id="name">
+
+    <label>CPF</label>
+    <input type="text" id="document">
+
+    <label>Telefone</label>
+    <input type="text" id="phone">
+
+    <label>Email</label>
+    <input type="email" id="email">
+
+    <label>Produto</label>
+    <input type="text" id="product_name">
+
+    <label>Descrição</label>
+    <input type="text" id="description">
+
+    <label>Valor (R$)</label>
+    <input type="number" id="total_amount" value="10">
+
+    <button id="create-payment">Criar Pagamento</button>
+  </div>
+
+  <div id="payment-container" style="display:none;">
+    <h3>Pagamento criado!</h3>
+
+    <div id="qr-container"></div>
+
+    <h4>Payload:</h4>
+    <div id="payload-box" class="payload-box"></div>
+    <button id="copy-payload">Copiar Payload</button>
+
+    <div id="status">Aguardando pagamento...</div>
+    <div id="timer">Tempo restante: 03:00</div>
+
+    <button id="cancel-payment" class="cancel">Cancelar Pagamento</button>
+    <button id="new-payment" style="margin-top:10px; display:none;">Gerar novo pagamento</button>
+  </div>
+
+  <hr>
+
+  <h2>Logs</h2>
+  <button id="load-logs">Carregar Logs</button>
+  <a id="download-logs" href="#" download="logs.json">
+    <button>Baixar Logs</button>
+  </a>
+
+  <div id="logs-view" class="log-box" style="display:none;"></div>
+
+</div>
+
+<script>
+const API_KEY = "23BBCE8145B2BFB9F407C265BD82A7498F19DD90371D53CD34743E12E9F300BE";
+
+let paymentId = null;
+let timerInterval = null;
+let timeLeft = 180;
+
+const $ = id => document.getElementById(id);
+
+function formatTime(sec){
+  return String(Math.floor(sec/60)).padStart(2,'0') + ":" + String(sec%60).padStart(2,'0');
+}
+
+async function criarPagamento() {
+  const body = {
+    total_amount: parseFloat($('total_amount').value),
+    name: $('name').value,
+    document: $('document').value,
+    phone: $('phone').value,
+    email: $('email').value,
+    product_name: $('product_name').value,
+    description: $('description').value
+  };
+
+  const res = await fetch("http://localhost:8000/criar-pagamento", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-api-key": API_KEY },
+    body: JSON.stringify(body)
+  });
+
+  const data = await res.json();
+
+  if (!data.id) return alert("Erro ao criar pagamento.");
+
+  paymentId = data.id;
+
+  $('qr-container').innerHTML = `<img src="${data.qr_base64}">`;
+  $('payload-box').textContent = data.pix_payload;
+
+  $('form-container').style.display = 'none';
+  $('payment-container').style.display = 'block';
+
+  startTimer();
+  checkPagamento();
+}
+
+async function checkPagamento() {
+  if (!paymentId) return;
+
+  try {
+    const res = await fetch(`http://localhost:8000/aguardar-pagamento/${paymentId}`, {
+      headers: { "x-api-key": API_KEY }
+    });
+
+    const d = await res.json();
+
+    if (d.status === "CANCELLED") {
+      $('status').textContent = "Pagamento cancelado!";
+      $('status').style.color = "red";
+      $('cancel-payment').disabled = true;
+      $('cancel-payment').textContent = "Esse pagamento já foi cancelado";
+      stopTimer();
+      return;
+    }
+
+    if (d.success) {
+      $('status').textContent = "Pagamento confirmado!";
+      $('status').style.color = "green";
+      stopTimer();
+      return;
+    }
+
+  } catch {}
+}
+
+async function cancelarPagamento() {
+  if (!paymentId) return;
+
+  const res = await fetch(`http://localhost:8000/cancel/${paymentId}`, {
+    method: "DELETE",
+    headers: { "x-api-key": API_KEY }
+  });
+
+  $('status').textContent = "Pagamento cancelado!";
+  $('status').style.color = "red";
+
+  $('cancel-payment').disabled = true;
+  $('cancel-payment').textContent = "Esse pagamento já foi cancelado";
+
+  stopTimer();
+}
+
+function startTimer() {
+  timeLeft = 180;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    $('timer').textContent = "Tempo restante: " + formatTime(timeLeft);
+
+    if (timeLeft <= 0) {
+      cancelarPagamento();
+      $('timer').textContent = "Tempo esgotado!";
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+// copiar payload
+$('copy-payload').onclick = () => {
+  navigator.clipboard.writeText($('payload-box').textContent);
+  alert("Payload copiado!");
+};
+
+// logs
+$('load-logs').onclick = async () => {
+  const res = await fetch("http://localhost:8000/logs", {
+    headers: { "x-api-key": API_KEY }
+  });
+
+  const d = await res.json();
+
+  $('logs-view').style.display = 'block';
+  $('logs-view').textContent = JSON.stringify(d.data, null, 2);
+
+  const blob = new Blob([JSON.stringify(d.data, null, 2)], { type: "application/json" });
+  $('download-logs').href = URL.createObjectURL(blob);
+};
+
+$('create-payment').onclick = criarPagamento;
+$('cancel-payment').onclick = cancelarPagamento;
+
+$('new-payment').onclick = () => {
+  $('payment-container').style.display = 'none';
+  $('form-container').style.display = 'block';
+};
+</script>
+</body>
+</html>
