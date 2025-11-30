@@ -39,6 +39,7 @@
 }
 </script>
   <link rel="stylesheet" href="home/style.css">
+  <link rel="stylesheet" href="home/assets/css/delete-prompt.css">
   <script src="/home/favicon.js" defer></script>
 </head>
 <body>
@@ -72,7 +73,7 @@
       Política de Privacidade
     </a>
     <hr style="border:0; border-top:1px solid var(--border-color); margin: 10px 0;">
-    <a href="javascript:void(0)" class="danger" onclick="limparDados()">
+    <a href="javascript:void(0)" class="danger" onclick="showDeletePrompt()">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
       Limpar Dados Locais
     </a>
@@ -124,9 +125,25 @@
     </section>
   </main>
   
+  <!-- Pop-up de Confirmação de Exclusão -->
+  <div class="delete-prompt-overlay" id="deletePromptOverlay">
+    <div class="delete-prompt-modal">
+      <span class="warning-icon">⚠️</span>
+      <h2>Ação Irreversível</h2>
+      <p class="prompt-message">Isso limpará permanentemente todos os seus dados salvos neste navegador, incluindo grupos enviados e favoritos.</p>
+      <p>Para confirmar, digite <strong>delete</strong> no campo abaixo.</p>
+      <input type="text" id="deleteConfirmInput" class="delete-prompt-input" placeholder="delete">
+      <div class="delete-prompt-actions">
+        <button id="cancelDeleteBtn" class="delete-prompt-btn cancel">Cancelar</button>
+        <button id="confirmDeleteBtn" class="delete-prompt-btn confirm" disabled>Apagar Tudo</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
   <script src="home/ui.js"></script>
   <script src="home/script.js"></script>
   <script src="home/ddos/sentinel.js"></script>
+  <script src="home/assets/js/delete-prompt.js"></script>
 </body>
-  </html>
+</html>

@@ -1,0 +1,117 @@
+
+/* Estilos para o Pop-up de Confirmação de Exclusão */
+
+.delete-prompt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.delete-prompt-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.delete-prompt-modal {
+    background-color: #2c2c2c;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.delete-prompt-overlay.active .delete-prompt-modal {
+    transform: scale(1);
+}
+
+.delete-prompt-modal h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.delete-prompt-modal .warning-icon {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+
+.delete-prompt-modal .prompt-message {
+    color: #ff5555; /* Vermelho para alerta */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.delete-prompt-modal p {
+    color: #cccccc;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.delete-prompt-input {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.delete-prompt-input::placeholder {
+    color: #888;
+}
+
+.delete-prompt-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.delete-prompt-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.delete-prompt-btn.cancel {
+    background-color: #555;
+    color: #fff;
+}
+
+.delete-prompt-btn.confirm {
+    background-color: #d9534f; /* Vermelho */
+    color: white;
+}
+
+.delete-prompt-btn.confirm:disabled {
+    background-color: #8c3835;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.delete-prompt-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
