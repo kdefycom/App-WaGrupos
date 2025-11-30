@@ -50,6 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Função para limpar todos os cookies do site
+function clearAllCookies() {
+    console.log("Iniciando a limpeza de cookies...");
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        const trimmedName = name.trim();
+        
+        // Para apagar um cookie, é preciso definir sua data de expiração para o passado.
+        // É necessário especificar o mesmo caminho (path) e domínio usados para criar o cookie.
+        // Como não sabemos a origem, tentamos apagar com o caminho raiz, que cobre a maioria dos casos.
+        document.cookie = trimmedName + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        
+        // Também tentamos apagar sem o caminho, para cookies criados em subdiretórios específicos.
+        document.cookie = trimmedName + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+    console.log("Limpeza de cookies concluída.");
+}
+
 async function clearAllLocalData() {
     try {
         console.log("Iniciando a exclusão de todos os dados locais...");
@@ -67,24 +89,25 @@ async function clearAllLocalData() {
                 reject(event.target.error);
             };
             deleteRequest.onblocked = () => {
-                // Isso acontece se houver outras conexões abertas com o banco de dados.
-                // O ideal é que a aplicação lide com isso, mas para um reset forçado, podemos alertar o usuário.
                 console.warn('A exclusão do banco de dados está bloqueada. Tente fechar outras abas desta aplicação.');
                 alert('Não foi possível apagar os dados pois há outra aba do site aberta. Por favor, feche todas as abas e tente novamente.');
                 reject('Exclusão bloqueada');
             };
         });
 
-        // 2. Limpar o LocalStorage (opcional, mas bom para uma limpeza completa)
+        // 2. Limpar o LocalStorage
         localStorage.clear();
         console.log("LocalStorage limpo.");
 
-        // 3. Limpar o SessionStorage (opcional)
+        // 3. Limpar o SessionStorage
         sessionStorage.clear();
         console.log("SessionStorage limpo.");
 
-        // 4. Informar o usuário e recarregar a página
-        alert('Todos os dados locais foram apagados com sucesso. A página será recarregada.');
+        // 4. Limpar os Cookies
+        clearAllCookies();
+
+        // 5. Informar o usuário e recarregar a página
+        alert('Todos os dados locais, incluindo cookies, foram apagados com sucesso. A página será recarregada.');
         location.reload();
 
     } catch (error) {

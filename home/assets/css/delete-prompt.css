@@ -1,4 +1,3 @@
-
 /* Estilos para o Pop-up de Confirmação de Exclusão */
 
 .delete-prompt-overlay {
@@ -45,9 +44,10 @@
     color: #ffffff;
 }
 
-.delete-prompt-modal .warning-icon {
-    font-size: 48px;
-    line-height: 1;
+.delete-prompt-modal .warning-icon svg {
+    width: 48px;
+    height: 48px;
+    color: #ff5555; /* Vermelho para o ícone */
     margin-bottom: 15px;
 }
 
