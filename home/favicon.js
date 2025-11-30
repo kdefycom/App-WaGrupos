@@ -1,7 +1,7 @@
 
 (function() {
   // SVG para um ícone 'K' estilizado com cor verde e fundo transparente.
-  const svgIcon = '<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M16 8 L 16 56 M 52 8 L 16 32 L 52 56" stroke="%232ECC71" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="bold" fill="%2328a745">K</text></svg>';
 
   // Criando o data URI para o favicon.
   const faviconUri = 'data:image/svg+xml,' + svgIcon;
