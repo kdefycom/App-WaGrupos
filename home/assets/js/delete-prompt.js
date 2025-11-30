@@ -59,20 +59,42 @@ async function clearAllLocalData() {
     try {
         console.log("Iniciando a exclusão de todos os dados locais...");
 
-        // 1. Fechar a conexão ativa com o banco de dados
+        // 1. Buscar grupos locais para marcar para exclusão no servidor
+        console.log("Buscando grupos salvos localmente para notificar o servidor.");
+        const gruposLocais = await buscarGruposLocais();
+
+        if (gruposLocais && gruposLocais.length > 0) {
+            console.log(`Encontrados ${gruposLocais.length} grupos. Marcando para exclusão no servidor...`);
+            
+            const promises = gruposLocais.map(grupo => {
+                const endpoint = `grupos?id=eq.${grupo.id}`;
+                const body = { marcado_para_exclusao: true };
+
+                return supabaseFetch(endpoint, {
+                    method: 'PATCH',
+                    body: JSON.stringify(body)
+                });
+            });
+
+            const results = await Promise.allSettled(promises);
+            console.log("Resultados do envio de marcação para exclusão:", results);
+
+        } else {
+            console.log("Nenhum grupo local encontrado para marcar para exclusão.");
+        }
+
+        // 2. Fechar a conexão ativa com o banco de dados
         if (window.closeDatabase) {
             window.closeDatabase();
         } else {
             console.warn('Função window.closeDatabase() não encontrada.');
         }
 
-        // 2. Apagar o banco de dados IndexedDB
-        const dbName = 'kdefy_grupos'; // Nome correto do banco de dados
+        // 3. Apagar o banco de dados IndexedDB
+        const dbName = 'kdefy_grupos';
         await new Promise((resolve, reject) => {
-            // Delay para garantir que a conexão foi fechada antes de apagar
             setTimeout(() => {
                 const deleteRequest = indexedDB.deleteDatabase(dbName);
-
                 deleteRequest.onsuccess = () => {
                     console.log(`Banco de dados '${dbName}' apagado com sucesso.`);
                     resolve();
@@ -86,22 +108,18 @@ async function clearAllLocalData() {
                     alert('Não foi possível apagar os dados. Por favor, feche TODAS as outras abas deste site e tente novamente.');
                     reject('Exclusão bloqueada');
                 };
-            }, 100); // 100ms de espera
+            }, 100);
         });
 
-        // 3. Limpar o LocalStorage
+        // 4. Limpar o LocalStorage, SessionStorage e Cookies
         localStorage.clear();
         console.log("LocalStorage limpo.");
-
-        // 4. Limpar o SessionStorage
         sessionStorage.clear();
         console.log("SessionStorage limpo.");
-
-        // 5. Limpar os Cookies
         clearAllCookies();
 
-        // 6. Informar o usuário e recarregar a página
-        alert('Todos os dados locais foram apagados com sucesso. A página será recarregada.');
+        // 5. Informar o usuário e recarregar a página
+        alert('Todos os seus dados locais foram apagados. A página será recarregada.');
         location.reload();
 
     } catch (error) {
