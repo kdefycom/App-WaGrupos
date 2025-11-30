@@ -7,6 +7,7 @@
 
   let meusGrupos = [];
   let boostPopupOverlay, boostPopup, closePopupButton;
+  let activeTimers = {};
 
   document.addEventListener('DOMContentLoaded', () => {
     setupSidebar();
@@ -15,6 +16,52 @@
     carregarMeusGrupos();
     setupImagePreviewHidden();
   });
+
+  function clearActiveTimers() {
+    for (const groupId in activeTimers) {
+      clearInterval(activeTimers[groupId]);
+    }
+    activeTimers = {};
+  }
+
+  function startCountdown(grupo) {
+    const timerElement = document.querySelector(`.boost-timer[data-group-id="${grupo.id}"]`);
+    if (!timerElement) return;
+
+    const endTime = new Date(grupo.ultimo_boost).getTime() + 2 * 60 * 60 * 1000;
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const remainingTime = endTime - now;
+
+      if (remainingTime <= 0) {
+        clearInterval(activeTimers[grupo.id]);
+        delete activeTimers[grupo.id];
+        // Adiciona um pequeno delay para evitar recarregamentos múltiplos e rápidos
+        setTimeout(() => {
+           // Apenas recarrega se o botão de impulsionar ainda não apareceu
+           if (document.querySelector(`.boost-timer[data-group-id="${grupo.id}"]`)) {
+              carregarMeusGrupos();
+           }
+        }, 1000);
+        return;
+      }
+
+      const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+      timerElement.innerHTML = `⏰ ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+    if (activeTimers[grupo.id]) {
+      clearInterval(activeTimers[grupo.id]);
+    }
+    
+    updateTimer(); 
+    activeTimers[grupo.id] = setInterval(updateTimer, 1000);
+  }
+
 
   function setupImagePreviewHidden() {
     const fileInput = document.getElementById("editFotoFile");
@@ -92,6 +139,7 @@
   }
 
   async function carregarMeusGrupos() {
+    clearActiveTimers();
     const lista = document.getElementById('gruposLista');
     lista.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Carregando seus grupos...</p>';
     try {
@@ -117,7 +165,6 @@
       for (const grupoLocal of gruposLocais) {
         if (idsAPI.has(grupoLocal.id)) {
           const apiData = gruposAPI.find(g => g.id === grupoLocal.id);
-          // Prioriza os dados da API sobre os locais para ter o status mais recente
           gruposSincronizados.push({ ...grupoLocal, ...apiData });
         } else {
           await removerGrupoLocal(grupoLocal.id);
@@ -136,6 +183,13 @@
         .map(renderizarGrupo)
         .join('');
 
+      // Iniciar contadores para os grupos em cooldown
+      meusGrupos.forEach(grupo => {
+        if (grupo.aprovado && !podeImpulsionar(grupo)) {
+          startCountdown(grupo);
+        }
+      });
+
     } catch (error) {
       console.error("Erro ao carregar grupos:", error);
       lista.innerHTML = '<div class=\"empty\"><h3 style=\"color:var(--text-primary);\">Ocorreu um erro</h3><p style=\"color:var(--text-secondary);\">Não foi possível carregar. Tente recarregar a página.</p></div>';
@@ -149,20 +203,26 @@
     const isReprovado = grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reprovado');
 
     if (grupo.aprovado) {
+        const starIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+        const vipButtonHTML = `<button class="btn-vip" onclick="alertVip('${grupo.id}')">
+                            ${starIcon}
+                            <span>Super VIP</span>
+                           </button>`;
+
+        let mainActionHTML;
         if (podeImpulsionar(grupo)) {
-            const starIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-            actionButtonHTML = `
-            <div class="action-buttons-container">
-                <button class="btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>
-                <button class="btn-vip" onclick="alertVip('${grupo.id}')">
-                ${starIcon}
-                <span>Super VIP</span>
-                </button>
-            </div>
-            `;
+            mainActionHTML = `<button class="btn-impulsionar" onclick="impulsionar(event, '${grupo.id}')">🚀 IMPULSIONAR</button>`;
         } else {
-            actionButtonHTML = `<div class="boost-timer">⏰ PRÓXIMO BOOST EM ${tempoRestante(grupo)}</div>`;
+            mainActionHTML = `<div class="boost-timer" data-group-id="${grupo.id}">⏰ Carregando...</div>`;
         }
+
+        actionButtonHTML = `
+        <div class="action-buttons-container">
+            ${mainActionHTML}
+            ${vipButtonHTML}
+        </div>
+        `;
+
     } else if (isReprovado) {
        actionButtonHTML = `<button class="btn-large btn-reprovado" disabled>REPROVADO</button>`;
        const motivo = grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim();
@@ -286,7 +346,6 @@
         })
       });
 
-      // Atualiza o grupo localmente também
       await salvarGrupoLocal(updatedGroup);
 
       fecharModalEdicao();
@@ -301,7 +360,6 @@
 
   function getCategoryName(id) { if (typeof CATEGORIES === 'undefined' || !id) return 'Outros'; const category = CATEGORIES.find(cat => cat.id === id); return category ? category.name : id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');}
   function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
-  function tempoRestante(grupo) { if (!grupo.ultimo_boost) return '0min'; const duasHoras = 2 * 60 * 60 * 1000; const passado = Date.now() - new Date(grupo.ultimo_boost).getTime(); const restante = duasHoras - passado; const minutos = Math.ceil(restante / 60000); return `${minutos}min`; }
   async function impulsionar(event, id) { const button = event.target; button.disabled = true; button.textContent = 'IMPULSIONANDO...'; try { await supabaseFetch(`grupos?id=eq.${id}`, { method: 'PATCH', body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) }); openBoostPopup(); carregarMeusGrupos(); } catch { button.disabled = false; button.textContent = '🚀 IMPULSIONAR'; } }
   
   async function removerGrupo(id) {
@@ -315,7 +373,6 @@
     try { 
       await removerGrupoLocal(id);
       
-      // Ação segura: Apenas marca o grupo para exclusão pelo admin
       await supabaseFetch(`grupos?id=eq.${id}`, { 
         method: 'PATCH',
         body: JSON.stringify({ solicitou_exclusao: true, mensagem_admin: 'Usuário solicitou a exclusão.' }) 
