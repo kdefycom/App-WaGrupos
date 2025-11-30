@@ -1,1 +1,0 @@
-const pagos = ['compra_venda', 'concursos', 'divulgacao', 'emagrecimento', 'esportes', 'eventos', 'fas', 'filmes_series', 'games_jogos', 'ganhar_dinheiro', 'imobiliaria', 'investimentos_financas', 'moda_beleza', 'negocios_empreendedorismo', 'politica', 'profissoes'];

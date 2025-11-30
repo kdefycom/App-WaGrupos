@@ -95,20 +95,6 @@ async function aprovar(id) {
   }
 }
 
-async function pagar(id) {
-  if (!confirm('Marcar este grupo como pago?')) return;
-  try {
-    await fetchAsAdmin(`grupos?id=eq.${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ requer_pagamento: true, aprovado: true })
-    });
-    alert('Grupo marcado como pago e aprovado!');
-    carregarGrupos();
-  } catch (error) {
-    alert('Erro: ' + error.message);
-  }
-}
-
 async function reprovar(id) {
   const motivo = prompt('Motivo da reprovação:');
   if (!motivo) return;
@@ -185,12 +171,10 @@ function renderizarGrupos(grupos) {
     } else {
         let otherActions = '';
         if (isPendente) {
-            if (pagos.includes(grupo.categoria)) {
-                otherActions = `<button class="btn btn-success" onclick="pagar('${grupo.id}')">Pago</button>`;
-            } else {
-                otherActions = `<button class="btn btn-success" onclick="aprovar('${grupo.id}')">Aprovar</button>`;
-            }
-            otherActions += ` <button class="btn btn-warning" onclick="reprovar('${grupo.id}')">Reprovar</button>`;
+            otherActions = `
+                <button class="btn btn-success" onclick="aprovar('${grupo.id}')">Aprovar</button>
+                <button class="btn btn-warning" onclick="reprovar('${grupo.id}')">Reprovar</button>
+            `;
         } else if (grupo.aprovado) {
             otherActions = grupo.vip 
                 ? `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>`
@@ -210,12 +194,9 @@ function renderizarGrupos(grupos) {
         ? `<div class="status-info-exclusao"><strong>Aviso:</strong> O usuário solicitou a exclusão deste grupo.</div>`
         : '';
 
-    const pagoHTML = grupo.requer_pagamento ? `<span class="status-badge status-pago">Grupo Pago</span>` : '';
-
     return `
       <div class="grupo-item ${solicitouExclusao ? 'grupo-solicitou-exclusao' : ''}" id="grupo-${grupo.id}">
         ${statusBadge}
-        ${pagoHTML}
         <div class="grupo-foto-container">
           <img src="${escapeHTML(grupo.foto_url) || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
         </div>
