@@ -41,7 +41,7 @@ let countdown = 180;
 let timerInterval = null;
 
 function startTimer() {
-    timerInterval = setInterval(() => {
+    timerInterval = setInterval(async () => {
         countdown--;
         document.getElementById("timer").innerText =
             "Pague em até " + countdown + " segundos. Após isso será cancelado automaticamente.";
@@ -49,10 +49,16 @@ function startTimer() {
         if (countdown <= 0) {
             clearInterval(timerInterval);
             document.getElementById("timer").innerText = "Pagamento expirado.";
+
             const cancelBtn = document.getElementById("cancelBtn");
-            if(cancelBtn){
+            if(cancelBtn && !cancelBtn.disabled){
                 cancelBtn.classList.add("disabled");
                 cancelBtn.disabled = true;
+
+                // Chama cancelamento automático no backend
+                if(paymentId){
+                    await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
+                }
             }
         }
     }, 1000);
@@ -71,18 +77,31 @@ document.getElementById("payBtn").onclick = async () => {
     const res = await fetch("http://localhost:3000/criar-pagamento", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: nome, email: email, total_amount: valor, product_name: "Produto", description: "Pagamento via teste" })
+        body: JSON.stringify({ 
+            name: nome, 
+            email: email, 
+            total_amount: valor, 
+            product_name: "Produto", 
+            description: "Pagamento via teste",
+            document: "12345678909"
+        })
     });
 
     const data = await res.json();
+    if(!data || !data.id){
+        alert("Erro ao criar pagamento.");
+        return;
+    }
+
     paymentId = data.id;
+    const pixPayload = data.pix_payload || "Não disponível";
 
     const qrUrl = `http://localhost:3000/qr/${paymentId}`;
 
     document.getElementById("result").innerHTML = `
         <h3>QR Code</h3>
         <img src="${qrUrl}" width="260">
-        <div id="payloadBox">${data.pix_payload}</div>
+        <div id="payloadBox">${pixPayload}</div>
         <button class="copyBtn" onclick="copyPayload()">Copiar Payload</button>
         <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
     `;
