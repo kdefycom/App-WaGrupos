@@ -2,65 +2,139 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pagamento via Pix - R$ 9,90</title>
+<title>Pagamento via Pix</title>
 <style>
-body { font-family: Arial; max-width: 480px; margin: auto; padding: 20px; background: #fafafa; }
-h2 { text-align: center; font-weight: normal; }
-.header-mp { text-align: center; margin-bottom: 25px; font-size: 20px; }
-.box { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-.label-title { font-size: 15px; margin-bottom: 10px; display: block; font-weight: bold; }
-input { width: 100%; padding: 10px; margin-top: 5px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
-button { width: 100%; padding: 14px; margin-top: 20px; border: none; cursor: pointer; font-size: 17px; border-radius: 6px; }
-#payBtn { background: #009ee3; color: white; }
-#cancelBtn { background: red; color: white; }
-#cancelBtn.disabled { background: #666; cursor: not-allowed; }
-#result { margin-top: 25px; text-align: center; }
-#payloadBox { margin-top: 10px; padding: 10px; background: #f5f5f5; word-break: break-all; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
-.copyBtn { background: #333; color: white; padding: 12px; width: 100%; margin-top: 10px; border-radius: 6px; }
-#timer { margin-top: 20px; font-size: 16px; color: red; text-align: center; }
-.details { margin-top: 20px; font-size: 15px; }
-.footer-email { margin-top: 20px; text-align: center; font-size: 13px; padding: 10px; }
-.footer-email a { color: #009ee3; }
+body { 
+    font-family: Arial, sans-serif; 
+    background: #f5f5f5; 
+    margin: 0; 
+    padding: 0;
+}
+.container {
+    max-width: 520px;
+    margin: auto;
+    padding: 20px;
+}
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header-title span {
+    background: #ddd;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+h2 { margin-top: 0; }
+.copy-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fafafa;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+.instrucoes-number {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+.instrucoes-number span {
+    background: #e8f1ff;
+    color: #007bff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    background: #009ee3;
+    border: none;
+    color: white;
+    font-size: 17px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+#cancelBtn { background: red; margin-top: 10px; }
+#cancelBtn.disabled { background: #777; cursor: not-allowed; }
+#timer { text-align: center; margin-top: 10px; color: red; font-size: 15px; }
+.input { margin-bottom: 15px; }
+.input label { font-weight: bold; display: block; margin-bottom: 5px; }
+.input input {
+    width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
+}
+.footer-box {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
+.footer-box a { color: #009ee3; }
 </style>
 </head>
 <body>
 
-<div class="header-mp"><strong>KDEFY GRUPOS LTDA</strong></div>
+<div class="container">
 
-<div class="box">
+<div class="card">
+    <div class="header-title">
+        <span>MM</span> 
+        KDEFY GRUPOS LTDA
+    </div>
 
-<h2>Pague R$ 9,90 via Pix</h2>
-<div style="text-align:center; font-size:14px; margin-top:10px;">Vencimento: 5 minutos após gerar o QR Code</div>
+    <h2>Pague R$ 9,90 via Pix</h2>
+    <div style="color:#555;">Vencimento: 5 minutos após a geração</div>
 
-<label class="label-title">Nome</label>
-<input id="nome">
+    <div class="input">
+        <label>Nome</label>
+        <input id="nome">
+    </div>
 
-<label class="label-title">CPF</label>
-<input id="cpf">
+    <div class="input">
+        <label>CPF</label>
+        <input id="cpf">
+    </div>
 
-<label class="label-title">Email</label>
-<input id="email" placeholder="kdefycom@gmail.com">
+    <div class="input">
+        <label>Email</label>
+        <input id="email" placeholder="kdefycom@gmail.com">
+    </div>
 
-<button id="payBtn">Gerar Pagamento PIX</button>
+    <button id="payBtn">Gerar pagamento PIX</button>
 
-<div id="result"></div>
-<div id="timer"></div>
-
-<div class="details">
-<p><strong>Detalhes da compra:</strong><br>
-grupo categoria paga — Valor de R$ 9,90</p>
+    <div id="result"></div>
+    <div id="timer"></div>
 </div>
 
-</div>
-
-<div class="footer-email">
-Se houver algum problema, entre em contato: <br>
+<div class="footer-box">
+Se tiver algum inconveniente, entre em contato <br>
 <a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a>
+</div>
+
 </div>
 
 <script>
 let paymentId = null;
-let countdown = 300; 
+let countdown = 300;
 let timerInterval = null;
 
 function startTimer() {
@@ -103,9 +177,9 @@ document.getElementById("payBtn").onclick = async () => {
         body: JSON.stringify({ 
             name: nome, 
             email: email, 
-            total_amount: total_amount, 
-            product_name: "grupo categoria paga", 
-            description: "Pagamento via PIX - KDEFY GRUPOS LTDA", 
+            total_amount: total_amount,
+            product_name: "grupo categoria paga",
+            description: "Pagamento via PIX - KDEFY GRUPOS LTDA",
             document: cpf
         })
     });
@@ -117,17 +191,40 @@ document.getElementById("payBtn").onclick = async () => {
     }
 
     paymentId = data.id;
-    const pixPayload = data.pix_payload || "Não disponível";
 
+    const pixPayload = data.pix_payload || "Não disponível";
     const qrUrl = `http://localhost:3000/qr/${paymentId}`;
 
     document.getElementById("result").innerHTML = `
+    <div class="card">
         <h3>Código QR</h3>
         <img src="${qrUrl}" width="260">
-        <div style="font-size:18px; margin-top:10px; font-weight:bold;">Valor: R$ 9,90</div>
-        <div id="payloadBox">${pixPayload}</div>
-        <button class="copyBtn" onclick="copyPayload()">Copiar código Pix</button>
+
+        <div style="margin-top:15px; font-weight:bold;">Código de pagamento</div>
+        <div class="copy-field">${pixPayload}</div>
+
+        <button class="copyBtn" style="margin-top:10px;background:#333;" onclick="copyPayload()">Copiar código</button>
         <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
+
+        <h3 style="margin-top:25px;">Como pagar?</h3>
+
+        <div class="instrucoes-number">
+            <span>1</span> Entre no app ou site do seu banco e escolha a opção de pagamento via Pix.
+        </div>
+
+        <div class="instrucoes-number">
+            <span>2</span> Escaneie o código QR ou copie e cole o código de pagamento.
+        </div>
+
+        <div class="instrucoes-number">
+            <span>3</span> Pronto! O pagamento é creditado na hora e você receberá a confirmação.
+        </div>
+
+        <hr style="margin:25px 0;">
+
+        <h3>Detalhes da sua compra</h3>
+        <div>grupo categoria paga — R$ 9,90</div>
+    </div>
     `;
 
     countdown = 300;
@@ -136,13 +233,14 @@ document.getElementById("payBtn").onclick = async () => {
 };
 
 function copyPayload() {
-    const text = document.getElementById("payloadBox").innerText;
+    const text = document.querySelector(".copy-field").innerText;
     navigator.clipboard.writeText(text);
 }
 
 async function cancelPayment() {
     if (!paymentId) return;
     const cancelBtn = document.getElementById("cancelBtn");
+
     if (!cancelBtn || cancelBtn.disabled) return;
 
     await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
