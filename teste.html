@@ -2,42 +2,67 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pagamento PIX</title>
+<title>Pagamento PIX - R$9,90</title>
 <style>
-body { font-family: Arial; max-width: 420px; margin: auto; padding: 20px; }
+body { font-family: Arial; max-width: 480px; margin: auto; padding: 20px; }
+h2 { text-align: center; }
 label { display: block; margin-top: 12px; font-weight: bold; }
-input { width: 100%; padding: 10px; margin-top: 5px; }
+input { width: 100%; padding: 10px; margin-top: 5px; font-size: 16px; }
 button { width: 100%; padding: 14px; margin-top: 20px; border: none; cursor: pointer; font-size: 17px; }
 #payBtn { background: #007bff; color: white; }
 #cancelBtn { background: red; color: white; }
 #cancelBtn.disabled { background: #666; cursor: not-allowed; }
 #result { margin-top: 25px; text-align: center; }
-#payloadBox { margin-top: 10px; padding: 10px; background: #f2f2f2; word-break: break-all; }
+#payloadBox { margin-top: 10px; padding: 10px; background: #f2f2f2; word-break: break-all; font-size: 14px; }
 .copyBtn { background: #222; color: white; padding: 10px; width: 100%; margin-top: 10px; }
 #timer { margin-top: 20px; font-size: 16px; color: red; text-align: center; }
+#info { font-size: 13px; color: #555; margin-top: 15px; }
+.selo-container { display: flex; justify-content: center; margin-top: 20px; gap: 15px; }
+.selo { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: #555; }
+.selo svg { width: 40px; height: 40px; margin-bottom: 5px; }
+.valor { font-size: 18px; font-weight: bold; margin-top: 10px; color: green; }
 </style>
 </head>
 <body>
 
-<h2>Finalizar Pagamento</h2>
+<h2>Pagamento PIX - R$ 9,90</h2>
 
 <label>Nome</label>
 <input id="nome">
 
+<label>CPF</label>
+<input id="cpf">
+
 <label>Email</label>
 <input id="email">
-
-<label>Valor (R$)</label>
-<input id="valor" type="number">
 
 <button id="payBtn">Finalizar Compra</button>
 
 <div id="result"></div>
 <div id="timer"></div>
 
+<div id="info">
+Os dados são coletados apenas para segurança da transação e, se necessário, para efetuar um pedido de reembolso.
+</div>
+
+<div class="selo-container">
+    <div class="selo">
+        <svg viewBox="0 0 24 24" fill="green">
+            <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm-1.2 17.4l-5.4-5.4 1.68-1.68 3.72 3.72 7.92-7.92 1.68 1.68-9.6 9.6z"/>
+        </svg>
+        <div>Protegido</div>
+    </div>
+    <div class="selo">
+        <svg viewBox="0 0 24 24" fill="#007bff">
+            <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        <div>Segurança</div>
+    </div>
+</div>
+
 <script>
 let paymentId = null;
-let countdown = 180;
+let countdown = 300; // 5 minutos
 let timerInterval = null;
 
 function startTimer() {
@@ -55,7 +80,6 @@ function startTimer() {
                 cancelBtn.classList.add("disabled");
                 cancelBtn.disabled = true;
 
-                // Chama cancelamento automático no backend
                 if(paymentId){
                     await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
                 }
@@ -66,10 +90,11 @@ function startTimer() {
 
 document.getElementById("payBtn").onclick = async () => {
     const nome = document.getElementById("nome").value;
+    const cpf = document.getElementById("cpf").value;
     const email = document.getElementById("email").value;
-    const valor = document.getElementById("valor").value;
+    const total_amount = 9.90;
 
-    if(!nome || !email || !valor){
+    if(!nome || !cpf || !email){
         alert("Preencha todos os campos!");
         return;
     }
@@ -80,10 +105,10 @@ document.getElementById("payBtn").onclick = async () => {
         body: JSON.stringify({ 
             name: nome, 
             email: email, 
-            total_amount: valor, 
-            product_name: "Produto", 
-            description: "Pagamento via teste",
-            document: "12345678909"
+            total_amount: total_amount, 
+            product_name: "Produto Premium", 
+            description: "Pagamento de teste", 
+            document: cpf
         })
     });
 
@@ -101,12 +126,13 @@ document.getElementById("payBtn").onclick = async () => {
     document.getElementById("result").innerHTML = `
         <h3>QR Code</h3>
         <img src="${qrUrl}" width="260">
+        <div class="valor">Valor: R$ 9,90</div>
         <div id="payloadBox">${pixPayload}</div>
         <button class="copyBtn" onclick="copyPayload()">Copiar Payload</button>
         <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
     `;
 
-    countdown = 180;
+    countdown = 300;
     clearInterval(timerInterval);
     startTimer();
 };
