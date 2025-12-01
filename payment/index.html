@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pagamento via Pix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+<div class="card" id="pre-checkout">
+    <div class="header-title">
+        <span>MM</span> 
+        KDEFY GRUPOS LTDA
+    </div>
+
+    <h2>Pague R$ 9,90 via Pix</h2>
+    <div class="vencimento">Vencimento: 5 minutos após a geração</div>
+
+    <div class="input">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text">
+    </div>
+
+    <div class="input">
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text">
+    </div>
+
+    <div class="input">
+        <label for="email">Email</label>
+        <input id="email" type="email" value="kdefycom@gmail.com">
+    </div>
+
+    <button id="payBtn">Gerar pagamento PIX</button>
+
+    <div id="timer"></div>
+</div>
+
+<div id="result" style="display: none;">
+    <!-- Conteúdo do QR Code será injetado aqui -->
+</div>
+
+<div class="footer-box">
+    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
+    <div>
+        Se tiver algum inconveniente, entre em contato <br>
+        <a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a>
+    </div>
+</div>
+
+</div>
+
+<script src="assets/js/script.js"></script>
+
+</body>
+</html>

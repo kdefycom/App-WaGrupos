@@ -1,0 +1,267 @@
+/* Reset e Base */
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+    background: #f5f5f5; /* Fundo cinza claro */
+    margin: 0; 
+    padding: 0;
+    color: #333;
+}
+.container {
+    max-width: 520px;
+    margin: auto;
+    padding: 0; /* Remove padding do container para que o card ocupe a largura total em mobile */
+}
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 0; /* Remove border-radius para replicar o estilo de página inteira */
+    box-shadow: none; /* Remove sombra para replicar o estilo de página inteira */
+    margin-bottom: 0;
+}
+/* Estilo do Header (MM KDEFY GRUPOS LTDA) */
+.header-title {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o título */
+    gap: 10px;
+    padding: 10px 0 20px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+.header-title span {
+    background: #ddd;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+}
+/* Estilo do Título Principal (Pague R$ 9,90) */
+h2 { 
+    margin-top: 0; 
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+.vencimento {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+/* Estilo dos Inputs */
+.input { margin-bottom: 20px; }
+.input label { 
+    font-weight: 500; 
+    display: block; 
+    margin-bottom: 5px; 
+    font-size: 14px;
+    color: #555;
+}
+.input input {
+    width: 100%; 
+    padding: 12px; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    font-size: 16px;
+    box-sizing: border-box;
+}
+/* Estilo do Botão */
+button {
+    width: 100%;
+    padding: 14px;
+    background: #009ee3; /* Cor principal do Mercado Pago */
+    border: none;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+button:hover {
+    background: #007bb5;
+}
+/* Estilos Pós-Pagamento (QR Code) */
+.qr-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+.qr-code-box {
+    text-align: center;
+    margin: 20px 0;
+}
+.qr-code-box img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 8px;
+}
+.pix-code-label {
+    font-size: 14px;
+    color: #777;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.copy-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fafafa;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.copy-field-text {
+    overflow-x: auto; /* Permite a rolagem horizontal */
+    white-space: nowrap; /* Impede a quebra de linha */
+    flex-grow: 1;
+}
+.copy-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    color: #009ee3;
+    font-weight: bold;
+}
+.copyBtn {
+    background: #333;
+    margin-top: 10px;
+}
+#cancelBtn { 
+    background: #f44336; 
+    margin-top: 10px; 
+}
+#cancelBtn.disabled { 
+    background: #ccc; 
+    cursor: not-allowed; 
+}
+#timer { 
+    text-align: center; 
+    margin-top: 15px; 
+    color: #f44336; 
+    font-size: 15px; 
+    font-weight: 500;
+}
+/* Estilo das Instruções (Como pagar?) */
+.instrucoes-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+.instrucoes-number {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 15px;
+    font-size: 15px;
+    line-height: 1.4;
+}
+.instrucoes-number span {
+    background: #009ee3; /* Cor azul do Mercado Pago */
+    color: white;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+.pix-limit-info {
+    font-size: 12px;
+    color: #777;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+/* Detalhes da Compra */
+.detalhes-compra {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+.detalhes-compra-header {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+.detalhes-compra-header .icon {
+    margin-right: 10px;
+    color: #009ee3;
+    font-size: 20px;
+}
+.detalhe-linha {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #555;
+}
+.detalhe-linha.total {
+    font-weight: bold;
+    color: #333;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+}
+/* Footer (Contato) */
+.footer-box {
+    background: white;
+    padding: 20px 25px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 15px;
+    color: #555;
+}
+.footer-box .icon {
+    background: #e8f1ff;
+    color: #009ee3;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px; /* Adiciona padding para centralizar o SVG 24x24 dentro do círculo 36x36 */
+}
+.footer-box a { 
+    color: #009ee3; 
+    font-weight: 500;
+    text-decoration: none;
+}
+/* Responsividade */
+@media (min-width: 520px) {
+    .container {
+        padding: 20px;
+    }
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .footer-box {
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        margin-top: 10px;
+        border-top: none;
+    }
+}
