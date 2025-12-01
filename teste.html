@@ -1,180 +1,117 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste de Upload para Supabase</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    main {
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      background-color: #2a2a2a;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    h1 {
-      margin-top: 0;
-    }
-    #previewContainer {
-        margin-bottom: 1.5rem;
-    }
-    #previewImg {
-      max-width: 100%;
-      max-height: 250px;
-      border-radius: 8px;
-      background-color: #3a3a3a;
-    }
-    .button-group {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
-    button, label {
-      cursor: pointer;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #fff;
-      background-color: #007bff;
-      transition: background-color 0.2s;
-    }
-    button:hover, label:hover {
-        background-color: #0056b3;
-    }
-    button:disabled {
-        background-color: #555;
-        cursor: not-allowed;
-    }
-    #fotoUpload {
-        display: none; /* O input real fica escondido */
-    }
-    #resultado {
-      margin-top: 2rem;
-    }
-    #resultado img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
-    #status {
-        margin-top: 1rem;
-        font-style: italic;
-        color: #aaa;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Pagamento PIX</title>
+<style>
+body { font-family: Arial; max-width: 420px; margin: auto; padding: 20px; }
+label { display: block; margin-top: 12px; font-weight: bold; }
+input { width: 100%; padding: 10px; margin-top: 5px; }
+button { width: 100%; padding: 14px; margin-top: 20px; border: none; cursor: pointer; font-size: 17px; }
+#payBtn { background: #007bff; color: white; }
+#cancelBtn { background: red; color: white; }
+#cancelBtn.disabled { background: #666; cursor: not-allowed; }
+#result { margin-top: 25px; text-align: center; }
+#payloadBox { margin-top: 10px; padding: 10px; background: #f2f2f2; word-break: break-all; }
+.copyBtn { background: #222; color: white; padding: 10px; width: 100%; margin-top: 10px; }
+#timer { margin-top: 20px; font-size: 16px; color: red; text-align: center; }
+</style>
 </head>
 <body>
 
-  <main>
-    <h1>Teste de Upload de Foto</h1>
-    
-    <div id="previewContainer">
-        <img id="previewImg" src="https://via.placeholder.com/300x200.png?text=Preview" alt="Pré-visualização da imagem">
-    </div>
+<h2>Finalizar Pagamento</h2>
 
-    <div class="button-group">
-        <label for="fotoUpload">Alterar Foto</label>
-        <input type="file" id="fotoUpload" accept="image/*">
-        <button id="enviarBtn">Enviar para Supabase</button>
-    </div>
+<label>Nome</label>
+<input id="nome">
 
-    <div id="status"></div>
-    <div id="resultado"></div>
-  </main>
+<label>Email</label>
+<input id="email">
 
-  <script>
-    // Credenciais e configuração do Supabase (do seu app.js)
-    const SUPABASE_URL = 'https://aqyaxfrukssndxgctukf.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxeWF4ZnJ1a3NzbmR4Z2N0dWtmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzMDY0MTYsImV4cCI6MjA3Nzg4MjQxNn0.fqP4BfoGBr-A8piJevWto3DnJByYvLxB9gudq81KvJw';
-    const BUCKET_NAME = 'fotos_grupos';
+<label>Valor (R$)</label>
+<input id="valor" type="number">
 
-    // Elementos do DOM
-    const previewImg = document.getElementById('previewImg');
-    const fotoUploadInput = document.getElementById('fotoUpload');
-    const enviarBtn = document.getElementById('enviarBtn');
-    const statusDiv = document.getElementById('status');
-    const resultadoDiv = document.getElementById('resultado');
+<button id="payBtn">Finalizar Compra</button>
 
-    let arquivoFoto = null;
+<div id="result"></div>
+<div id="timer"></div>
 
-    // Evento para quando o usuário seleciona um arquivo
-    fotoUploadInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        arquivoFoto = file;
-        previewImg.src = URL.createObjectURL(file); // Mostra o preview
-      }
-    });
+<script>
+let paymentId = null;
+let countdown = 180;
+let timerInterval = null;
 
-    // Evento para o clique no botão de enviar
-    enviarBtn.addEventListener('click', async () => {
-      if (!arquivoFoto) {
-        alert('Por favor, selecione uma imagem primeiro.');
-        return;
-      }
+function startTimer() {
+    timerInterval = setInterval(() => {
+        countdown--;
+        document.getElementById("timer").innerText =
+            "Pague em até " + countdown + " segundos. Após isso será cancelado automaticamente.";
 
-      enviarBtn.disabled = true;
-      enviarBtn.textContent = 'Enviando...';
-      statusDiv.textContent = 'Iniciando upload...';
-      resultadoDiv.innerHTML = '';
-
-      try {
-        // 1. Criar um nome de arquivo único para evitar sobreposições
-        const filePath = `public/test-${Date.now()}-${arquivoFoto.name}`;
-        const uploadUrl = `${SUPABASE_URL}/storage/v1/object/${BUCKET_NAME}/${filePath}`;
-
-        // 2. Fazer a requisição de upload para o Supabase Storage
-        const response = await fetch(uploadUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': arquivoFoto.type,
-          },
-          body: arquivoFoto, // O corpo da requisição é o próprio arquivo
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`Falha no upload: ${errorData.message}`);
+        if (countdown <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("timer").innerText = "Pagamento expirado.";
+            const cancelBtn = document.getElementById("cancelBtn");
+            if(cancelBtn){
+                cancelBtn.classList.add("disabled");
+                cancelBtn.disabled = true;
+            }
         }
-        
-        statusDiv.textContent = 'Upload concluído! Gerando URL...';
+    }, 1000);
+}
 
-        // 3. Construir a URL pública da imagem
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${filePath}`;
+document.getElementById("payBtn").onclick = async () => {
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const valor = document.getElementById("valor").value;
 
-        // 4. Exibir a imagem na página
-        resultadoDiv.innerHTML = `
-          <h3>Imagem Enviada com Sucesso!</h3>
-          <p>Esta imagem foi carregada do Supabase Storage:</p>
-          <img src="${publicUrl}" alt="Imagem carregada do Supabase">
-          <p>URL Pública: <a href="${publicUrl}" target="_blank">${publicUrl}</a></p>
-        `;
+    if(!nome || !email || !valor){
+        alert("Preencha todos os campos!");
+        return;
+    }
 
-      } catch (error) {
-        console.error('Erro detalhado:', error);
-        statusDiv.textContent = 'Erro!';
-        resultadoDiv.innerHTML = `<p style="color: red;">Ocorreu um erro: ${error.message}</p>`;
-      } finally {
-        enviarBtn.disabled = false;
-        enviarBtn.textContent = 'Enviar para Supabase';
-      }
+    const res = await fetch("http://localhost:3000/criar-pagamento", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: nome, email: email, total_amount: valor, product_name: "Produto", description: "Pagamento via teste" })
     });
-  </script>
+
+    const data = await res.json();
+    paymentId = data.id;
+
+    const qrUrl = `http://localhost:3000/qr/${paymentId}`;
+
+    document.getElementById("result").innerHTML = `
+        <h3>QR Code</h3>
+        <img src="${qrUrl}" width="260">
+        <div id="payloadBox">${data.pix_payload}</div>
+        <button class="copyBtn" onclick="copyPayload()">Copiar Payload</button>
+        <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
+    `;
+
+    countdown = 180;
+    clearInterval(timerInterval);
+    startTimer();
+};
+
+function copyPayload() {
+    const text = document.getElementById("payloadBox").innerText;
+    navigator.clipboard.writeText(text);
+}
+
+async function cancelPayment() {
+    if (!paymentId) return;
+    const cancelBtn = document.getElementById("cancelBtn");
+    if (!cancelBtn || cancelBtn.disabled) return;
+
+    await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
+
+    cancelBtn.innerText = "Pagamento Cancelado";
+    cancelBtn.classList.add("disabled");
+    cancelBtn.disabled = true;
+
+    clearInterval(timerInterval);
+    document.getElementById("timer").innerText = "Pagamento cancelado.";
+}
+</script>
 
 </body>
 </html>
