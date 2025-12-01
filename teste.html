@@ -3,131 +3,322 @@
 <head>
 <meta charset="UTF-8">
 <title>Pagamento via Pix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body { 
-    font-family: Arial, sans-serif; 
-    background: #f5f5f5; 
-    margin: 0; 
-    padding: 0;
-}
-.container {
-    max-width: 520px;
-    margin: auto;
-    padding: 20px;
-}
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-.header-title {
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.header-title span {
-    background: #ddd;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-}
-h2 { margin-top: 0; }
-.copy-field {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fafafa;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow-x: auto;
-}
-.instrucoes-number {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 15px;
-}
-.instrucoes-number span {
-    background: #e8f1ff;
-    color: #007bff;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-button {
-    width: 100%;
-    padding: 14px;
-    background: #009ee3;
-    border: none;
-    color: white;
-    font-size: 17px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-#cancelBtn { background: red; margin-top: 10px; }
-#cancelBtn.disabled { background: #777; cursor: not-allowed; }
-#timer { text-align: center; margin-top: 10px; color: red; font-size: 15px; }
-.input { margin-bottom: 15px; }
-.input label { font-weight: bold; display: block; margin-bottom: 5px; }
-.input input {
-    width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
-}
-.footer-box {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 20px;
-}
-.footer-box a { color: #009ee3; }
+    /* Reset e Base */
+    body { 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+        background: #f5f5f5; /* Fundo cinza claro */
+        margin: 0; 
+        padding: 0;
+        color: #333;
+    }
+    .container {
+        max-width: 520px;
+        margin: auto;
+        padding: 0; /* Remove padding do container para que o card ocupe a largura total em mobile */
+    }
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 0; /* Remove border-radius para replicar o estilo de página inteira */
+        box-shadow: none; /* Remove sombra para replicar o estilo de página inteira */
+        margin-bottom: 0;
+    }
+    /* Estilo do Header (MM KDEFY GRUPOS LTDA) */
+    .header-title {
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0 20px 0;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+    }
+    .header-title span {
+        background: #ddd;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: #555;
+    }
+    /* Estilo do Título Principal (Pague R$ 9,90) */
+    h2 { 
+        margin-top: 0; 
+        font-size: 24px;
+        font-weight: 600;
+        color: #333;
+    }
+    .vencimento {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+    /* Estilo dos Inputs */
+    .input { margin-bottom: 20px; }
+    .input label { 
+        font-weight: 500; 
+        display: block; 
+        margin-bottom: 5px; 
+        font-size: 14px;
+        color: #555;
+    }
+    .input input {
+        width: 100%; 
+        padding: 12px; 
+        border: 1px solid #ccc; 
+        border-radius: 8px; 
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+    /* Estilo do Botão */
+    button {
+        width: 100%;
+        padding: 14px;
+        background: #009ee3; /* Cor principal do Mercado Pago */
+        border: none;
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #007bb5;
+    }
+    /* Estilos Pós-Pagamento (QR Code) */
+    .qr-section h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+    .qr-code-box {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .qr-code-box img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        border: 1px solid #eee;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .pix-code-label {
+        font-size: 14px;
+        color: #777;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+    .copy-field {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: #fafafa;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow-x: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .copy-field-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex-grow: 1;
+    }
+    .copy-icon {
+        cursor: pointer;
+        margin-left: 10px;
+        color: #009ee3;
+        font-weight: bold;
+    }
+    .copyBtn {
+        background: #333;
+        margin-top: 10px;
+    }
+    #cancelBtn { 
+        background: #f44336; 
+        margin-top: 10px; 
+    }
+    #cancelBtn.disabled { 
+        background: #ccc; 
+        cursor: not-allowed; 
+    }
+    #timer { 
+        text-align: center; 
+        margin-top: 15px; 
+        color: #f44336; 
+        font-size: 15px; 
+        font-weight: 500;
+    }
+    /* Estilo das Instruções (Como pagar?) */
+    .instrucoes-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+    .instrucoes-number {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-top: 15px;
+        font-size: 15px;
+        line-height: 1.4;
+    }
+    .instrucoes-number span {
+        background: #009ee3; /* Cor azul do Mercado Pago */
+        color: white;
+        width: 20px;
+        min-width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: 2px;
+    }
+    .pix-limit-info {
+        font-size: 12px;
+        color: #777;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    /* Detalhes da Compra */
+    .detalhes-compra {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    .detalhes-compra-header {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    .detalhes-compra-header .icon {
+        margin-right: 10px;
+        color: #009ee3;
+        font-size: 20px;
+    }
+    .detalhe-linha {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: #555;
+    }
+    .detalhe-linha.total {
+        font-weight: bold;
+        color: #333;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+        margin-top: 15px;
+    }
+    /* Footer (Contato) */
+    .footer-box {
+        background: white;
+        padding: 20px 25px;
+        margin-top: 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 15px;
+        color: #555;
+    }
+    .footer-box .icon {
+        background: #e8f1ff;
+        color: #009ee3;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px; /* Adiciona padding para centralizar o SVG 24x24 dentro do círculo 36x36 */
+    }
+    .footer-box a { 
+        color: #009ee3; 
+        font-weight: 500;
+        text-decoration: none;
+    }
+    /* Responsividade */
+    @media (min-width: 520px) {
+        .container {
+            padding: 20px;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .footer-box {
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            border-top: none;
+        }
+    }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<div class="card">
+<div class="card" id="pre-checkout">
     <div class="header-title">
         <span>MM</span> 
         KDEFY GRUPOS LTDA
     </div>
 
     <h2>Pague R$ 9,90 via Pix</h2>
-    <div style="color:#555;">Vencimento: 5 minutos após a geração</div>
+    <div class="vencimento">Vencimento: 5 minutos após a geração</div>
 
     <div class="input">
-        <label>Nome</label>
-        <input id="nome">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text">
     </div>
 
     <div class="input">
-        <label>CPF</label>
-        <input id="cpf">
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text">
     </div>
 
     <div class="input">
-        <label>Email</label>
-        <input id="email" placeholder="kdefycom@gmail.com">
+        <label for="email">Email</label>
+        <input id="email" type="email" value="kdefycom@gmail.com">
     </div>
 
     <button id="payBtn">Gerar pagamento PIX</button>
 
-    <div id="result"></div>
     <div id="timer"></div>
 </div>
 
+<div id="result" style="display: none;">
+    <!-- Conteúdo do QR Code será injetado aqui -->
+</div>
+
 <div class="footer-box">
-Se tiver algum inconveniente, entre em contato <br>
-<a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a>
+    <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
+    <div>
+        Se tiver algum inconveniente, entre em contato <br>
+        <a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a>
+    </div>
 </div>
 
 </div>
@@ -138,14 +329,19 @@ let countdown = 300;
 let timerInterval = null;
 
 function startTimer() {
+    const timerElement = document.getElementById("timer");
     timerInterval = setInterval(async () => {
         countdown--;
-        document.getElementById("timer").innerText =
-            "Pague em até " + countdown + " segundos. Após isso será cancelado automaticamente.";
+        
+        const minutes = Math.floor(countdown / 60);
+        const seconds = countdown % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        timerElement.innerText = `O pagamento expira em ${timeString}`;
 
         if (countdown <= 0) {
             clearInterval(timerInterval);
-            document.getElementById("timer").innerText = "Pagamento expirado.";
+            timerElement.innerText = "Pagamento expirado.";
 
             const cancelBtn = document.getElementById("cancelBtn");
             if(cancelBtn && !cancelBtn.disabled){
@@ -153,6 +349,7 @@ function startTimer() {
                 cancelBtn.disabled = true;
 
                 if(paymentId){
+                    // Simulação de cancelamento
                     await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
                 }
             }
@@ -171,6 +368,11 @@ document.getElementById("payBtn").onclick = async () => {
         return;
     }
 
+    // Esconde o pré-checkout e mostra o resultado
+    document.getElementById("pre-checkout").style.display = 'none';
+    document.getElementById("result").style.display = 'block';
+
+    // Simulação de criação de pagamento
     const res = await fetch("http://localhost:3000/criar-pagamento", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -187,54 +389,90 @@ document.getElementById("payBtn").onclick = async () => {
     const data = await res.json();
     if(!data || !data.id){
         alert("Erro ao criar pagamento.");
+        // Volta para o pré-checkout em caso de erro
+        document.getElementById("pre-checkout").style.display = 'block';
+        document.getElementById("result").style.display = 'none';
         return;
     }
 
     paymentId = data.id;
 
-    const pixPayload = data.pix_payload || "Não disponível";
+    const pixPayload = data.pix_payload || "00020126360014br.gov.bcb.pix011453727795000109520400005303986304000054069.905802BR5925KDEFY GRUPOS LTDA6007BRASIL62070503***6304D14F"; // Payload simulado
     const qrUrl = `http://localhost:3000/qr/${paymentId}`;
 
     document.getElementById("result").innerHTML = `
-    <div class="card">
-        <h3>Código QR</h3>
-        <img src="${qrUrl}" width="260">
+    <div class="card qr-section">
+        <div class="header-title">
+            <span>MM</span> 
+            KDEFY GRUPOS LTDA
+        </div>
 
-        <div style="margin-top:15px; font-weight:bold;">Código de pagamento</div>
-        <div class="copy-field">${pixPayload}</div>
+        <h2>Pague R$ 9,90 via Pix</h2>
+        <div class="vencimento" id="vencimento-qr">O pagamento expira em 05:00</div>
 
-        <button class="copyBtn" style="margin-top:10px;background:#333;" onclick="copyPayload()">Copiar código</button>
+        <p style="font-weight: 500; margin-top: 30px;">Para pagar, escolha uma destas opções:</p>
+        
+        <div class="qr-code-box">
+            <p style="font-size: 14px; color: #555; margin-bottom: 5px;">Código QR</p>
+            <img src="${qrUrl}" alt="QR Code Pix">
+        </div>
+
+        <div class="pix-code-label">Código de pagamento</div>
+        <div class="copy-field">
+            <div class="copy-field-text">${pixPayload}</div>
+            <div class="copy-icon" onclick="copyPayload()">📋</div>
+        </div>
+
+        <div class="instrucoes-title">Como pagar?</div>
+
+        <div class="instrucoes-number">
+            <span>1</span> <div>Entre no app ou site do seu banco e escolha a opção de pagamento via Pix.</div>
+        </div>
+
+        <div class="instrucoes-number">
+            <span>2</span> <div>Escaneie o código QR ou copie e cole o código de pagamento.</div>
+        </div>
+
+        <div class="instrucoes-number">
+            <span>3</span> <div>Pronto! O pagamento será creditado na hora e você receberá um e-mail de confirmação.</div>
+        </div>
+        
+        <div class="pix-limit-info">
+            O Pix tem um limite diário de transferências. Para mais informações, por favor, consulte seu banco.
+        </div>
+
+        <div class="detalhes-compra">
+            <div class="detalhes-compra-header">
+                <span class="icon">🧾</span>
+                Detalhes da sua compra
+            </div>
+            <div class="detalhe-linha">
+                <span>grupo categoria paga</span>
+                <span>R$ 9,90</span>
+            </div>
+            <div class="detalhe-linha total">
+                <span>Total</span>
+                <span>R$ 9,90</span>
+            </div>
+        </div>
+
         <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
-
-        <h3 style="margin-top:25px;">Como pagar?</h3>
-
-        <div class="instrucoes-number">
-            <span>1</span> Entre no app ou site do seu banco e escolha a opção de pagamento via Pix.
-        </div>
-
-        <div class="instrucoes-number">
-            <span>2</span> Escaneie o código QR ou copie e cole o código de pagamento.
-        </div>
-
-        <div class="instrucoes-number">
-            <span>3</span> Pronto! O pagamento é creditado na hora e você receberá a confirmação.
-        </div>
-
-        <hr style="margin:25px 0;">
-
-        <h3>Detalhes da sua compra</h3>
-        <div>grupo categoria paga — R$ 9,90</div>
     </div>
     `;
 
+    // Atualiza o elemento do timer para o novo local
+    document.getElementById("timer").remove();
+    document.getElementById("vencimento-qr").id = "timer";
+    
     countdown = 300;
     clearInterval(timerInterval);
     startTimer();
 };
 
 function copyPayload() {
-    const text = document.querySelector(".copy-field").innerText;
+    const text = document.querySelector(".copy-field-text").innerText;
     navigator.clipboard.writeText(text);
+    alert("Código Pix copiado!");
 }
 
 async function cancelPayment() {
@@ -243,6 +481,7 @@ async function cancelPayment() {
 
     if (!cancelBtn || cancelBtn.disabled) return;
 
+    // Simulação de cancelamento
     await fetch(`http://localhost:3000/cancelar/${paymentId}`, { method: "GET" });
 
     cancelBtn.innerText = "Pagamento Cancelado";
