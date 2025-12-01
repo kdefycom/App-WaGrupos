@@ -2,67 +2,65 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Pagamento PIX - R$9,90</title>
+<title>Pagamento via Pix - R$ 9,90</title>
 <style>
-body { font-family: Arial; max-width: 480px; margin: auto; padding: 20px; }
-h2 { text-align: center; }
-label { display: block; margin-top: 12px; font-weight: bold; }
-input { width: 100%; padding: 10px; margin-top: 5px; font-size: 16px; }
-button { width: 100%; padding: 14px; margin-top: 20px; border: none; cursor: pointer; font-size: 17px; }
-#payBtn { background: #007bff; color: white; }
+body { font-family: Arial; max-width: 480px; margin: auto; padding: 20px; background: #fafafa; }
+h2 { text-align: center; font-weight: normal; }
+.header-mp { text-align: center; margin-bottom: 25px; font-size: 20px; }
+.box { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+.label-title { font-size: 15px; margin-bottom: 10px; display: block; font-weight: bold; }
+input { width: 100%; padding: 10px; margin-top: 5px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+button { width: 100%; padding: 14px; margin-top: 20px; border: none; cursor: pointer; font-size: 17px; border-radius: 6px; }
+#payBtn { background: #009ee3; color: white; }
 #cancelBtn { background: red; color: white; }
 #cancelBtn.disabled { background: #666; cursor: not-allowed; }
 #result { margin-top: 25px; text-align: center; }
-#payloadBox { margin-top: 10px; padding: 10px; background: #f2f2f2; word-break: break-all; font-size: 14px; }
-.copyBtn { background: #222; color: white; padding: 10px; width: 100%; margin-top: 10px; }
+#payloadBox { margin-top: 10px; padding: 10px; background: #f5f5f5; word-break: break-all; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
+.copyBtn { background: #333; color: white; padding: 12px; width: 100%; margin-top: 10px; border-radius: 6px; }
 #timer { margin-top: 20px; font-size: 16px; color: red; text-align: center; }
-#info { font-size: 13px; color: #555; margin-top: 15px; }
-.selo-container { display: flex; justify-content: center; margin-top: 20px; gap: 15px; }
-.selo { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: #555; }
-.selo svg { width: 40px; height: 40px; margin-bottom: 5px; }
-.valor { font-size: 18px; font-weight: bold; margin-top: 10px; color: green; }
+.details { margin-top: 20px; font-size: 15px; }
+.footer-email { margin-top: 20px; text-align: center; font-size: 13px; padding: 10px; }
+.footer-email a { color: #009ee3; }
 </style>
 </head>
 <body>
 
-<h2>Pagamento PIX - R$ 9,90</h2>
+<div class="header-mp"><strong>KDEFY GRUPOS LTDA</strong></div>
 
-<label>Nome</label>
+<div class="box">
+
+<h2>Pague R$ 9,90 via Pix</h2>
+<div style="text-align:center; font-size:14px; margin-top:10px;">Vencimento: 5 minutos após gerar o QR Code</div>
+
+<label class="label-title">Nome</label>
 <input id="nome">
 
-<label>CPF</label>
+<label class="label-title">CPF</label>
 <input id="cpf">
 
-<label>Email</label>
-<input id="email">
+<label class="label-title">Email</label>
+<input id="email" placeholder="kdefycom@gmail.com">
 
-<button id="payBtn">Finalizar Compra</button>
+<button id="payBtn">Gerar Pagamento PIX</button>
 
 <div id="result"></div>
 <div id="timer"></div>
 
-<div id="info">
-Os dados são coletados apenas para segurança da transação e, se necessário, para efetuar um pedido de reembolso.
+<div class="details">
+<p><strong>Detalhes da compra:</strong><br>
+grupo categoria paga — Valor de R$ 9,90</p>
 </div>
 
-<div class="selo-container">
-    <div class="selo">
-        <svg viewBox="0 0 24 24" fill="green">
-            <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm-1.2 17.4l-5.4-5.4 1.68-1.68 3.72 3.72 7.92-7.92 1.68 1.68-9.6 9.6z"/>
-        </svg>
-        <div>Protegido</div>
-    </div>
-    <div class="selo">
-        <svg viewBox="0 0 24 24" fill="#007bff">
-            <path d="M12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm1 17h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        <div>Segurança</div>
-    </div>
+</div>
+
+<div class="footer-email">
+Se houver algum problema, entre em contato: <br>
+<a href="mailto:kdefycom@gmail.com">kdefycom@gmail.com</a>
 </div>
 
 <script>
 let paymentId = null;
-let countdown = 300; // 5 minutos
+let countdown = 300; 
 let timerInterval = null;
 
 function startTimer() {
@@ -106,8 +104,8 @@ document.getElementById("payBtn").onclick = async () => {
             name: nome, 
             email: email, 
             total_amount: total_amount, 
-            product_name: "Produto Premium", 
-            description: "Pagamento de teste", 
+            product_name: "grupo categoria paga", 
+            description: "Pagamento via PIX - KDEFY GRUPOS LTDA", 
             document: cpf
         })
     });
@@ -124,11 +122,11 @@ document.getElementById("payBtn").onclick = async () => {
     const qrUrl = `http://localhost:3000/qr/${paymentId}`;
 
     document.getElementById("result").innerHTML = `
-        <h3>QR Code</h3>
+        <h3>Código QR</h3>
         <img src="${qrUrl}" width="260">
-        <div class="valor">Valor: R$ 9,90</div>
+        <div style="font-size:18px; margin-top:10px; font-weight:bold;">Valor: R$ 9,90</div>
         <div id="payloadBox">${pixPayload}</div>
-        <button class="copyBtn" onclick="copyPayload()">Copiar Payload</button>
+        <button class="copyBtn" onclick="copyPayload()">Copiar código Pix</button>
         <button id="cancelBtn" onclick="cancelPayment()">Cancelar Pagamento</button>
     `;
 
