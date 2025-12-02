@@ -1,3 +1,15 @@
+function escapeHTML(str) {
+    if (str === null || str === undefined) {
+        return '';
+    }
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 async function login() {
   const email = document.getElementById('username').value;
   const password = document.getElementById('password').value;
@@ -194,6 +206,10 @@ function renderizarGrupos(grupos) {
         ? `<div class="status-info-exclusao"><strong>Aviso:</strong> O usuário solicitou a exclusão deste grupo.</div>`
         : '';
 
+    const paidIndicatorHTML = grupo.requires_payment
+      ? `<span style="display: inline-block; margin-left: 10px; background-color: #1e90ff; color: white; padding: 2px 8px; font-size: 12px; border-radius: 10px; font-weight: bold; vertical-align: middle;">$ Categoria Paga</span>`
+      : '';
+
     return `
       <div class="grupo-item ${solicitouExclusao ? 'grupo-solicitou-exclusao' : ''}" id="grupo-${grupo.id}">
         ${statusBadge}
@@ -201,7 +217,7 @@ function renderizarGrupos(grupos) {
           <img src="${escapeHTML(grupo.foto_url) || 'https://via.placeholder.com/1600x900/1A1A1A/FFFFFF?text=Sem+Imagem'}" class="grupo-foto">
         </div>
         <div class="grupo-info">
-          <div class="grupo-titulo">${escapeHTML(grupo.nome)}</div>
+          <div class="grupo-titulo">${escapeHTML(grupo.nome)}${paidIndicatorHTML}</div>
           <div class="grupo-details">
             <span><strong>CATEGORIA:</strong> ${escapeHTML(getCategoryName(grupo.categoria))}</span>
             <span><strong>TIPO:</strong> ${escapeHTML(grupo.tipo)}</span>

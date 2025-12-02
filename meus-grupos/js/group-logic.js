@@ -7,26 +7,30 @@ function renderizarGrupo(grupo) {
     const isReprovado = grupo.mensagem_admin && grupo.mensagem_admin.toLowerCase().includes('reprovado');
 
     if (grupo.aprovado) {
-        const starIcon = `<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\"/></svg>`;
-        const vipButtonHTML = `<button class=\"btn-vip\" onclick=\"alertVip('${grupo.id}')\">
-                            ${starIcon}
-                            <span>Super VIP</span>
-                           </button>`;
-
-        let mainActionHTML;
-        if (podeImpulsionar(grupo)) {
-            mainActionHTML = `<button class=\"btn-impulsionar\" onclick=\"impulsionar(event, '${grupo.id}')\">🚀 IMPULSIONAR</button>`;
+        if (grupo.requires_payment && !grupo.pago) {
+            actionButtonHTML = `<button class=\"btn-large btn-pagar\" onclick=\"window.location.href = '/payment/?group_id=${grupo.id}\'">💰 PAGAR PARA LIBERAR</button>`;
+            statusInfoHTML = `<div class=\"status-info-pagamento\"><strong>Aviso:</strong> Este grupo pertence a uma categoria que requer uma taxa de liberação. Após a confirmação do pagamento, seu grupo será publicado instantaneamente.</div>`;
         } else {
-            mainActionHTML = `<div class=\"boost-timer\" data-group-id=\"${grupo.id}\">⏰ Carregando...</div>`;
+            const starIcon = `<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\"/></svg>`;
+            const vipButtonHTML = `<button class=\"btn-vip\" onclick=\"alertVip('${grupo.id}')\">
+                                ${starIcon}
+                                <span>Super VIP</span>
+                               </button>`;
+
+            let mainActionHTML;
+            if (podeImpulsionar(grupo)) {
+                mainActionHTML = `<button class=\"btn-impulsionar\" onclick=\"impulsionar(event, '${grupo.id}')\">🚀 IMPULSIONAR</button>`;
+            } else {
+                mainActionHTML = `<div class=\"boost-timer\" data-group-id=\"${grupo.id}\">⏰ Carregando...</div>`;
+            }
+
+            actionButtonHTML = `
+            <div class=\"action-buttons-container\">
+                ${mainActionHTML}
+                ${vipButtonHTML}
+            </div>
+            `;
         }
-
-        actionButtonHTML = `
-        <div class=\"action-buttons-container\">
-            ${mainActionHTML}
-            ${vipButtonHTML}
-        </div>
-        `;
-
     } else if (isReprovado) {
        actionButtonHTML = `<button class=\"btn-large btn-reprovado\" disabled>REPROVADO</button>`;
        const motivo = grupo.mensagem_admin.substring(grupo.mensagem_admin.indexOf(':') + 1).trim();

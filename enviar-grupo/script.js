@@ -220,6 +220,9 @@
       
       const tipoEntidade = tipoSelecionado === 'canal_whatsapp' ? 'Canal' : 'Grupo';
 
+      const selectedCategory = CATEGORIES.find(cat => cat.id === categoria);
+      const requires_payment = selectedCategory ? selectedCategory.requires_fee || false : false;
+
       const data = {
         nome,
         link: linkValidado,
@@ -229,7 +232,9 @@
         foto_url: fotoUrl,
         email,
         regras: JSON.stringify(regras),
-        aprovado: false
+        aprovado: false,
+        requires_payment: requires_payment,
+        pago: false
       };
 
       try {
