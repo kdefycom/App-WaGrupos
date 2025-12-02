@@ -145,7 +145,7 @@ async function loadGroups() {
 async function fetchData(signal) {
     const startIndex = (STATE.currentPage - 1) * STATE.itemsPerPage;
     
-    let queryParts = ['aprovado=eq.true'];
+    let queryParts = ['aprovado=eq.true', 'or=(requires_payment.eq.false,pago.eq.true)'];
 
     if (STATE.currentGroupType !== 'todos') {
         queryParts.push(`tipo=eq.${STATE.currentGroupType}`);
