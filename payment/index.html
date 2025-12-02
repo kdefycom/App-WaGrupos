@@ -5,6 +5,7 @@
 <title>Pagamento via Pix</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/izitoast.min.css">
 </head>
 <body>
 
@@ -31,12 +32,17 @@
 
     <div class="input">
         <label for="email">Email</label>
-        <input id="email" type="email" value="kdefycom@gmail.com">
+        <input id="email" type="email" value="">
     </div>
 
     <button id="payBtn">Gerar pagamento PIX</button>
 
     <div id="timer"></div>
+</div>
+
+<div class="card" id="loading" style="display: none; text-align: center;">
+    <h2>Aguarde...</h2>
+    <p>Estamos gerando seu pagamento.</p>
 </div>
 
 <div id="result" style="display: none;">
@@ -53,6 +59,7 @@
 
 </div>
 
+<script src="assets/js/izitoast.min.js"></script>
 <script src="assets/js/script.js"></script>
 
 </body>
