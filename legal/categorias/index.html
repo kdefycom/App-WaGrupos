@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Política de Categorias Especiais - KDefy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --primary-text-color: #E0E0E0;
+            --secondary-text-color: #B0B0B0;
+            --accent-color-blue: #007BFF;
+            --accent-color-red: #fa383e;
+            --border-color: #333333;
+            --code-bg-color: #1E1E1E;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            color: var(--secondary-text-color);
+        }
+        .section h2 {
+            font-size: 2em;
+            color: var(--accent-color-blue);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 25px;
+        }
+        .section p, .section li {
+            font-size: 1.1em;
+            color: var(--primary-text-color);
+            margin-bottom: 15px;
+        }
+        .section strong {
+            color: #FFFFFF;
+        }
+        .section a {
+            color: var(--accent-color-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .section a:hover {
+            text-decoration: underline;
+        }
+        .payment-box {
+            background-color: var(--code-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .payment-box .price {
+            font-family: 'Fira Code', monospace;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #FFFFFF;
+            flex-basis: 100%;
+            margin-bottom: 15px;
+        }
+        .payment-box .price .currency {
+            color: var(--accent-color-red);
+        }
+        .payment-box .description {
+            font-size: 1em;
+            color: var(--secondary-text-color);
+            flex-basis: 100%;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            padding-left: 0;
+            list-style: none;
+        }
+        .category-grid li {
+            background-color: var(--code-bg-color);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent-color-red);
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1em;
+            color: var(--primary-text-color);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+         .category-grid li:hover {
+            background-color: #2a2a2a;
+            border-color: var(--accent-color-red);
+        }
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Política de Categorias Especiais</h1>
+            <p class="subtitle">Diretrizes sobre grupos que requerem uma taxa de moderação para publicação.</p>
+        </div>
+
+        <div class="section">
+            <h2>Visão Geral</h2>
+            <p>Para manter a alta qualidade e a segurança da nossa plataforma, investimos em um processo de <strong>moderação de conteúdo cuidadoso e responsável</strong>. Determinadas categorias, devido à sua natureza comercial ou ao maior potencial para conteúdo sensível, exigem uma análise mais intensiva.</p>
+            <p>Para cobrir os custos operacionais dessa moderação especializada, instituímos uma <strong>taxa única de publicação</strong> para grupos nessas categorias específicas. Esta abordagem garante que apenas administradores sérios e comprometidos publiquem nesses nichos, resultando em um ecossistema mais seguro e confiável para todos os usuários.</p>
+        </div>
+
+        <div class="section">
+            <h2>Taxa de Publicação</h2>
+            <div class="payment-box">
+                <div class="price"><span class="currency">R$</span> 9,90</div>
+                <p class="description">Pagamento único por grupo. Após a confirmação, o grupo é liberado instantaneamente, desde que aprovado pela nossa equipe de moderação.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Categorias Sujeitas à Taxa</h2>
+            <p>A publicação de grupos nas categorias listadas abaixo está sujeita à taxa de moderação. A lista é revisada periodicamente para se adaptar à dinâmica da comunidade.</p>
+            <ul class="category-grid">
+                <li>Compra e Venda</li>
+                <li>Concursos</li>
+                <li>Divulgação</li>
+                <li>Emagrecimento</li>
+                <li>Esportes</li>
+                <li>Eventos</li>
+                <li>Fãs</li>
+                <li>Filmes e Séries</li>
+                <li>Futebol</li>
+                <li>Games e Jogos</li>
+                <li>Ganhar Dinheiro</li>
+                <li>Imobiliária</li>
+                <li>Investimentos e Finanças</li>
+                <li>Moda e Beleza</li>
+                <li>Negócios e Empreendedorismo</li>
+                <li>Outros</li>
+                <li>Política</li>
+                <li>Receitas</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <a href="/meus-grupos/">← Voltar para Meus Grupos</a>
+        </div>
+    </div>
+</body>
+</html>
