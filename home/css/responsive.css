@@ -1,0 +1,9 @@
+@media (max-width: 768px) { 
+      .grupos-grid { grid-template-columns: 1fr; } 
+      .nav-buttons { flex-wrap: wrap; }
+      .btn { font-size: 12px; padding: 8px 15px; }
+    }
+.type-filter-btn, #searchButton, .category-item, #showMoreCategories, .card-button, .pagination button, .btn {
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }

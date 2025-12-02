@@ -75,7 +75,10 @@ function renderizarGrupo(grupo) {
 
 async function removerGrupo(id) {
     const grupo = meusGrupos.find(g => g.id === id);
-    if (!grupo) return;
+    if (!grupo) {
+      customAlert('Você não tem permissão para remover este grupo.', 'Erro');
+      return;
+    }
 
     const tipoEntidade = grupo.tipo === 'canal_whatsapp' ? 'canal' : 'grupo';
     const confirm = await customConfirm(`Tem certeza que deseja apagar este ${tipoEntidade}?`, 'Confirmar Exclusão');

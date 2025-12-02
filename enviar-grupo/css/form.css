@@ -1,0 +1,39 @@
+label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-secondary); }
+    #step1 label { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 30px; text-align: center; }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        transition: border .3s;
+        background-color: var(--input-bg);
+        color: var(--text-primary);
+    }
+
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--action-blue); }
+
+    textarea { min-height: 100px; resize: vertical; margin-bottom: 5px; }
+
+    .char-counter {
+        font-size: 12px;
+        color: var(--text-secondary);
+        text-align: right;
+        margin-bottom: 20px;
+    }
+
+    .limite-excedido {
+        color: var(--danger-color);
+        font-weight: bold;
+    }
+   .preview-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; margin: 20px auto; display: block; border: 2px solid var(--border-color); background-color: var(--bg-color);}
+
+    .regras-grid { display: grid; gap: 10px; margin-bottom: 20px; }
+    .regra-item {
+        display: flex; align-items: center; gap: 10px; padding: 12px;
+        background: var(--input-bg); border-radius: 8px; color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+    }
+    .regra-item input[type=checkbox] { width: auto; margin: 0; }

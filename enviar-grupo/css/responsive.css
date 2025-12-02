@@ -1,0 +1,5 @@
+@media (max-width: 480px) {
+        .tipo-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .tipo-btn { min-height: 150px; padding: 15px 10px; font-size: 12px; }
+        .tipo-btn svg { width: 50px; height: 50px; }
+    }

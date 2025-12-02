@@ -40,6 +40,9 @@ function initializePage() {
     renderCategories();
     loadGroups();
     updateActiveFilters();
+
+    // Atualiza a lista de grupos a cada 15 minutos
+    setInterval(loadGroups, 15 * 60 * 1000);
 }
 
 function setupEventListeners() {
@@ -160,7 +163,7 @@ async function fetchData(signal) {
     }
 
     const query = queryParts.join('&');
-    const finalQuery = `grupos?${query}&order=vip.desc,created_at.desc&limit=${STATE.itemsPerPage}&offset=${startIndex}`;
+    const finalQuery = `grupos?${query}&order=vip.desc,ultimo_boost.desc.nullslast,created_at.desc&limit=${STATE.itemsPerPage}&offset=${startIndex}`;
 
     try {
         const [data, countResponse] = await Promise.all([

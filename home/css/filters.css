@@ -1,0 +1,24 @@
+.filters-section { background-color: var(--card-bg); padding: 30px 0; border-bottom: 1px solid var(--border-color); }
+    
+    .type-filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+    .type-filter-btn { padding: 10px 25px; border-radius: 20px; border: 1px solid var(--border-color); background-color: transparent; color: var(--text-primary); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .type-filter-btn:hover { background-color: var(--gray-dark); color: var(--text-primary); }
+    .type-filter-btn.active { background-color: var(--accent-green); color: white; border-color: var(--accent-green); }
+
+    #searchInput { flex-grow: 1; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px 0 0 8px; font-size: 16px; outline: none; background-color: var(--bg-color); color: var(--text-primary); }
+    #searchInput:focus { border-color: var(--accent-green); }
+    #searchInput::placeholder { color: var(--text-primary); }
+    #searchButton { padding: 0 30px; border: 1px solid var(--accent-green); border-left: 0; background-color: var(--accent-green); color: white; font-size: 16px; font-weight: 700; border-radius: 0 8px 8px 0; cursor: pointer; transition: all 0.2s; }
+    #searchButton:hover { background-color: var(--accent-green-hover); }
+    .categories-bar { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px; }
+    .category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; color: var(--text-secondary); transition: color 0.2s; width: 80px; }
+    .category-item:hover { color: var(--text-primary); }
+    .category-icon { width: 50px; height: 50px; border-radius: 50%; background-color: var(--bg-color); display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 1px solid var(--border-color); }
+    .category-icon svg { width: 24px; height: 24px; color: var(--text-secondary); }
+    .category-item:hover .category-icon { background-color: var(--gray-dark); }
+    .category-item.active .category-icon { background-color: var(--accent-green); border-color: var(--accent-green); }
+    .category-item.active .category-icon svg { color: white; }
+    .category-item.active span { color: var(--text-primary); font-weight: 500; }
+    .category-item span { font-size: 14px; text-align: center; }
+    #showMoreCategories { background-color: transparent; color: var(--text-primary); border: 1px solid var(--border-color); padding: 10px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 20px; }
+    #showMoreCategories:hover { background-color: var(--gray-dark); }
