@@ -47,13 +47,13 @@
 .delete-prompt-modal .warning-icon svg {
     width: 48px;
     height: 48px;
-    color: #ff5555; /* Vermelho para o ícone */
+    color: #cccccc; /* Cinza, em vez de vermelho */
     margin-bottom: 15px;
 }
 
 .delete-prompt-modal .prompt-message {
-    color: #ff5555; /* Vermelho para alerta */
-    font-weight: bold;
+    color: #cccccc; /* Cor padrão do texto */
+    font-weight: normal; /* Peso normal, sem negrito */
     margin-bottom: 20px;
 }
 
@@ -73,6 +73,11 @@
     color: #fff;
     font-size: 16px;
     box-sizing: border-box;
+}
+
+.delete-prompt-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .delete-prompt-input::placeholder {
@@ -107,9 +112,9 @@
 }
 
 .delete-prompt-btn.confirm:disabled {
-    background-color: #8c3835;
+    background-color: #555; /* Cinza quando desabilitado */
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 .delete-prompt-btn:hover:not(:disabled) {
