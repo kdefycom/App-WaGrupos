@@ -1,10 +1,25 @@
-function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const cooldown = 120 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > cooldown; }
+function podeImpulsionar(grupo) {
+    if (!grupo.ultimo_boost) return true;
+    const cooldown = 120 * 60 * 1000; // 120 minutos
+
+    // FIX: Garante que a data do banco de dados seja tratada como UTC.
+    // Adiciona 'Z' ao final da string de data para que o JavaScript a interprete como UTC,
+    // evitando a conversão para o fuso horário local do navegador.
+    let ultimoBoostStr = grupo.ultimo_boost.replace(' ', 'T');
+    if (!ultimoBoostStr.endsWith('Z')) {
+        ultimoBoostStr += 'Z';
+    }
+    const ultimoBoostTime = new Date(ultimoBoostStr).getTime();
+
+    return Date.now() - ultimoBoostTime > cooldown;
+}
   
 async function impulsionar(event, id) { 
     const button = event.target; 
     button.disabled = true; 
     button.textContent = 'IMPULSIONANDO...'; 
     try { 
+        // new Date().toISOString() já está no formato UTC correto (com 'Z' no final).
         await supabaseFetch(`grupos?id=eq.${id}`, { 
             method: 'PATCH', 
             body: JSON.stringify({ ultimo_boost: new Date().toISOString() }) 
@@ -21,7 +36,12 @@ function startCountdown(grupo) {
     const timerElement = document.querySelector(`.boost-timer[data-group-id="${grupo.id}"]`);
     if (!timerElement) return;
 
-    const endTime = new Date(grupo.ultimo_boost).getTime() + 120 * 60 * 1000;
+    // FIX: Garante que a data do banco de dados seja tratada como UTC.
+    let ultimoBoostStr = grupo.ultimo_boost.replace(' ', 'T');
+    if (!ultimoBoostStr.endsWith('Z')) {
+        ultimoBoostStr += 'Z';
+    }
+    const endTime = new Date(ultimoBoostStr).getTime() + 120 * 60 * 1000; // 120 minutos
 
     const updateTimer = () => {
       const now = Date.now();
@@ -30,9 +50,8 @@ function startCountdown(grupo) {
       if (remainingTime <= 0) {
         clearInterval(activeTimers[grupo.id]);
         delete activeTimers[grupo.id];
-        // Adiciona um pequeno delay para evitar recarregamentos múltiplos e rápidos
+        
         setTimeout(() => {
-           // Apenas recarrega se o botão de impulsionar ainda não apareceu
            if (document.querySelector(`.boost-timer[data-group-id="${grupo.id}"]`)) {
               carregarMeusGrupos();
            }
