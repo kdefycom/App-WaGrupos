@@ -1,4 +1,4 @@
-function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const duasHoras = 2 * 60 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > duasHoras; }
+function podeImpulsionar(grupo) { if (!grupo.ultimo_boost) return true; const cooldown = 120 * 60 * 1000; return Date.now() - new Date(grupo.ultimo_boost).getTime() > cooldown; }
   
 async function impulsionar(event, id) { 
     const button = event.target; 
@@ -21,7 +21,7 @@ function startCountdown(grupo) {
     const timerElement = document.querySelector(`.boost-timer[data-group-id="${grupo.id}"]`);
     if (!timerElement) return;
 
-    const endTime = new Date(grupo.ultimo_boost).getTime() + 2 * 60 * 60 * 1000;
+    const endTime = new Date(grupo.ultimo_boost).getTime() + 120 * 60 * 1000;
 
     const updateTimer = () => {
       const now = Date.now();
