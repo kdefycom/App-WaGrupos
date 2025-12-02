@@ -56,3 +56,8 @@
     height: 24px;
     fill: currentColor;
 }
+
+.btn-pagar {
+    background-color: var(--action-blue);
+    color: #fff;
+}
