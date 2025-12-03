@@ -188,9 +188,12 @@ function renderizarGrupos(grupos) {
                 <button class="btn btn-warning" onclick="reprovar('${grupo.id}')">Reprovar</button>
             `;
         } else if (grupo.aprovado) {
-            otherActions = grupo.vip 
-                ? `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>`
-                : `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', true)">⭐ Tornar VIP</button>`;
+            const podeSerVip = !grupo.requires_payment || grupo.pago;
+            if (podeSerVip) {
+                otherActions = grupo.vip 
+                    ? `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', false)">Remover VIP</button>`
+                    : `<button class="btn btn-warning" onclick="toggleVip('${grupo.id}', true)">⭐ Tornar VIP</button>`;
+            }
         }
         adminActionsHTML = `
             ${otherActions}
