@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', async () => {  const params = new URLSearchParams(window.location.search);
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
   const groupId = params.get('id');
 
   if (!groupId) {
@@ -8,10 +9,13 @@ document.addEventListener('DOMContentLoaded', async () => {  const params = new 
   }
 
   try {
+    // Definir a query correta para os grupos aleatórios
+    const randomGroupsQuery = `grupos?id=neq.${groupId}&aprovado=eq.true&or=(requires_payment.eq.false,pago.eq.true)&limit=6&order=ultimo_boost.desc.nullslast,created_at.desc`;
+
     // Buscar o grupo principal e grupos aleatórios em paralelo
     const [mainGroupData, randomGroupsData] = await Promise.all([
         supabaseFetch(`grupos?id=eq.${groupId}&select=*`), // Busca o grupo da página
-        supabaseFetch(`grupos?id=neq.${groupId}&limit=6&order=created_at.desc`) // Busca 6 outros grupos
+        supabaseFetch(randomGroupsQuery) // Busca 6 outros grupos com o filtro correto
     ]);
 
     // --- PREENCHER DADOS DO GRUPO PRINCIPAL ---
