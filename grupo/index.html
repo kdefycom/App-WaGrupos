@@ -7,70 +7,49 @@
   <title>Carregando...</title>
   <meta name="description" content="">
   
-  <link rel="stylesheet" href="/enviar-grupo/css/layout.css">
-  <link rel="stylesheet" href="/enviar-grupo/css/buttons.css">
+  <link rel="stylesheet" href="css/style.css">
   <script src="/home/js/favicon.js" defer></script>
-  <style>
-    .group-card {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 2rem;
-      max-width: 600px;
-      margin: 2rem auto;
-      text-align: center;
-    }
-    .group-image {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      margin: 0 auto 1rem;
-      object-fit: cover;
-    }
-    .group-rules {
-      text-align: left;
-      margin: 2rem 0;
-      padding-left: 1.5rem;
-    }
-    .disclaimer {
-      font-size: 0.8rem;
-      color: #777;
-      margin-top: 2rem;
-    }
-    .stats {
-      margin: 1rem 0;
-      color: #555;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
-    <div id="group-details" class="group-card">
-      <img id="group-img" class="group-image" src="https://via.placeholder.com/150" alt="Foto do Grupo">
-      <h1 id="group-name">Carregando nome do grupo...</h1>
-      <p id="group-description">Carregando descrição...</p>
-      
+
+    <header class="group-header">
+      <div class="group-image-container">
+        <img id="group-img" class="group-image" src="" alt="Imagem do Grupo">
+      </div>
+      <h1 id="group-name"></h1>
       <div class="stats">
         <span id="group-date"></span> | <span id="group-views"></span>
       </div>
+      <a id="join-button" href="#" class="btn" target="_blank" rel="noopener noreferrer">Entrar no Grupo</a>
+    </header>
 
-      <a id="join-button" href="#" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Entrar no Grupo</a>
-      
-      <div id="rules-container">
-        <h2>Regras do Grupo</h2>
-        <ul id="group-rules" class="group-rules">
-          <li>Carregando regras...</li>
-        </ul>
-      </div>
+    <main>
+      <section class="group-content">
+        <h2>Sobre o Grupo</h2>
+        <p id="group-description"></p>
+      </section>
 
-      <p class="disclaimer">
-        <strong>Aviso:</strong> Você está prestes a ser redirecionado para um grupo externo. O KDefy atua apenas como uma plataforma de divulgação e não tem responsabilidade pelo conteúdo ou administração deste grupo.
-      </p>
+      <section class="group-content" id="rules-container">
+        <h2>Regras</h2>
+        <ul id="group-rules" class="group-rules"></ul>
+      </section>
 
-    </div>
-    <a href="/" class="btn btn-back" style="display: block; text-align: center; max-width: 200px; margin: 1rem auto;">← Voltar à Home</a>
+      <section id="more-groups">
+        <h2>Explore outros grupos</h2>
+        <div id="more-groups-container"></div>
+      </section>
+    </main>
+
+    <p class="disclaimer">
+      <strong>Aviso:</strong> Você está prestes a ser redirecionado para um grupo externo. O KDefy atua apenas como uma plataforma de divulgação e não tem responsabilidade pelo conteúdo ou administração deste grupo.
+    </p>
+
+    <a href="/" class="btn-back">← Voltar à Home</a>
+
   </div>
 
   <script src="/home/js/global.js"></script>
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
