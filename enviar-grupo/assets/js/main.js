@@ -3,11 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   popularCategorias();
   setupCharCounter();
 
-  document.getElementById('linkInput').addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(validarLinkEmTempoReal, 500);
-  });
-
   const enviarBtn = document.getElementById('enviarBtn');
   const nomeInput = document.getElementById('nomeInput');
   const categoriaSelect = document.getElementById('categoriaSelect');

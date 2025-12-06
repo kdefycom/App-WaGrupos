@@ -59,9 +59,9 @@ function renderCategories() {
     const allCat = createCategoryElement(null, 'Todos', ICONS.all);
     container.appendChild(allCat);
 
-    const limit = STATE.categoriasExpandidas ? CATEGORIES.length : 8;
+    const limit = STATE.categoriasExpandidas ? CATEGORIES.length : 5;
     
-    if (CATEGORIES.length > 8) {
+    if (CATEGORIES.length > 5) {
         showMoreBtn.style.display = 'inline-block';
         showMoreBtn.textContent = STATE.categoriasExpandidas ? 'Mostrar Menos' : 'Mostrar Mais';
     } else {
@@ -110,7 +110,7 @@ function updateActiveFilters() {
     });
 
     const categoryItems = Array.from(document.querySelectorAll('.category-item'));
-    const activeCategoryIndex = CATEGORIES.slice(0, STATE.categoriasExpandidas ? CATEGORIES.length : 8).findIndex(c => c.id === STATE.currentCategory);
+    const activeCategoryIndex = CATEGORIES.slice(0, STATE.categoriasExpandidas ? CATEGORIES.length : 5).findIndex(c => c.id === STATE.currentCategory);
 
     let elementToActivate;
     if (STATE.currentCategory === null) {

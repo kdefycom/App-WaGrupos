@@ -1,13 +1,12 @@
 
-async function validarLinkEmTempoReal() {
+async function validarLinkEProsseguir() {
   const link = document.getElementById('linkInput').value.trim();
   const alertDiv = document.getElementById('alert');
-  const prosseguirBtn = document.getElementById('prosseguirBtn');
-  prosseguirBtn.disabled = true;
   alertDiv.className = 'alert'; // Limpa classes de cor
 
   if (!link) {
-    alertDiv.innerHTML = '';
+    alertDiv.innerHTML = 'Por favor, insira um link.';
+    alertDiv.className = 'alert alert-error';
     return;
   }
 
@@ -43,10 +42,8 @@ async function validarLinkEmTempoReal() {
       return;
     }
 
-    alertDiv.innerHTML = '✓ Link válido!';
-    alertDiv.className = 'alert alert-success';
     linkValidado = link;
-    prosseguirBtn.disabled = false;
+    prosseguirParaDetalhes();
 
   } catch (error) {
     alertDiv.innerHTML = 'Erro ao verificar o link.';
