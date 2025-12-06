@@ -1,0 +1,14 @@
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  .container {
+    padding: 15px;
+  }
+  #group-name {
+    font-size: 1.8em;
+  }
+  #more-groups-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}

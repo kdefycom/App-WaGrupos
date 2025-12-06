@@ -1,0 +1,30 @@
+/* Estilos Gerais */
+body {
+  font-family: sans-serif;
+  background-color: #1A1A19; /* Cor de fundo da página */
+  color: #F8F8F7; /* Cor do texto principal */
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #2C2C2C; /* Cor de fundo do card */
+  padding: 20px;
+  border-radius: 12px; /* Bordas mais arredondadas */
+  border: 1px solid #5E5E5B; /* Borda sutil */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Remove a borda azul irritante ao focar em links e botões */
+a:focus,
+button:focus,
+.btn:focus,
+.grupo-card-small:focus {
+    outline: none;
+    box-shadow: none;
+}

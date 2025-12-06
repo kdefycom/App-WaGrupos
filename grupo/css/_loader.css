@@ -1,0 +1,36 @@
+/* --- ESTADO DE CARREGAMENTO --- */
+
+/* Esconde o container principal enquanto carrega */
+body.loading .container {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Estilos do Loader (Spinner) */
+#loader {
+  border: 6px solid #444; /* Cinza escuro */
+  border-top: 6px solid #3498db; /* Azul */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  position: fixed; /* Centralizado na tela */
+  top: 50%;
+  left: 50%;
+  margin-top: -25px; /* Metade da altura */
+  margin-left: -25px; /* Metade da largura */
+  z-index: 100;
+  display: none; /* Escondido por padrão */
+}
+
+/* Mostra o loader quando o body tem a classe .loading */
+body.loading #loader {
+  display: block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- FIM DO ESTADO DE CARREGAMENTO --- */
