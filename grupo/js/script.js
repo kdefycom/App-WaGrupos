@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!groupId) {
     document.getElementById('group-name').textContent = 'Grupo não encontrado';
     document.title = "Erro | KDefy";
+    document.body.classList.remove('loading'); // Remove o loading em caso de erro
     return;
   }
 
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!mainGroupData || mainGroupData.length === 0) {
       document.getElementById('group-name').textContent = 'Grupo não encontrado ou removido.';
       document.title = "Erro | KDefy";
+      document.body.classList.remove('loading'); // Remove o loading em caso de erro
       return;
     }
 
@@ -33,10 +35,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderMoreGroups(randomGroupsData);
     }
 
+    // Remove a classe de loading para mostrar o conteúdo
+    document.body.classList.remove('loading');
+
   } catch (error) {
     console.error('Erro ao buscar detalhes do grupo:', error);
     document.getElementById('group-name').textContent = 'Erro ao carregar o grupo.';
     document.title = "Erro | KDefy";
+    // Remove a classe de loading mesmo se der erro, para mostrar a mensagem
+    document.body.classList.remove('loading');
   }
 });
 
