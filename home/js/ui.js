@@ -1,4 +1,3 @@
-
 function escapeHTML(str) {
     const p = document.createElement("p");
     p.appendChild(document.createTextNode(str));
@@ -24,7 +23,7 @@ function renderGroups(grupos) {
               <span class="card-category">${getCategoryName(grupo.categoria)}</span>
               <h3 class="grupo-title" title="${nomeSeguro}">${nomeSeguro}</h3>
               <p class="grupo-desc">${descricaoSegura}</p>
-              <a href="${escapeHTML(grupo.link)}" target="_blank" class="card-button">${buttonText}</a>
+              <a href="/grupo/?id=${grupo.id}" class="card-button">${buttonText}</a>
             </div>
           </div>
         `;

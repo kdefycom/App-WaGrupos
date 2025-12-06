@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título e Meta Descrição serão preenchidos dinamicamente -->
+  <title>Carregando...</title>
+  <meta name="description" content="">
+  
+  <link rel="stylesheet" href="/enviar-grupo/css/layout.css">
+  <link rel="stylesheet" href="/enviar-grupo/css/buttons.css">
+  <script src="/home/js/favicon.js" defer></script>
+  <style>
+    .group-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    .group-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      object-fit: cover;
+    }
+    .group-rules {
+      text-align: left;
+      margin: 2rem 0;
+      padding-left: 1.5rem;
+    }
+    .disclaimer {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 2rem;
+    }
+    .stats {
+      margin: 1rem 0;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="group-details" class="group-card">
+      <img id="group-img" class="group-image" src="https://via.placeholder.com/150" alt="Foto do Grupo">
+      <h1 id="group-name">Carregando nome do grupo...</h1>
+      <p id="group-description">Carregando descrição...</p>
+      
+      <div class="stats">
+        <span id="group-date"></span> | <span id="group-views"></span>
+      </div>
+
+      <a id="join-button" href="#" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Entrar no Grupo</a>
+      
+      <div id="rules-container">
+        <h2>Regras do Grupo</h2>
+        <ul id="group-rules" class="group-rules">
+          <li>Carregando regras...</li>
+        </ul>
+      </div>
+
+      <p class="disclaimer">
+        <strong>Aviso:</strong> Você está prestes a ser redirecionado para um grupo externo. O KDefy atua apenas como uma plataforma de divulgação e não tem responsabilidade pelo conteúdo ou administração deste grupo.
+      </p>
+
+    </div>
+    <a href="/" class="btn btn-back" style="display: block; text-align: center; max-width: 200px; margin: 1rem auto;">← Voltar à Home</a>
+  </div>
+
+  <script src="/home/js/global.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
