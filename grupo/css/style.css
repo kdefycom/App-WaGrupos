@@ -7,6 +7,15 @@ body {
   padding: 20px;
 }
 
+/* Remove tap highlight and focus outline for a cleaner look */
+a,
+button,
+a:focus,
+button:focus {
+    outline: none !important; /* Important to override defaults */
+    -webkit-tap-highlight-color: transparent;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -98,11 +107,15 @@ body.loading #loader {
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1em;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn:hover {
   background-color: #128C7E;
+}
+
+.btn:active {
+    transform: scale(0.95);
 }
 
 .group-content {
@@ -154,6 +167,11 @@ body.loading #loader {
 .grupo-card-small:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.grupo-card-small:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .card-image-container-small {
@@ -210,7 +228,17 @@ body.loading #loader {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #2C2C2C;
+  transition: transform 0.2s, background-color 0.3s;
 }
+
+.btn-back:hover {
+    background-color: #383838;
+}
+
+.btn-back:active {
+    transform: scale(0.98);
+}
+
 
 @media (max-width: 600px) {
   body {
