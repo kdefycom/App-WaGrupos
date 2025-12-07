@@ -1,8 +1,8 @@
 /* Estilos Gerais */
 body {
   font-family: sans-serif;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #1A1A1A;
+  color: #F8F8F7;
   margin: 0;
   padding: 20px;
 }
@@ -10,7 +10,7 @@ body {
 .container {
   max-width: 800px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #2C2C2C;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -81,11 +81,11 @@ body.loading #loader {
 #group-name {
   font-size: 2.5em;
   margin: 10px 0;
-  color: #1c1e21;
+  color: #F8F8F7;
 }
 
 .stats {
-  color: #606770;
+  color: #aaa;
   margin-bottom: 20px;
 }
 
@@ -111,7 +111,7 @@ body.loading #loader {
 }
 
 .group-content h2 {
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #444;
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
@@ -122,15 +122,15 @@ body.loading #loader {
 }
 
 .group-rules li {
-    background-color: #f9f9f9;
+    background-color: #333;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 8px;
-    border-left: 3px solid #3498db;
+    border-left: 3px solid #555;
 }
 
 #more-groups h2 {
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid #444;
     padding-bottom: 5px;
     margin-bottom: 15px;
 }
@@ -142,7 +142,7 @@ body.loading #loader {
 }
 
 .grupo-card-small {
-    background-color: #fff;
+    background-color: #333;
     border-radius: 8px;
     overflow: hidden;
     text-decoration: none;
@@ -184,10 +184,10 @@ body.loading #loader {
 
 .disclaimer {
   font-size: 0.9em;
-  color: #606770;
+  color: #aaa;
   text-align: center;
   margin-top: 30px;
-  background-color: #f9f9f9;
+  background-color: #333;
   padding: 10px;
   border-radius: 5px;
 }
@@ -196,8 +196,11 @@ body.loading #loader {
   display: block;
   text-align: center;
   margin-top: 20px;
-  color: #3498db;
+  color: #F8F8F7;
   text-decoration: none;
+  background-color: #2C2C2C;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 @media (max-width: 600px) {
