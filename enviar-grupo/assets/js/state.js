@@ -1,5 +1,5 @@
 
 let tipoSelecionado = '';
 let linkValidado = '';
-let fotoUrl = 'https://via.placeholder.com/300';
+let fotoUrl = ''; // Removida a URL do placeholder
 let debounceTimer;

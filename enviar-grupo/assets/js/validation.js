@@ -62,6 +62,7 @@ async function validarLinkEProsseguir() {
                 }
                 if(data.url_foto) {
                     document.getElementById('previewImg').src = data.url_foto;
+                    fotoUrl = data.url_foto; // CORREÇÃO FINAL
                 }
             } else {
                 console.error('Falha ao buscar dados da API: ' + response.statusText);
