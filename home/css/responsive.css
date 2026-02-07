@@ -1,9 +1,116 @@
-@media (max-width: 768px) { 
-      .grupos-grid { grid-template-columns: 1fr; } 
-      .nav-buttons { flex-wrap: wrap; }
-      .btn { font-size: 12px; padding: 8px 15px; }
-    }
+/* General fixes for tap highlight on mobile */
 .type-filter-btn, #searchButton, .category-item, #showMoreCategories, .card-button, .pagination button, .btn {
-        -webkit-tap-highlight-color: transparent;
-        outline: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+/* --- Responsive Design --- */
+
+/* Medium screens (tablets, large phones) */
+@media (max-width: 992px) {
+    .grupos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
     }
+
+    .grupo-title {
+        font-size: 18px;
+    }
+
+    .grupo-desc {
+        font-size: 15px;
+    }
+}
+
+/* Small screens (most phones) */
+@media (max-width: 768px) {
+    .header-content {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    /* Hide desktop navigation and show mobile menu toggle */
+    .nav-buttons {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 15px;
+        gap: 8px;
+    }
+
+    /* Make the buttons full-width on mobile */
+    .nav-buttons .btn {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Style for when the mobile menu is open */
+    .nav-buttons.active {
+        display: flex;
+    }
+    
+    /* The hamburger menu button is already in header.css, we just need to make sure it's displayed */
+    .menu-toggle {
+        display: flex; 
+    }
+
+    /* Adjust grid for a single column layout */
+    .grupos-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .content-section {
+        padding: 30px 0;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .btn {
+        font-size: 13px;
+        padding: 10px 18px;
+    }
+
+    .card-content {
+        padding: 12px;
+    }
+
+    .grupo-img {
+        height: 280px; /* Adjust image height for smaller cards */
+    }
+}
+
+/* Extra small screens (older/smaller phones) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .grupo-title {
+        font-size: 17px;
+    }
+
+    .grupo-desc {
+        font-size: 14px;
+    }
+
+    .card-button {
+        padding: 10px;
+    }
+
+    #searchContainer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #searchInput {
+        border-radius: 8px; /* Consistent border radius */
+    }
+}

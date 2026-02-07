@@ -70,6 +70,14 @@ function setupEventListeners() {
         STATE.categoriasExpandidas = !STATE.categoriasExpandidas;
         renderCategories();
     });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navButtons = document.querySelector('.nav-buttons');
+    if (menuToggle && navButtons) {
+        menuToggle.addEventListener('click', () => {
+            navButtons.classList.toggle('active');
+        });
+    }
     
     setupSidebar();
 }
